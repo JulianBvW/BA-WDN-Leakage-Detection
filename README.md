@@ -77,7 +77,7 @@ Das Testen von (anfänglich) **3** erschiedenen Ansätzen zur Leck-Erkunnung:
 
 1. Die *Baseline*
 2. Regression
-3. Graph-NN
+3. Recurrent- und Graph-NN
 
 ### Die Baseline
 
@@ -88,9 +88,9 @@ Hierfür werden einfach die momentanen Druck-Werte jedes Sensors als Eingabe ben
 
 Ein Besserer Ansatz wird der sein, mittels **Regression** die Werte jeweiliger Sensoren anhand aller anderen Sensoren zu **predicten**. Da der echte Wert jedes Sensors gegeben ist, lässt sich leicht die Differenz (der *Error*) berechnen. Dieser kann nun mit einem Schwellwert (evtl. dynamisch) verglichen werden und bei **zu großem Fehler** Alarm schlagen.
 
-### Graph-NN
+### Recurrent- und Graph-NN
 
-Sogenannte [Graph Neural Networks](https://en.wikipedia.org/wiki/Graph_neural_network) sind NNs welche **speziell für Graphen** einsetzbar sind. Eventuell lässt sich mit solchen Modellen die Leck-Erkennung noch weiter verbessern.
+Neuere Arten von künstlichen, neuronalen Netzen könnten die Effizienz der Leck-Detektion noch weiter verbessern. Während sogenannte [Recurrent Neural Networks](https://de.wikipedia.org/wiki/Rekurrentes_neuronales_Netz) als Zusatz eine Art Gedächtnis besitzen, welches hilfreich beim Bearbeiten von **sequenziellen Daten** sind, gibt es auch sogenannte [Graph Neural Networks](https://en.wikipedia.org/wiki/Graph_neural_network), welche **speziell für Graphen**, wie einem WDN, einsetzbar sind.
 
 ## Die Roadmap
 
@@ -98,6 +98,7 @@ Sogenannte [Graph Neural Networks](https://en.wikipedia.org/wiki/Graph_neural_ne
 - [X] Git initialisieren
 - [ ] Weitere Literatur lesen
 - [ ] Analysieren der Daten
+  - [ ] Zyklen erkennen (Tageszyklus, Jahreszeiten, ...)
 - [ ] Testen verschiedener Leck-Arten (Bruch, Schleichend, ...)
 - [ ] **Trainingsdaten** generieren (*train-test-split*)
 - [ ] **Experiment: Baseline**
@@ -111,7 +112,7 @@ Sogenannte [Graph Neural Networks](https://en.wikipedia.org/wiki/Graph_neural_ne
   - [ ] Gewichten
   - [ ] Threshold adjustieren
   - [ ] Metriken analysieren
-- [ ] **Experiment: Graph-NN**
+- [ ] **Experiment: Recurrent- und Graph-NN**
   - [ ] Was ist das überhaupt?
   - [ ] Keine Ahnung?
 - [ ] Weitere **Datensätze** testen
