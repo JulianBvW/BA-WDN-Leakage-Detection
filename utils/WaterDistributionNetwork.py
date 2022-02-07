@@ -20,12 +20,12 @@ class WDN:
       self.important_nodes = list(set.intersection(set(self.important_nodes), set(important_nodes)))
 
   def get_network(self):
-    """Returns the underlying wntr network.
+    """Return the underlying wntr network.
     """
     return self.network
   
   def show(self):
-    """Print network.
+    """Print nodes and edges of the network and plot it as a graph.
     """
     print(f"Nodes: {sorted(self.network.get_graph().nodes())}")
     print(f"->Important: {sorted(self.important_nodes)}")
