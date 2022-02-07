@@ -1,4 +1,3 @@
-from networkx.generators.random_graphs import random_powerlaw_tree_sequence
 import wntr
 import numpy as np
 import pandas as pd
