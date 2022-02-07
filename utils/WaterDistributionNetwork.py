@@ -12,7 +12,7 @@ class WDN:
 
     Args:
       inp_file (String): The file path of the .inp file.
-      importnat_nodes (iterable of nodes): List of nodes (Strings) interesting for ML
+      importnat_nodes (iterable of nodes): List of nodes (Strings) interesting for ML and plotting.
     """
     self.network = wntr.network.WaterNetworkModel(inp_file)
     self.important_nodes = self.network.get_graph().nodes()
