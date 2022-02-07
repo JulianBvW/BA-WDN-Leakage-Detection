@@ -13,6 +13,17 @@ Hier gehe ich über mehrere datengetriebene Ansätze um dieses Problem mittels m
   - Berechne `p_pred(i)` aus anderen Sensoren `p(j), j != i`
   - Annomalie falls `|p(i) - p_pred(i)| > threshold`
 
+## Theorie
+
+### Arten der Leck-Detektion
+
+Die Detektion lässt sich in zwei Arten einstufen, aktive und passive Verfahren.
+
+- **Aktives Verfahren (_Hardware-based_).** Hier geht es darum, mittels spezieller Technik wzB. Schallgeneratoren oder Kameras aktiv zu Anomalien zu suchen. Jeder proaktive Suchvorgang steht hier idR. für sich.
+- **Passive Verfahren (_Model-based_).** Dies sind kontinuierliche Verfahren, welche durch im WDN angebrachte Sensoren durchgehend den aktuellen Status überwachen und bei Anomalien Alarm schlagen. Hierfür wird meistens eine Art virtuelles Netzwerk simuliert und mit dem Real-Zustand verglichen. Diese Simulation kann entweder aufgrund perfekt-kalibrierten, hydraulischen Modellen basieren (_Hydraulic-model-based_) oder mittels Langzeitdaten hervorgesagt werden (_Hydraulic-Measurement-based/ Data-driven_).
+
+In dieser Arbeit geht es um die **datengetrieben Verfahren** (also passive, auf Messwerten basierenden Verfahren) und wie dieses Lernen eines simulierten Netzwerkes aussehen kann.
+
 ## Schwerpunkte
 
 ### Model
