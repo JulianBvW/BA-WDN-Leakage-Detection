@@ -111,7 +111,7 @@ Neuere Arten von künstlichen, neuronalen Netzen könnten die Effizienz der Leck
 - [ ] Analysieren der Daten
   - [ ] Zyklen erkennen (Tageszyklus, Jahreszeiten, ...)
 - [ ] Datenstrukturen aufsetzen
-  - [ ] Netzwerk
+  - [X] Netzwerk
   - [ ] Datensatz
 - [ ] Testen verschiedener Leck-Arten (Bruch, Schleichend, ...)
 - [ ] **Trainingsdaten** generieren (*train-test-split*)
