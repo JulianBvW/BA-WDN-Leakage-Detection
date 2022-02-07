@@ -16,13 +16,33 @@ class Dataloader:
     self.data = simulation_results
     self.important_nodes = important_nodes
   
-  def get_nodes(self, nodes):
-    """Select specific nodes
+  def get_nodes(self, nodes=[]):
+    """Select specific nodes or just the important nodes.
 
     Args:
-      nodes (iterable of nodes): The nodes you want to get.
+      nodes (iterable of nodes) (optional): The nodes you want to get.
     
     Returns:
       Pandas Dataframe containing node pressures with hour as index.
     """
-    return self.data.loc[:,nodes]
+    if nodes:
+      return self.data.loc[:,nodes]
+      
+    return self.data.loc[:, self.important_nodes]
+  
+  def get_days_at_hour(self, hour, nodes=[]):
+    """Set day as index while looking at a specific hour.
+
+    Args:
+      hour (Int): The hour of the day.
+      nodes (iterable of nodes) (optional): The nodes you want to get.
+    
+    Returns:
+      pandas Dataframe containing pressure values for the specified hour.
+    """
+    at_hour = self.data[self.data['hour of the day'] == hour].set_index('day')
+    
+    if nodes:
+      return at_hour.loc[:,nodes]
+
+    return at_hour.loc[:, self.important_nodes]
