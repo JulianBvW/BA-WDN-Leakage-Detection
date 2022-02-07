@@ -49,6 +49,8 @@ class WDN:
     self.network.options.time.duration = time_in_hours*3600
 
     # Add leakages
+    for n_id in self.important_nodes:
+      self.network.get_node(n_id).remove_leak(self.network)
     for n_id, area, time_start_in_hours, time_end_in_hours in leakages:
       self.network.get_node(n_id).add_leak(self.network, area=area, start_time=time_start_in_hours*3600, end_time=time_end_in_hours*3600)
 
