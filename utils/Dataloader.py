@@ -66,7 +66,7 @@ class Dataloader:
     if not hours:
       hours = range(24)
 
-    data = self.get_days_at_hour(23, ['12']).loc[:, []]
+    data = self.get_days_at_hour(23, [node]).loc[:, []]
     for i in hours:
-      data[i] = self.get_days_at_hour(i, ['12'])['12'].values.tolist()[:len(data)]
+      data[i] = self.get_days_at_hour(i, [node])[node].values.tolist()[:len(data)]
     return data
