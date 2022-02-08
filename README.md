@@ -108,8 +108,9 @@ Neuere Arten von künstlichen, neuronalen Netzen könnten die Effizienz der Leck
 - [X] Aufgabenstellung formulieren
 - [X] Git initialisieren
 - [ ] Weitere Literatur lesen
-- [ ] Analysieren der Daten
-  - [ ] Zyklen erkennen (Tageszyklus, Jahreszeiten, ...)
+- [X] Analysieren der Daten
+  - [X] Zyklen erkennen (Tageszyklus, Jahreszeiten, ...)
+    -> Nur Tageszyklen, Anpass-Zeit
 - [X] Datenstrukturen aufsetzen
   - [X] Netzwerk
   - [X] Datensatz
