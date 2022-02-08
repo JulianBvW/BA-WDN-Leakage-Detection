@@ -21,6 +21,7 @@ class Dataloader:
 
     Args:
       nodes (iterable of nodes) (optional): The nodes you want to get.
+      include_time (Bool) (optional): Set flag to include time of day and day columns.
     
     Returns:
       Pandas Dataframe containing node pressures with hour as index.
@@ -51,3 +52,21 @@ class Dataloader:
       return at_hour.loc[:, nodes]
 
     return at_hour.loc[:, self.important_nodes]
+  
+  def get_days_at_hours(self, node, hours=[]):
+    """Set day as index while looking at (specific) hours for a specific node.
+
+    Args:
+      node (node): The node you want to get.
+      hours (iterable of int) (optional): Specific hours.
+    
+    Returns:
+      pandas Dataframe containing pressures for one node at different hours.
+    """
+    if not hours:
+      hours = range(24)
+
+    data = self.get_days_at_hour(23, ['12']).loc[:, []]
+    for i in hours:
+      data[i] = self.get_days_at_hour(i, ['12'])['12'].values.tolist()[:len(data)]
+    return data
