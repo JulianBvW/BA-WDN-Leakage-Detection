@@ -42,6 +42,7 @@ In dieser Arbeit geht es um die **datengetrieben Verfahren** (also passive, auf 
 ### Datensätze
   - Spielzeugdatensatz (z.B. Net1)
   - [LeakDB](https://github.com/KIOS-Research/LeakDB)
+  - BattleDIM (L-Town Netzwerk)  <- Real world!
 ### Evaluations-Metriken
   - Train-Test Split (z.B. Cross validation, ...) 
   - Annomaliedetektion => Zeitpunkte: Vgl. mit Annomalie-Zeitpunkten aus GroundTruth -- TP, FP, TN, FN (Confusion Matrix), Precision, Recall, ...
