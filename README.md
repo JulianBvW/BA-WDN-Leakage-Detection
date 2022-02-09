@@ -115,7 +115,7 @@ Neuere Arten von künstlichen, neuronalen Netzen könnten die Effizienz der Leck
 - [X] Datenstrukturen aufsetzen
   - [X] Netzwerk
   - [X] Datensatz
-- [ ] Testen verschiedener Leck-Arten (Bruch, Schleichend, ...)
+- [X] Testen verschiedener Leck-Arten (Bruch, Schleichend, ...)
 - [ ] **Trainingsdaten** generieren (*train-test-split*)
 - [ ] **Experiment: Baseline**
   - [ ] Modell aufstellen
