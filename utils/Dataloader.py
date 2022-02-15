@@ -37,7 +37,7 @@ class Dataloader:
     if include_day:
       nodelist += ['day']
       
-    return self.data.loc[:, nodelist]
+    return self.data.loc[:, nodelist].clone()
   
   def get_days_at_hour(self, hour, nodes=[]):
     """Set day as index while looking at a specific hour.
@@ -49,7 +49,7 @@ class Dataloader:
     Returns:
       pandas Dataframe containing pressure values for the specified hour.
     """
-    at_hour = self.data[self.data['hour of the day'] == hour].set_index('day')
+    at_hour = self.data[self.data['hour of the day'] == hour].clone().set_index('day')
     
     if nodes:
       return at_hour.loc[:, nodes]
