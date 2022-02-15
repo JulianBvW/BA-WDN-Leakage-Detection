@@ -16,7 +16,7 @@ class Dataloader:
     self.data = simulation_results
     self.important_nodes = important_nodes
   
-  def get_nodes(self, nodes=[], include_time=False):
+  def get_nodes(self, nodes=[], include_time=False, include_day=False):
     """Select specific nodes or just the important nodes.
 
     Args:
@@ -32,7 +32,10 @@ class Dataloader:
       nodelist += self.important_nodes
     
     if include_time:
-      nodelist += ['hour of the day', 'day']
+      nodelist += ['hour of the day']
+    
+    if include_day:
+      nodelist += ['day']
       
     return self.data.loc[:, nodelist]
   
