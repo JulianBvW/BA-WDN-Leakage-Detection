@@ -38,8 +38,6 @@ class Dataloader:
     
     if include_day:
       nodelist.append('day')
-    
-    print(nodelist)
       
     return self.data.loc[:, nodelist].copy()
   
