@@ -32,10 +32,12 @@ class Dataloader:
       nodelist += self.important_nodes
     
     if include_time:
-      nodelist += ['hour of the day']
+      nodelist.append('hour of the day')
     
     if include_day:
-      nodelist += ['day']
+      nodelist.append('day')
+
+    nodelist = sorted(list(set(nodelist)))
       
     return self.data.loc[:, nodelist].copy()
   
