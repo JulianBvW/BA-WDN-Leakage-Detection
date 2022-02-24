@@ -26,7 +26,9 @@ class Dataloader:
     Returns:
       Pandas Dataframe containing node pressures with hour as index.
     """
-    nodelist = nodes
+    nodelist = []
+
+    nodelist += nodes
 
     if not nodes:
       nodelist += self.important_nodes
@@ -36,8 +38,8 @@ class Dataloader:
     
     if include_day:
       nodelist.append('day')
-
-    nodelist = sorted(list(set(nodelist)))
+    
+    print(nodelist)
       
     return self.data.loc[:, nodelist].copy()
   
