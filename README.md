@@ -120,7 +120,10 @@ Neuere Arten von künstlichen, neuronalen Netzen könnten die Effizienz der Leck
 - [X] Testen verschiedener Leck-Arten (Bruch, Schleichend, ...)
 - [X] **Trainingsdaten** generieren (*train-test-split*)
 - [ ] **Experiment: Baseline**
-  - [ ] Modell aufstellen
+  - [ ] Modelle testen
+    - [X] SVM
+    - [ ] KNN
+    - [ ] NN
   - [ ] Hyperparameter adjustieren
   - [ ] Gewichten
   - [ ] Metriken analysieren
