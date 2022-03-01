@@ -115,9 +115,9 @@ Neuere Arten von künstlichen, neuronalen Netzen könnten die Effizienz der Leck
 - [ ] Datenstrukturen aufsetzen
   - [X] Netzwerk
   - [X] Datensatz
-  - [ ] Datengenerator
+  - [X] Datengenerator
     - [X] Einzelne Simulationen
-    - [ ] Gesamtes X, y
+    - [X] Gesamtes X, y
   - [X] Modell (Klassifikation)
   - [ ] Modell (Regression)
   - [ ] Feature Extractor
