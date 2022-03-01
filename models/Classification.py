@@ -1,0 +1,67 @@
+import numpy as np
+import pandas as pd
+from scipy.signal import medfilt
+from sklearn.base import BaseEstimator
+from sklearn.metrics import accuracy_score
+from utils.helper import any_transform
+
+class ClassificationModel(BaseEstimator):
+  """
+  Classification model wrapper for different ML models like SVM or KNN.
+  Uses median filter for noise free classification.
+  """
+
+  def __init__(self, model, medfilt_kernel_size=5):
+    """Create the model.
+
+    Args:
+      model (SKLearn classificator): The base estimator.
+      medfilt_kernel_size (int): The kernel size for the median filter.
+    """
+    self.model = model
+    self.medfilt_kernel_size = medfilt_kernel_size
+
+  def fit(self, X, y):
+    """Trains the model.
+
+    Args:
+      X (list of pandas dataframe time series): Multiple simulations.
+      y (list of numpy arrays): True labels for every time point in every simulation.
+    """
+
+    # Concatinate the simulations to train everything at once.
+    X_concat = pd.concat(X)
+    y_concat = np.concatenate(y)
+    X_concat.reset_index(drop=True, inplace=True)
+
+    # Train the model.
+    self.model.fit(X_concat, y_concat)
+
+    return self
+
+  def predict(self, X):
+    """Predict labels for every time point of every time series inputted.
+
+    Args:
+      X (list of pandas dataframe time series): Multiple time series.
+    
+    Returns:
+      preds: List of Numpy arrays containing the labels for every time point.
+    """
+    preds = []
+    for X_single in X:
+      pred = self.model.predict(X_single)
+      preds.append(medfilt(pred, self.medfilt_kernel_size))
+    return preds
+
+  def score(self, X, y):
+    """Implements standard accuracy score.
+
+    Args:
+      X (list of pandas dataframe time series): Multiple time series.
+      y (list of numpy arrays): True labels for every time point in every simulation.
+    
+    Returns:
+      score: Accuracy score.
+    """
+    return accuracy_score(*any_transform(y, self.predict(X)))
