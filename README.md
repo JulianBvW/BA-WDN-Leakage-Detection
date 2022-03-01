@@ -115,10 +115,21 @@ Neuere Arten von künstlichen, neuronalen Netzen könnten die Effizienz der Leck
 - [ ] Datenstrukturen aufsetzen
   - [X] Netzwerk
   - [X] Datensatz
-  - [X] Datengenerator
-  - [ ] Modelle
+  - [ ] Datengenerator
+    - [X] Einzelne Simulationen
+    - [ ] Gesamtes X, y
+  - [X] Modell (Klassifikation)
+  - [ ] Modell (Regression)
+  - [ ] Feature Extractor
+  - [ ] Metrik
+    - [X] Precision, Recall, Specificion, Accuracy
+    - [ ] Detection Time
+  - [X] Helper
 - [X] Testen verschiedener Leck-Arten (Bruch, Schleichend, ...)
-- [X] **Trainingsdaten** generieren (*train-test-split*)
+- [ ] **Trainingsdaten** richtig generieren
+  - [X] *train-test-split*
+  - [ ] Cross Validation
+  - [ ] Grid Search
 - [ ] **Experiment: Baseline**
   - [ ] Modelle testen
     - [X] SVM
