@@ -122,8 +122,8 @@ Neuere Arten von künstlichen, neuronalen Netzen könnten die Effizienz der Leck
 - [ ] **Experiment: Baseline**
   - [ ] Modelle testen
     - [X] SVM
-    - [ ] KNN
-    - [ ] NN
+    - [X] KNN
+    - [X] NN
   - [ ] Hyperparameter adjustieren
   - [ ] Gewichten
   - [ ] Metriken analysieren
