@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 from .Dataloader import Dataloader
+from tqdm import tqdm
+pd.options.mode.chained_assignment = None
 
 class Datagenerator:
   """
@@ -108,7 +110,11 @@ class Datagenerator:
     # Generate simulations
     X, y = [], []
     for node, iters in zip(['12', ''], [size_leak, size - size_leak]):
-      for i in range(iters):
+      if node == '':
+        print(f'Generating {iters} non leakage scenarios...')
+      else:
+        print(f'Generating {iters} leakage scenarios...')
+      for i in tqdm(range(iters)):
         X_single, y_single = self.gen_single_data(node, num_hours=24*days_per_sim, include_time=include_time, noise_strength=noise_strength)
         X.append(X_single)
         y.append(y_single)
