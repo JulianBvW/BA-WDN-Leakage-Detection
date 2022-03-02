@@ -24,7 +24,7 @@ def detection_time(y_true_list, y_pred_list):
         times += np.where(y_pred[idx:] == 1)[0][0]
         count += 1
   if count == 0:
-    return '-'
+    return -1
   return times / count
 
 def print_metrics(y_true_list, y_pred_list):
