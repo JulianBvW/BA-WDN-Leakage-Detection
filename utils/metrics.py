@@ -23,6 +23,8 @@ def detection_time(y_true_list, y_pred_list):
       if 1 in y_pred[idx:]:
         times += np.where(y_pred[idx:] == 1)[0][0]
         count += 1
+  if count == 0:
+    return '-'
   return times / count
 
 def print_metrics(y_true_list, y_pred_list):
