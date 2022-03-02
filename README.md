@@ -121,14 +121,14 @@ Neuere Arten von künstlichen, neuronalen Netzen könnten die Effizienz der Leck
   - [X] Modell (Klassifikation)
   - [ ] Modell (Regression)
   - [ ] Feature Extractor
-  - [ ] Metrik
+  - [X] Metrik
     - [X] Precision, Recall, Specificion, Accuracy
-    - [ ] Detection Time
+    - [X] Detection Time
   - [X] Helper
 - [X] Testen verschiedener Leck-Arten (Bruch, Schleichend, ...)
 - [ ] **Trainingsdaten** richtig generieren
   - [X] *train-test-split*
-  - [ ] Cross Validation
+  - [X] Cross Validation
   - [ ] Grid Search
 - [ ] **Experiment: Baseline**
   - [ ] Modelle testen
