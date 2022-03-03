@@ -89,7 +89,7 @@ class Datagenerator:
     return X_concat, y_concat
 
 
-  def gen_dataset(self, size=50, leak_perc=0.5, days_per_sim=5, include_time=True, noise_strength=0.3):
+  def gen_dataset(self, size=50, leak_perc=0.5, days_per_sim=5, include_time=True, noise_strength=0.3, numpy=True):
     """Generate a whole dataset containing leakage and non leakage scenarios.
 
     Args:
@@ -98,6 +98,7 @@ class Datagenerator:
       days_per_sim (int): The numbers of days per simulation.
       include_time (bool): If 'hour of the day' should be included.
       noise_strength (float): Strength of the noise added.
+      numpy (bool): If the data should be converted to numpy arrays.
     
     Returns:
       X: List of Pandas Dataframes containing node pressures with hour as index.
@@ -119,4 +120,6 @@ class Datagenerator:
         X.append(X_single)
         y.append(y_single)
     
+    if numpy:
+      return np.array(X), np.array(y)
     return X, y
