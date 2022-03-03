@@ -30,9 +30,12 @@ class ClassificationModel(BaseEstimator):
     """
 
     # Concatinate the simulations to train everything at once.
-    X_concat = pd.concat(X)
+    if type(X) == list:
+      X_concat = pd.concat(X)
+      X_concat.reset_index(drop=True, inplace=True)
+    else:
+      X_concat = X.reshape((X.shape[0]*X.shape[1], X.shape[2]))
     y_concat = np.concatenate(y)
-    X_concat.reset_index(drop=True, inplace=True)
 
     # Train the model.
     self.model.fit(X_concat, y_concat)
