@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from .Dataloader import Dataloader
 from tqdm import tqdm
+from utils.helper import shuffle_data
 pd.options.mode.chained_assignment = None
 
 class Datagenerator:
@@ -89,7 +90,7 @@ class Datagenerator:
     return X_concat, y_concat
 
 
-  def gen_dataset(self, size=50, leak_perc=0.5, days_per_sim=5, include_time=True, noise_strength=0.3, numpy=True):
+  def gen_dataset(self, size=50, leak_perc=0.5, days_per_sim=5, include_time=True, noise_strength=0.3, numpy=True, shuffle=False):
     """Generate a whole dataset containing leakage and non leakage scenarios.
 
     Args:
@@ -99,6 +100,7 @@ class Datagenerator:
       include_time (bool): If 'hour of the day' should be included.
       noise_strength (float): Strength of the noise added.
       numpy (bool): If the data should be converted to numpy arrays.
+      shuffle (bool): If the data should be shuffled (only if numpy=True).
     
     Returns:
       X: List of Pandas Dataframes containing node pressures with hour as index.
@@ -121,5 +123,8 @@ class Datagenerator:
         y.append(y_single)
     
     if numpy:
-      return np.array(X), np.array(y)
+      X, y = np.array(X), np.array(y)
+      if shuffle:
+        X, y = shuffle_data(X, y)
+    
     return X, y
