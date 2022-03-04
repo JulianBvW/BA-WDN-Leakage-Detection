@@ -68,3 +68,9 @@ class ClassificationModel(BaseEstimator):
       score: Accuracy score.
     """
     return accuracy_score(*any_transform(y, self.predict(X)))
+
+  def get_params(self, deep=True):
+    return self.model.get_params(deep)
+  
+  def set_params(self, **params):
+    return self.model.set_params(**params)
