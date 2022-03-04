@@ -11,7 +11,7 @@ class ClassificationModel(BaseEstimator):
   Uses median filter for noise free classification.
   """
 
-  def __init__(self, model, medfilt_kernel_size=5):
+  def __init__(self, model, medfilt_kernel_size=5, **model_params):
     """Create the model.
 
     Args:
@@ -20,6 +20,8 @@ class ClassificationModel(BaseEstimator):
     """
     self.model = model
     self.medfilt_kernel_size = medfilt_kernel_size
+    if model_params:
+      self.model.set_params(**model_params)
 
   def fit(self, X, y):
     """Trains the model.
@@ -70,7 +72,17 @@ class ClassificationModel(BaseEstimator):
     return accuracy_score(*any_transform(y, self.predict(X)))
 
   def get_params(self, deep=True):
-    return self.model.get_params(deep)
+    params = self.model.get_params(deep)
+    params['model'] = self.model
+    params['medfilt_kernel_size'] = self.medfilt_kernel_size
+    return params
   
   def set_params(self, **params):
-    return self.model.set_params(**params)
+    if 'model' in params:
+      self.model = params['model']
+      del params['model']
+    if 'medfilt_kernel_size' in params:
+      self.medfilt_kernel_size = params['medfilt_kernel_size']
+      del params['medfilt_kernel_size']
+    self.model.set_params(**params)
+    return self
