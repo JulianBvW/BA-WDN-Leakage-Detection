@@ -33,4 +33,4 @@ def print_metrics(y_true_list, y_pred_list):
   print(f'Recall (Sns): {round(recall(y_true_list, y_pred_list), 3)}\tWie gut wurden echte Lecks erkannt?')
   print(f'Specificity:  {round(specificity(y_true_list, y_pred_list), 3)}\tWie gut wurde \'alles ok\' erkannt?')
   print(f'Precision:    {round(precision(y_true_list, y_pred_list), 3)}\tWie viele erkannte lecks waren auch wirklich Lecks?')
-  print(f'Mean Detection Time: {round(detection_time(y_true_list, y_pred_list), 3)}\tWie viele Stunden dauerte es bis zum erkennen?')
+  print(f'Mean Detection Time: {round(detection_time(y_true_list, y_pred_list), 3)}h\tWie viele Stunden dauerte es bis zum erkennen?')
