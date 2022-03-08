@@ -135,6 +135,7 @@ Neuere Arten von künstlichen, neuronalen Netzen könnten die Effizienz der Leck
     - [X] SVM
     - [X] KNN
     - [X] NN
+  - [ ] Verscch. Feature Extractor
   - [ ] Hyperparameter adjustieren
   - [ ] Gewichten
   - [ ] Metriken analysieren
@@ -142,7 +143,7 @@ Neuere Arten von künstlichen, neuronalen Netzen könnten die Effizienz der Leck
   - [ ] Modell aufstellen
   - [ ] Hyperparameter adjustieren
   - [ ] Gewichten
-  - [ ] Threshold adjustieren
+  - [ ] Threshold adjustieren (Pipeline)
   - [ ] Metriken analysieren
 - [ ] **Experiment: Recurrent- und Graph-NN**
   - [ ] Was ist das überhaupt?
