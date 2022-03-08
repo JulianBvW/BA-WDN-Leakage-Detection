@@ -24,8 +24,8 @@ def detection_time(y_true_list, y_pred_list):
         times += np.where(y_pred[idx:] == 1)[0][0]
         count += 1
   if count == 0:
-    return -1
-  return times / count
+    return -float('inf')
+  return -times / count
 
 def print_metrics(y_true_list, y_pred_list):
   print(confusion_matrix(*any_transform(y_true_list, y_pred_list)))
