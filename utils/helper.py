@@ -11,4 +11,12 @@ def any_transform(a, b):
 def shuffle_data(X, y):
   idxs = np.arange(len(y))
   np.random.shuffle(idxs)
-  return X[idxs], y[idxs]
+  if type(X) == np.ndarray:
+    return X[idxs], y[idxs]
+  else:
+    X_list = []
+    y_list = []
+    for idx in idxs:
+      X_list.append(X[idx])
+      y_list.append(y[idx])
+    return X_list, y_list
