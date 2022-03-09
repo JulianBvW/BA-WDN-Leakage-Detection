@@ -126,17 +126,17 @@ Neuere Arten von künstlichen, neuronalen Netzen könnten die Effizienz der Leck
     - [X] Detection Time
   - [X] Helper
 - [X] Testen verschiedener Leck-Arten (Bruch, Schleichend, ...)
-- [ ] **Trainingsdaten** richtig generieren
+- [X] **Trainingsdaten** richtig generieren
   - [X] *train-test-split*
   - [X] Cross Validation
-  - [ ] Grid Search
+  - [X] Grid Search
 - [ ] **Experiment: Baseline**
   - [ ] Modelle testen
     - [X] SVM
     - [X] KNN
     - [X] NN
-  - [ ] Verscch. Feature Extractor
-  - [ ] Hyperparameter adjustieren
+  - [ ] Versch. Feature Extractor
+  - [X] Hyperparameter adjustieren
   - [ ] Gewichten
   - [ ] Metriken analysieren
 - [ ] **Experiment: Regression**
