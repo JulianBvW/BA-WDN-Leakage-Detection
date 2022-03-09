@@ -120,7 +120,7 @@ Neuere Arten von künstlichen, neuronalen Netzen könnten die Effizienz der Leck
     - [X] Gesamtes X, y
   - [X] Modell (Klassifikation)
   - [ ] Modell (Regression)
-  - [ ] Feature Extractor
+  - [X] Feature Extractor
   - [X] Metrik
     - [X] Precision, Recall, Specificion, Accuracy
     - [X] Detection Time
@@ -135,7 +135,7 @@ Neuere Arten von künstlichen, neuronalen Netzen könnten die Effizienz der Leck
     - [X] SVM
     - [X] KNN
     - [X] NN
-  - [ ] Versch. Feature Extractor
+  - [X] Versch. Feature Extractor
   - [X] Hyperparameter adjustieren
   - [ ] Gewichten
   - [ ] Metriken analysieren
