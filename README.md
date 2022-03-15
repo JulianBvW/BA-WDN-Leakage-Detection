@@ -54,7 +54,7 @@ In dieser Arbeit geht es um die **datengetrieben Verfahren** (also passive, auf 
 ### Generelles
 
 - Titel: **TODO**
-- [Formelles](https://www.uni-bielefeld.de/fakultaeten/technische-fakultaet/organisation/formulare/) (Eigenständigkeitserklärung, **kein** Uni-Log, Studiengang, Name, Abschluss, Gutachternamen, ...)
+- Formelles (Eigenständigkeitserklärung, **kein** Uni-Log, Studiengang, Name, Abschluss, Gutachternamen, ...)
 - ca. **20-30 Seiten** (Code als Repository)
 - Ausdruckt vor Corona, heute i.d.R. digital als .pdf
 - Formatierung: Egal  <- Meisten Studis machen LaTeX, wenn Druck dann bitte auf Margins achten! Siehe [Smart Thesis Template](https://github.com/astoeckel/smart-thesis)
@@ -121,9 +121,11 @@ Neuere Arten von künstlichen, neuronalen Netzen könnten die Effizienz der Leck
   - [X] Modell (Klassifikation)
   - [ ] Modell (Regression)
   - [X] Feature Extractor
-  - [X] Metrik
+  - [ ] Metrik
     - [X] Precision, Recall, Specificion, Accuracy
-    - [X] Detection Time
+    - [ ] Detection Time
+      - [X] Mean
+      - [ ] Standartabweichung
   - [X] Helper
 - [X] Testen verschiedener Leck-Arten (Bruch, Schleichend, ...)
 - [X] **Trainingsdaten** richtig generieren
