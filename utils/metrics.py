@@ -25,7 +25,16 @@ def detection_time(y_true_list, y_pred_list):
         count += 1
   if count == 0:
     return -float('inf')
-  return -times / count # TODO STD
+  return -times / count
+
+def detection_time_list(y_true_list, y_pred_list):
+  times = []
+  for y_true, y_pred in zip(y_true_list, y_pred_list):
+    if 1 in y_true:
+      idx = np.where(y_true == 1)[0][0]
+      if 1 in y_pred[idx:]:
+        times.append(np.where(y_pred[idx:] == 1)[0][0])
+  return times
 
 def print_metrics(y_true_list, y_pred_list):
   print(confusion_matrix(*any_transform(y_true_list, y_pred_list)))
