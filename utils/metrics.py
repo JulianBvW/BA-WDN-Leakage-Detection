@@ -25,7 +25,7 @@ def detection_time(y_true_list, y_pred_list):
         count += 1
   if count == 0:
     return -float('inf')
-  return -times / count
+  return -times / count # TODO STD
 
 def print_metrics(y_true_list, y_pred_list):
   print(confusion_matrix(*any_transform(y_true_list, y_pred_list)))
