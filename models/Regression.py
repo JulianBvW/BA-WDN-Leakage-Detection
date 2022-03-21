@@ -45,19 +45,18 @@ class RegressionModel(BaseEstimator):
       raise TypeError('X must be list of pd.DataFrame.')
     y_concat = np.concatenate(y)
 
-    ##### Regressor
-
     # Filter leakages
     data_regr = X_concat[y_concat == 0]
-    X_regr = data_regr[self.node_ensamble]
+    X_regr = data_regr[self.node_ensamble] # TODO: time of day?
     y_regr = data_regr[self.node_target]
 
-    # Train
+    # Train Regressor
     self.model.fit(X_regr, y_regr)
 
-    ##### Threshold
-
-    # 
+    # Set Threshold
+    y_pred = self.model.predict(X_concat[self.node_ensamble]) # TODO: time of day?
+    differences = pd.DataFrame(X_concat['12'] - y_pred)
+    self.threshold = differences[y_concat == 0].quantile(.0)[0]
 
     return self
 
@@ -72,8 +71,12 @@ class RegressionModel(BaseEstimator):
     """
     preds = []
     for X_single in X:
-      pred = self.model.predict(X_single)
-      preds.append(medfilt(pred, self.medfilt_kernel_size))
+      X_single_regr = X_single[self.node_ensamble] # TODO: time of day?
+      y_single_true = X_single[self.node_target]
+      y_single_pred = self.model.predict(X_single_regr)
+      differences = pd.DataFrame(y_single_true - y_single_pred)
+      is_under_threshold = np.array((differences < self.threshold)['12'])
+      preds.append(is_under_threshold.astype(int))
     return preds
 
   def score(self, X, y):
