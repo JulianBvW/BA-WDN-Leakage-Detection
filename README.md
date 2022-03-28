@@ -129,7 +129,7 @@ Zwei Ansätze, die vlt. möglich sind.
   - [X] Feature Extractor
   - [X] Metrik
     - [X] Precision, Recall, Specificion, Accuracy
-    - [ ] Detection Time
+    - [X] Detection Time
       - [X] Mean
       - [X] Standartabweichung
       - [X] Median
