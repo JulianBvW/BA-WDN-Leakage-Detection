@@ -115,9 +115,10 @@ Neuere Arten von künstlichen, neuronalen Netzen könnten die Effizienz der Leck
 - [ ] Datenstrukturen aufsetzen
   - [X] Netzwerk
   - [X] Datensatz
-  - [X] Datengenerator
+  - [ ] Datengenerator
     - [X] Einzelne Simulationen
     - [X] Gesamtes X, y
+    - [ ] Verschiedene Nodes mit Leck
   - [X] Modell (Klassifikation)
   - [ ] Modell (Regression)
   - [X] Feature Extractor
@@ -133,7 +134,7 @@ Neuere Arten von künstlichen, neuronalen Netzen könnten die Effizienz der Leck
   - [X] Cross Validation
   - [X] Grid Search
 - [ ] **Experiment: Baseline**
-  - [ ] Modelle testen
+  - [X] Modelle testen
     - [X] SVM
     - [X] KNN
     - [X] NN
@@ -147,10 +148,16 @@ Neuere Arten von künstlichen, neuronalen Netzen könnten die Effizienz der Leck
   - [ ] Gewichten
   - [ ] Threshold adjustieren (Pipeline)
   - [ ] Metriken analysieren
-- [ ] **Experiment: Recurrent- und Graph-NN**
-  - [ ] Was ist das überhaupt?
-  - [ ] Keine Ahnung?
-- [ ] Weitere **Datensätze** testen
+- [ ] ~**Experiment: Recurrent- und Graph-NN**~
+  - [ ] ~Was ist das überhaupt?~
+  - [ ] ~Keine Ahnung?~
+- [ ] **Experiment: Weitere Modelle**
+  - [ ] Time Series Forecasting
+  - [ ] Unsupervised Outliar Detection
+- [ ] **Datensätze** testen
+  - [X] Net1 Spielzeug
+  - [ ] LeakDB
+  - [ ] BattleDIM
 - [ ] **XAI**: Analysieren der Experimente
 - [ ] Aufschreiben
   - [ ] Formelles
