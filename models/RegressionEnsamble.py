@@ -26,11 +26,11 @@ class RegressionEnsamble(BaseEstimator):
     self.models = {}
     for node in nodes:
       self.models[node] = clone(model)
+      if model_params:
+        self.models[node].set_params(**model_params)
 
+    self.nodes = nodes
     self.medfilt_kernel_size = medfilt_kernel_size
-
-    #if model_params: # TODO!
-    #  self.model.set_params(**model_params)
 
   def fit(self, X, y):
     """Trains the model.
@@ -119,8 +119,9 @@ class RegressionEnsamble(BaseEstimator):
     return accuracy_score(*any_transform(y, self.predict(X)))
 
   def get_params(self, deep=True):
-    params = self.model.get_params(deep)
+    params = self.models[self.nodes[0]].get_params(deep)
     params['model'] = self.model
+    params['nodes'] = self.nodes
     params['medfilt_kernel_size'] = self.medfilt_kernel_size
     return params
   
@@ -128,8 +129,12 @@ class RegressionEnsamble(BaseEstimator):
     if 'model' in params:
       self.model = params['model']
       del params['model']
+    if 'nodes' in params:
+      self.nodes = params['nodes']
+      del params['nodes']
     if 'medfilt_kernel_size' in params:
       self.medfilt_kernel_size = params['medfilt_kernel_size']
       del params['medfilt_kernel_size']
-    self.model.set_params(**params)
+    for node in self.nodes:
+      self.models[node].set_params(**params)
     return self

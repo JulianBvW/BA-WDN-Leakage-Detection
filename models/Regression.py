@@ -25,7 +25,7 @@ class RegressionModel(BaseEstimator):
     self.model = model
     self.node_target = node_target
     self.node_ensamble = node_ensamble
-    self.medfilt_kernel_size = medfilt_kernel_size
+    self.medfilt_kernel_size = medfilt_kernel_size # TODO: needed?
     if model_params:
       self.model.set_params(**model_params)
 
@@ -94,6 +94,8 @@ class RegressionModel(BaseEstimator):
   def get_params(self, deep=True):
     params = self.model.get_params(deep)
     params['model'] = self.model
+    params['node_target'] = self.node_target
+    params['node_ensamble'] = self.node_ensamble
     params['medfilt_kernel_size'] = self.medfilt_kernel_size
     return params
   
@@ -101,6 +103,12 @@ class RegressionModel(BaseEstimator):
     if 'model' in params:
       self.model = params['model']
       del params['model']
+    if 'node_target' in params:
+      self.node_target = params['node_target']
+      del params['node_target']
+    if 'node_ensamble' in params:
+      self.node_ensamble = params['node_ensamble']
+      del params['node_ensamble']
     if 'medfilt_kernel_size' in params:
       self.medfilt_kernel_size = params['medfilt_kernel_size']
       del params['medfilt_kernel_size']
