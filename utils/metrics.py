@@ -36,10 +36,21 @@ def detection_time_list(y_true_list, y_pred_list):
         times.append(np.where(y_pred[idx:] == 1)[0][0])
   return times
 
+def detection_time_mean(y_true_list, y_pred_list):
+  return np.mean(detection_time_list(y_true_list, y_pred_list))
+
+def detection_time_std(y_true_list, y_pred_list):
+  return np.std(detection_time_list(y_true_list, y_pred_list))
+
+def detection_time_median(y_true_list, y_pred_list):
+  return np.median(detection_time_list(y_true_list, y_pred_list))
+
 def print_metrics(y_true_list, y_pred_list):
   print(confusion_matrix(*any_transform(y_true_list, y_pred_list)))
   print(f'Accuracy:     {round(accuracy(y_true_list, y_pred_list), 3)}\tWie oft lag der Algorithmus richtig?')
   print(f'Recall (Sns): {round(recall(y_true_list, y_pred_list), 3)}\tWie gut wurden echte Lecks erkannt?')
   print(f'Specificity:  {round(specificity(y_true_list, y_pred_list), 3)}\tWie gut wurde \'alles ok\' erkannt?')
   print(f'Precision:    {round(precision(y_true_list, y_pred_list), 3)}\tWie viele erkannte lecks waren auch wirklich Lecks?')
-  print(f'Mean Detection Time: {round(detection_time(y_true_list, y_pred_list), 3)}h\tWie viele Stunden dauerte es bis zum erkennen?')
+  print(f'Mean Detection Time: {round(detection_time_mean(y_true_list, y_pred_list), 3)}h\tWie viele Stunden dauerte es bis zum erkennen?')
+  print(f'         -> Std:     {round(detection_time_std(y_true_list, y_pred_list), 3)}h\tWie viele Stunden dauerte es bis zum erkennen?')
+  print(f'         -> Mean:    {round(detection_time_median(y_true_list, y_pred_list), 3)}h\tWie viele Stunden dauerte es bis zum erkennen?')
