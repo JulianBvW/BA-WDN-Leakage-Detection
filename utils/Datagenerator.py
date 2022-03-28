@@ -90,17 +90,19 @@ class Datagenerator:
     return X_concat, y_concat
 
 
-  def gen_dataset(self, size=50, leak_perc=0.5, days_per_sim=5, include_time=True, noise_strength=0.3, numpy=False, shuffle=False):
+  def gen_dataset(self, size=50, nodes=['12'], leak_perc=0.5, days_per_sim=5, include_time=True, noise_strength=0.3, numpy=False, shuffle=False, return_nodes=False):
     """Generate a whole dataset containing leakage and non leakage scenarios.
 
     Args:
       size (int): The numbers of simulations.
+      nodes (list of nodes): The nodes that should be used for leakages.
       leak_perc (float [0..1]): Percentage of simulations with leakage.
       days_per_sim (int): The numbers of days per simulation.
       include_time (bool): If 'hour of the day' should be included.
       noise_strength (float): Strength of the noise added.
       numpy (bool): If the data should be converted to numpy arrays.
       shuffle (bool): If the data should be shuffled.
+      return_nodes (bool): If the node chosen for the leak should be returned.
     
     Returns:
       X: List of Pandas Dataframes containing node pressures with hour as index.
@@ -111,21 +113,29 @@ class Datagenerator:
     size_leak = int(size*leak_perc)
 
     # Generate simulations
-    X, y = [], []
-    for node, iters in zip(['12', ''], [size_leak, size - size_leak]):
-      if node == '':
-        print(f'Generating {iters} non leakage scenarios...')
-      else:
+    X, y, y_nodes = [], [], []
+    for leak, iters in zip([True, False], [size_leak, size - size_leak]):
+      if leak:
         print(f'Generating {iters} leakage scenarios...')
+      else:
+        print(f'Generating {iters} non leakage scenarios...')
       for i in tqdm(range(iters)):
+        if leak:
+          node = np.random.choice(nodes)
+        else:
+          node = ''
         X_single, y_single = self.gen_single_data(node, num_hours=24*days_per_sim, include_time=include_time, noise_strength=noise_strength)
         X.append(X_single)
         y.append(y_single)
+        y_nodes.append(node)
     
     if numpy:
-      X, y = np.array(X), np.array(y)
+      X, y, y_nodes = np.array(X), np.array(y), np.array(y_nodes)
     
     if shuffle:
-      X, y = shuffle_data(X, y)
+      X, y, y_nodes = shuffle_data(X, y, y_nodes)
+    
+    if return_nodes:
+      return X, y, y_nodes
     
     return X, y
