@@ -89,7 +89,8 @@ Das Testen von (anfänglich) **3** erschiedenen Ansätzen zur Leck-Erkunnung:
 
 1. Die *Baseline*
 2. Regression
-3. Recurrent- und Graph-NN
+3. ~Recurrent- und Graph-NN~
+4. Outlier Detection und TSF
 
 ### Die Baseline
 
@@ -100,9 +101,13 @@ Hierfür werden einfach die momentanen Druck-Werte jedes Sensors als Eingabe ben
 
 Ein Besserer Ansatz wird der sein, mittels **Regression** die Werte jeweiliger Sensoren anhand aller anderen Sensoren zu **predicten**. Da der echte Wert jedes Sensors gegeben ist, lässt sich leicht die Differenz (der *Error*) berechnen. Dieser kann nun mit einem Schwellwert (evtl. dynamisch) verglichen werden und bei **zu großem Fehler** Alarm schlagen.
 
-### Recurrent- und Graph-NN
+### ~Recurrent- und Graph-NN~
 
-Neuere Arten von künstlichen, neuronalen Netzen könnten die Effizienz der Leck-Detektion noch weiter verbessern. Während sogenannte [Recurrent Neural Networks](https://de.wikipedia.org/wiki/Rekurrentes_neuronales_Netz) als Zusatz eine Art Gedächtnis besitzen, welches hilfreich beim Bearbeiten von **sequenziellen Daten** sind, gibt es auch sogenannte [Graph Neural Networks](https://en.wikipedia.org/wiki/Graph_neural_network), welche **speziell für Graphen**, wie einem WDN, einsetzbar sind.
+~Neuere Arten von künstlichen, neuronalen Netzen könnten die Effizienz der Leck-Detektion noch weiter verbessern. Während sogenannte [Recurrent Neural Networks](https://de.wikipedia.org/wiki/Rekurrentes_neuronales_Netz) als Zusatz eine Art Gedächtnis besitzen, welches hilfreich beim Bearbeiten von **sequenziellen Daten** sind, gibt es auch sogenannte [Graph Neural Networks](https://en.wikipedia.org/wiki/Graph_neural_network), welche **speziell für Graphen**, wie einem WDN, einsetzbar sind.~
+
+### Outlier Detection und Time Series Forecasting
+
+Zwei Ansätze, die vlt. möglich sind.
 
 ## Die Roadmap
 
@@ -112,21 +117,22 @@ Neuere Arten von künstlichen, neuronalen Netzen könnten die Effizienz der Leck
 - [X] Analysieren der Daten
   - [X] Zyklen erkennen (Tageszyklus, Jahreszeiten, ...)
     -> Nur Tageszyklen, Anpass-Zeit
-- [ ] Datenstrukturen aufsetzen
+- [X] Datenstrukturen aufsetzen
   - [X] Netzwerk
   - [X] Datensatz
-  - [ ] Datengenerator
+  - [X] Datengenerator
     - [X] Einzelne Simulationen
     - [X] Gesamtes X, y
-    - [ ] Verschiedene Nodes mit Leck
+    - [X] Verschiedene Nodes mit Leck
   - [X] Modell (Klassifikation)
-  - [ ] Modell (Regression)
+  - [X] Modell (Regression)
   - [X] Feature Extractor
-  - [ ] Metrik
+  - [X] Metrik
     - [X] Precision, Recall, Specificion, Accuracy
     - [ ] Detection Time
       - [X] Mean
-      - [ ] Standartabweichung
+      - [X] Standartabweichung
+      - [X] Median
   - [X] Helper
 - [X] Testen verschiedener Leck-Arten (Bruch, Schleichend, ...)
 - [X] **Trainingsdaten** richtig generieren
@@ -153,7 +159,7 @@ Neuere Arten von künstlichen, neuronalen Netzen könnten die Effizienz der Leck
   - [ ] ~Keine Ahnung?~
 - [ ] **Experiment: Weitere Modelle**
   - [ ] Time Series Forecasting
-  - [ ] Unsupervised Outliar Detection
+  - [ ] Unsupervised Outlier Detection
 - [ ] **Datensätze** testen
   - [X] Net1 Spielzeug
   - [ ] LeakDB
