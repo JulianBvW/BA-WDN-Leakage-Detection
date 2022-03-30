@@ -164,10 +164,10 @@ Zwei Ansätze, die vlt. möglich sind.
 - [ ] **Datensätze** testen
   - [X] Net1 Spielzeug
   - [ ] LeakDB
-    - [ ] Szenario laden
-    - [ ] Datensatz laden
+    - [X] Szenario laden
+    - [X] Datensatz laden
     - [ ] Modelle testen
-    - [ ] Metrik umschreiben (h -> ts)
+    - [X] Metrik umschreiben (h -> ts)
   - [ ] BattleDIM
 - [ ] **XAI**: Analysieren der Experimente
 - [ ] Aufschreiben
