@@ -90,7 +90,7 @@ class Datagenerator:
     return X_concat, y_concat
 
 
-  def gen_dataset(self, size=50, nodes=['12'], leak_perc=0.5, days_per_sim=5, include_time=True, noise_strength=0.3, numpy=False, shuffle=False, return_nodes=False):
+  def gen_dataset(self, size=50, leakage_nodes=['12'], leak_perc=0.5, days_per_sim=5, include_time=True, noise_strength=0.3, numpy=False, shuffle=False, return_nodes=False):
     """Generate a whole dataset containing leakage and non leakage scenarios.
 
     Args:
@@ -121,13 +121,87 @@ class Datagenerator:
         print(f'Generating {iters} non leakage scenarios...')
       for i in tqdm(range(iters)):
         if leak:
-          node = np.random.choice(nodes)
+          node = np.random.choice(leakage_nodes)
         else:
           node = ''
         X_single, y_single = self.gen_single_data(node, num_hours=24*days_per_sim, include_time=include_time, noise_strength=noise_strength)
         X.append(X_single)
         y.append(y_single)
         y_nodes.append(node)
+    
+    if numpy:
+      X, y, y_nodes = np.array(X), np.array(y), np.array(y_nodes)
+    
+    if shuffle:
+      X, y, y_nodes = shuffle_data(X, y, y_nodes)
+    
+    if return_nodes:
+      return X, y, y_nodes
+    
+    return X, y
+
+  def get_scenario(self, root, scenario, ts_in_h=0.5, include_time=True):
+    """Load one scenario of the LeakDB dataset.
+
+    Args:
+      root (str): Root path of the dataset.
+      scenario (int): The scenario number of the dataset.
+      ts_in_h (float): Time step in hours (0.5 = 30min).
+      include_time (bool): If 'hour of the day' should be included.
+    
+    Returns:
+      X: Pandas Dataframe containing node pressures with hour as index.
+      y: Numpy array containing the labels.
+    """
+
+    nodes = self.wdn.important_nodes
+    
+    # Load dataset
+    data = pd.read_csv(root + f'Scenario-{scenario}/Labels.csv')[['Label']]
+    for node in nodes:
+      data[node] = pd.read_csv(root + f'Scenario-{scenario}/Pressures/Node_{node}.csv')['Value']
+
+    # Add hour info
+    data['hour'] = np.arange(0, len(data) * ts_in_h, ts_in_h)
+    data['hour of the day'] = data['hour'] % 24
+    data['day'] = data['hour'] // 24
+    data.set_index('hour')
+
+    start = int(10*24//ts_in_h)
+
+    if include_time:
+      nodes.append('hour of the day')
+    
+    return data[nodes][start:], np.array(data['Label'][start:])
+
+  def get_dataset(self, root, size, ts_in_h=0.5, days_per_sim=5, include_time=True):
+    """Load a whole dataset as selection from the LeakDB dataset 
+    randomly containing leakage and non leakage scenarios.
+
+    Args:
+      root (str): Root path of the dataset.
+      size (int): The numbers of scenarios.
+      ts_in_h (float): Time step in hours (0.5 = 30min).
+      days_per_sim (int): The numbers of days per simulation.
+      include_time (bool): If 'hour of the day' should be included.
+    
+    Returns:
+      X: List of Pandas Dataframes containing node pressures with hour as index.
+      y: List of Numpy arrays containing the labels.
+    """
+
+    # Get scenarios
+    X, y = [], []
+    for _ in tqdm(range(size)):
+      scenario = np.random.randint(1,1001)
+      X_single, y_single = self.get_scenario(root, scenario, ts_in_h, include_time)
+
+
+      node = np.random.choice(leakage_nodes)
+      X_single, y_single = self.gen_single_data(node, num_hours=24*days_per_sim, include_time=include_time, noise_strength=noise_strength)
+      X.append(X_single)
+      y.append(y_single)
+      y_nodes.append(node)
     
     if numpy:
       X, y, y_nodes = np.array(X), np.array(y), np.array(y_nodes)
