@@ -154,7 +154,7 @@ class Datagenerator:
       y: Numpy array containing the labels.
     """
 
-    nodes = self.wdn.important_nodes
+    nodes = list(self.wdn.important_nodes)
     
     # Load dataset
     data = pd.read_csv(root + f'Scenario-{scenario}/Labels.csv')[['Label']]
@@ -196,20 +196,11 @@ class Datagenerator:
       scenario = np.random.randint(1,1001)
       X_single, y_single = self.get_scenario(root, scenario, ts_in_h, include_time)
 
+      # Select the time window
+      time_steps = int(days_per_sim * 24 // ts_in_h)
+      window_start = np.random.randint(len(y_single) - time_steps - 1)
 
-      node = np.random.choice(leakage_nodes)
-      X_single, y_single = self.gen_single_data(node, num_hours=24*days_per_sim, include_time=include_time, noise_strength=noise_strength)
-      X.append(X_single)
-      y.append(y_single)
-      y_nodes.append(node)
-    
-    if numpy:
-      X, y, y_nodes = np.array(X), np.array(y), np.array(y_nodes)
-    
-    if shuffle:
-      X, y, y_nodes = shuffle_data(X, y, y_nodes)
-    
-    if return_nodes:
-      return X, y, y_nodes
-    
+      X.append(X_single.iloc[window_start:window_start+time_steps])
+      y.append(y_single[window_start:window_start+time_steps])
+        
     return X, y
