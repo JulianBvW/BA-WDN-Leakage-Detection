@@ -167,6 +167,7 @@ Zwei Ansätze, die vlt. möglich sind.
     - [ ] Szenario laden
     - [ ] Datensatz laden
     - [ ] Modelle testen
+    - [ ] Metrik umschreiben (h -> ts)
   - [ ] BattleDIM
 - [ ] **XAI**: Analysieren der Experimente
 - [ ] Aufschreiben
