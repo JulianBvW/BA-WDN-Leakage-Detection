@@ -204,3 +204,27 @@ class Datagenerator:
       y.append(y_single[window_start:window_start+time_steps])
         
     return X, y
+
+  def get_full_dataset(self, root, ts_in_h=0.5, include_time=True):
+    """Load a whole LeakDB dataset containing leakage and non 
+    leakage scenarios.
+
+    Args:
+      root (str): Root path of the dataset.
+      ts_in_h (float): Time step in hours (0.5 = 30min).
+      include_time (bool): If 'hour of the day' should be included.
+    
+    Returns:
+      X: List of Pandas Dataframes containing node pressures with hour as index.
+      y: List of Numpy arrays containing the labels.
+    """
+
+    # Get scenarios
+    X, y = [], []
+    for scenario in tqdm(range(1, 1001)):
+      X_single, y_single = self.get_scenario(root, scenario, ts_in_h, include_time)
+
+      X.append(X_single)
+      y.append(y_single)
+        
+    return X, y

@@ -4,6 +4,7 @@ from scipy.signal import medfilt
 from sklearn.base import BaseEstimator
 from sklearn.metrics import accuracy_score
 from utils.helper import any_transform
+from tqdm import tqdm
 
 class ClassificationModel(BaseEstimator):
   """
@@ -44,15 +45,20 @@ class ClassificationModel(BaseEstimator):
 
     return self
 
-  def predict(self, X):
+  def predict(self, X, verbose=False):
     """Predict labels for every time point of every time series inputted.
 
     Args:
       X (list of pandas dataframe time series): Multiple time series.
-    
+      verbose (bool): If you want to use tqdm.
+
     Returns:
       preds: List of Numpy arrays containing the labels for every time point.
     """
+    
+    if verbose:
+      X = tqdm(X)
+
     preds = []
     for X_single in X:
       pred = self.model.predict(X_single)
