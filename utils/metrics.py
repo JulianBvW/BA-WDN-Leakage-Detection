@@ -52,4 +52,4 @@ def print_metrics(y_true_list, y_pred_list):
   print(f'Specificity:  {round(specificity(y_true_list, y_pred_list), 3)}\tWie gut wurde \'alles ok\' erkannt?')
   print(f'Precision:    {round(precision(y_true_list, y_pred_list), 3)}\tWie viele erkannte lecks waren auch wirklich Lecks?')
   print(f'Detection Time      \tWie viele Zeiteinheiten dauerte es bis zum erkennen?')
-  print(f' -> Mean: {round(detection_time_mean(y_true_list, y_pred_list), 3)}t\tStd: {round(detection_time_std(y_true_list, y_pred_list), 3)}h\tMedian: {round(detection_time_median(y_true_list, y_pred_list), 3)}h')
+  print(f' -> Mean: {round(detection_time_mean(y_true_list, y_pred_list), 3)}ts\tStd: {round(detection_time_std(y_true_list, y_pred_list), 3)}ts\tMedian: {round(detection_time_median(y_true_list, y_pred_list), 3)}ts')
