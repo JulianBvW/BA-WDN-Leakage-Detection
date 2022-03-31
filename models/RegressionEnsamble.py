@@ -5,6 +5,7 @@ from sklearn.base import BaseEstimator
 from sklearn.metrics import accuracy_score
 from utils.helper import any_transform
 from sklearn.base import clone
+from tqdm import tqdm
 
 class RegressionEnsamble(BaseEstimator):
   """
@@ -32,13 +33,18 @@ class RegressionEnsamble(BaseEstimator):
     self.nodes = nodes
     self.medfilt_kernel_size = medfilt_kernel_size
 
-  def fit(self, X, y):
+  def fit(self, X, y, verbose=False):
     """Trains the model.
 
     Args:
       X (list of pandas dataframe time series): Multiple simulations.
       y (list of numpy arrays): True labels for every time point in every simulation.
+      verbose (bool): If you want to use tqdm.
     """
+
+    nodes = self.nodes
+    if verbose:
+      nodes = tqdm(self.nodes)
 
     # Concatinate the simulations to train everything at once.
     if type(X) == list:
@@ -53,7 +59,7 @@ class RegressionEnsamble(BaseEstimator):
 
     # Go over every virtual node
     X_regr_pred = pd.DataFrame()
-    for node in self.models:
+    for node in nodes:
 
       # Filter features for regression
       features = list(X_concat.columns)
@@ -68,28 +74,30 @@ class RegressionEnsamble(BaseEstimator):
       X_regr_pred[node] = self.models[node].predict(X_concat[features])
       
     differences = X_concat[list(self.models)] - X_regr_pred
-
-    return differences
-
-    #self.threshold = differences[y_concat == 0].quantile(.0)[0]
+    self.thresholds = abs(differences[y_concat == 0]).max() * 1.5
 
     return self
 
-  def predict(self, X):
+  def predict(self, X, verbose=False, t=0):
     """Predict labels for every time point of every time series inputted.
 
     Args:
       X (list of pandas dataframe time series): Multiple time series.
+      verbose (bool): If you want to use tqdm.
     
     Returns:
       preds: List of Numpy arrays containing the labels for every time point.
     """
+
+    if verbose:
+      X = tqdm(X)
+
     preds = []
     for X_single in X:
 
       # Go over every virtual node
       X_regr_pred = pd.DataFrame()
-      for node in self.models:
+      for node in self.nodes:
   
         # Exclude current node for regression
         features = list(X_single.columns)
@@ -99,10 +107,10 @@ class RegressionEnsamble(BaseEstimator):
         X_regr_pred[node] = self.models[node].predict(X_single[features])
         
       differences = X_single[list(self.models)] - X_regr_pred
-      
-      # ?
-      #is_under_threshold = np.array((differences < self.threshold)['12'])
-      #preds.append(is_under_threshold.astype(int))
+
+      pred = (differences > self.thresholds).sum(axis=1)
+      pred = (pred > t).astype(int)
+      preds.append(medfilt(pred, self.medfilt_kernel_size))
     
     return preds
 
@@ -120,18 +128,19 @@ class RegressionEnsamble(BaseEstimator):
 
   def get_params(self, deep=True):
     params = self.models[self.nodes[0]].get_params(deep)
-    params['model'] = self.model
+    params['model'] = self.models[self.nodes[0]]
     params['nodes'] = self.nodes
     params['medfilt_kernel_size'] = self.medfilt_kernel_size
     return params
   
   def set_params(self, **params):
-    if 'model' in params:
-      self.model = params['model']
-      del params['model']
     if 'nodes' in params:
       self.nodes = params['nodes']
       del params['nodes']
+    if 'model' in params:
+      for node in self.nodes:
+        self.models[node] = clone(params['model'])
+      del params['model']
     if 'medfilt_kernel_size' in params:
       self.medfilt_kernel_size = params['medfilt_kernel_size']
       del params['medfilt_kernel_size']
