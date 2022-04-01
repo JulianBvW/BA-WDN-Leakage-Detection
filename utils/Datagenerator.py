@@ -172,7 +172,10 @@ class Datagenerator:
     if include_time:
       nodes.append('hour of the day')
     
-    return data[nodes][start:], np.array(data['Label'][start:])
+    X, y = data[nodes][start:], np.array(data['Label'][start:])
+    X.reset_index(drop=True, inplace=True)
+    
+    return X, y
 
   def get_dataset(self, root, size, ts_in_h=0.5, days_per_sim=5, include_time=True):
     """Load a whole dataset as selection from the LeakDB dataset 
