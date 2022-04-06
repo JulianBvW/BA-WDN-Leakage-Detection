@@ -105,9 +105,9 @@ Ein Besserer Ansatz wird der sein, mittels **Regression** die Werte jeweiliger S
 
 ~Neuere Arten von künstlichen, neuronalen Netzen könnten die Effizienz der Leck-Detektion noch weiter verbessern. Während sogenannte [Recurrent Neural Networks](https://de.wikipedia.org/wiki/Rekurrentes_neuronales_Netz) als Zusatz eine Art Gedächtnis besitzen, welches hilfreich beim Bearbeiten von **sequenziellen Daten** sind, gibt es auch sogenannte [Graph Neural Networks](https://en.wikipedia.org/wiki/Graph_neural_network), welche **speziell für Graphen**, wie einem WDN, einsetzbar sind.~
 
-### Outlier Detection ~und Time Series Forecasting~
+### ~Outlier Detection und Time Series Forecasting~
 
-Zwei Ansätze, die vlt. möglich sind.
+~Zwei Ansätze, die vlt. möglich sind.~
 
 ## Die Roadmap
 
@@ -127,7 +127,9 @@ Zwei Ansätze, die vlt. möglich sind.
   - [X] Modell (Klassifikation)
   - [X] Modell (Regression)
   - [X] Modell (Weiteres)
-  - [X] Feature Extractor
+  - [ ] Feature Extractor
+    - [X] Past Days
+    - [ ] Time window mean
   - [X] Metrik
     - [X] Precision, Recall, Specificion, Accuracy
     - [X] Detection Time
@@ -140,36 +142,35 @@ Zwei Ansätze, die vlt. möglich sind.
   - [X] *train-test-split*
   - [X] Cross Validation
   - [X] Grid Search
-- [ ] **Experiment: Baseline**
+- [X] **Experiment: Baseline**
   - [X] Modelle testen
     - [X] SVM
     - [X] KNN
     - [X] NN
   - [X] Versch. Feature Extractor
   - [X] Hyperparameter adjustieren
-  - [ ] Gewichten
   - [X] Metriken analysieren
 - [ ] **Experiment: Regression**
   - [X] Modell aufstellen
   - [ ] Hyperparameter adjustieren
-  - [ ] Gewichten
   - [ ] Threshold adjustieren (Pipeline)
   - [ ] Metriken analysieren
 - [X] ~**Experiment: Recurrent- und Graph-NN**~
   - [X] ~Was ist das überhaupt?~
   - [X] ~Keine Ahnung?~
-- [X] **Experiment: Weitere Modelle**
+- [X] ~**Experiment: Weitere Modelle**~
   - [X] ~Time Series Forecasting~
-  - [X] Unsupervised Outlier Detection
+  - [X] ~Unsupervised Outlier Detection~
 - [ ] **Datensätze** testen
   - [X] Net1 Spielzeug
   - [ ] LeakDB
     - [X] Szenario laden
     - [X] Datensatz laden
+    - [ ] Datensatz selektieren
     - [ ] Modelle testen
     - [X] Metrik umschreiben (h -> ts)
-  - [ ] BattleDIM
-- [ ] **XAI**: Analysieren der Experimente
+  - [X] ~BattleDIM~
+- [X] ~**XAI**: Analysieren der Experimente~
 - [ ] Aufschreiben
   - [ ] Formelles
   - [ ] Bilder generieren
