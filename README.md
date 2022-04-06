@@ -153,7 +153,9 @@ Ein Besserer Ansatz wird der sein, mittels **Regression** die Werte jeweiliger S
 - [ ] **Experiment: Regression**
   - [X] Modell aufstellen
   - [ ] Hyperparameter adjustieren
-  - [ ] Threshold adjustieren (Pipeline)
+  - [ ] Threshold adjustieren
+    - [ ] Magic number
+    - [ ] Time of day
   - [ ] Metriken analysieren
 - [X] ~**Experiment: Recurrent- und Graph-NN**~
   - [X] ~Was ist das überhaupt?~
