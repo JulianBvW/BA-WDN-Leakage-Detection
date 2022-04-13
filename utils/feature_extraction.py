@@ -42,3 +42,22 @@ def past_days_transform(X, nodes, past_start=1, past_end=2):
     X_new.append(x)
   
   return X_new
+
+def mean_transform(X, window=3):
+  """Creates a rolling window and calculates the mean value.
+
+  Args:
+    X (list of pd.DataFrame): The dataset.
+    window (int): The rolling window size.
+
+  Returns:
+    X: List of pd.Dataframe containing transformed node pressures.
+  """
+
+  # Raise exception if type is not list of pd.DataFrame
+  if type(X) == np.ndarray:
+    raise TypeError('X must be of type list of pd.DataFrame.')
+  
+  rolling = lambda X_single: X_single.rolling(window, min_periods=1).mean()
+  
+  return list(map(rolling, X))
