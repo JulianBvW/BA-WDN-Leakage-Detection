@@ -113,7 +113,7 @@ Ein Besserer Ansatz wird der sein, mittels **Regression** die Werte jeweiliger S
 
 - [X] Aufgabenstellung formulieren
 - [X] Git initialisieren
-- [ ] Weitere Literatur lesen
+- [X] Weitere Literatur lesen
 - [X] Analysieren der Daten
   - [X] Zyklen erkennen (Tageszyklus, Jahreszeiten, ...)
     -> Nur Tageszyklen, Anpass-Zeit
@@ -127,9 +127,9 @@ Ein Besserer Ansatz wird der sein, mittels **Regression** die Werte jeweiliger S
   - [X] Modell (Klassifikation)
   - [X] Modell (Regression)
   - [X] Modell (Weiteres)
-  - [ ] Feature Extractor
+  - [X] Feature Extractor
     - [X] Past Days
-    - [ ] Time window mean
+    - [X] Time window mean
   - [X] Metrik
     - [X] Precision, Recall, Specificion, Accuracy
     - [X] Detection Time
