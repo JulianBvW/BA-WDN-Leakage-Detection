@@ -168,7 +168,7 @@ Ein Besserer Ansatz wird der sein, mittels **Regression** die Werte jeweiliger S
   - [ ] LeakDB
     - [X] Szenario laden
     - [X] Datensatz laden
-    - [ ] Datensatz selektieren
+    - [X] Datensatz selektieren
     - [ ] Modelle testen
     - [X] Metrik umschreiben (h -> ts)
   - [X] ~BattleDIM~
