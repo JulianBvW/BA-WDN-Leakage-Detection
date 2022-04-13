@@ -8,6 +8,7 @@ pd.options.mode.chained_assignment = None
 class Datagenerator:
   """
   Class used to generate training and testing data.
+  Also loads LeakDB dataset.
   """
 
   def __init__(self, wdn):
@@ -89,7 +90,6 @@ class Datagenerator:
 
     return X_concat, y_concat
 
-
   def gen_dataset(self, size=50, leakage_nodes=['12'], leak_perc=0.5, days_per_sim=5, include_time=True, noise_strength=0.3, numpy=False, shuffle=False, return_nodes=False):
     """Generate a whole dataset containing leakage and non leakage scenarios.
 
@@ -165,7 +165,7 @@ class Datagenerator:
     data['hour'] = np.arange(0, len(data) * ts_in_h, ts_in_h)
     data['hour of the day'] = data['hour'] % 24
     data['day'] = data['hour'] // 24
-    data.set_index('hour')
+    data = data.set_index('hour')
 
     start = int(10*24//ts_in_h)
 
@@ -176,36 +176,64 @@ class Datagenerator:
     X.reset_index(drop=True, inplace=True)
     
     return X, y
-
-  def get_dataset(self, root, size, ts_in_h=0.5, days_per_sim=5, include_time=True):
-    """Load a whole dataset as selection from the LeakDB dataset 
-    randomly containing leakage and non leakage scenarios.
+  
+  def get_dataset(self, root, size=500, leak_perc=0.5, day_window=10, ts_in_h=0.5, include_time=True, shuffle=True):
+    """Get a selection of scenarios from the LeakDB dataset.
 
     Args:
       root (str): Root path of the dataset.
       size (int): The numbers of scenarios.
+      leak_perc (float [0..1]): Percentage of scenarios with leakage.
+      day_window (int): The numbers of days for a scenario.
       ts_in_h (float): Time step in hours (0.5 = 30min).
-      days_per_sim (int): The numbers of days per simulation.
       include_time (bool): If 'hour of the day' should be included.
+      shuffle (bool): If the data should be shuffled.
     
     Returns:
       X: List of Pandas Dataframes containing node pressures with hour as index.
       y: List of Numpy arrays containing the labels.
     """
+    ts_window = int(day_window * 24 / ts_in_h)
 
-    # Get scenarios
+    # Seperate leakage and non leakage scenarios
+    labels = pd.read_csv(root + 'Labels.csv')
+    labels = labels.set_index('Scenario')
+    sc_leak_idx   = np.array(labels.index[labels['Label'] == 1])
+    sc_noleak_idx = np.array(labels.index[labels['Label'] == 0])
+
+    # Calculate amount of leakage scenarios
+    size_leak = int(size*leak_perc)
+    if size_leak > len(sc_leak_idx):
+      raise ValueError('Number of wanted leakage scenarios too large')
+
+    # Select scenarios
+    scenarios_leak   = np.random.choice(sc_leak_idx, size_leak, replace=False)
+    scenarios_noleak = np.random.choice(sc_noleak_idx, size - size_leak, replace=False)
+
+    # Load and crop scenarios
     X, y = [], []
-    for _ in tqdm(range(size)):
-      scenario = np.random.randint(1,1001)
-      X_single, y_single = self.get_scenario(root, scenario, ts_in_h, include_time)
-
-      # Select the time window
-      time_steps = int(days_per_sim * 24 // ts_in_h)
-      window_start = np.random.randint(len(y_single) - time_steps - 1)
-
-      X.append(X_single.iloc[window_start:window_start+time_steps])
-      y.append(y_single[window_start:window_start+time_steps])
-        
+    for leak, scns in zip([True, False], [scenarios_leak, scenarios_noleak]):
+      if leak:
+        print(f'Getting {len(scenarios_leak)} leakage scenarios...')
+      else:
+        print(f'Getting {len(scenarios_noleak)} non leakage scenarios...')
+      for scn in tqdm(scns):
+        X_single, y_single = self.get_scenario(root, scn, ts_in_h, include_time)
+        if leak:
+          try:
+            time_point = np.where(y_single == 1)[0][0] - int(ts_window / 2)
+            time_point = min(max(time_point, 0), len(X_single) - ts_window) # Keep day window in range
+          except:
+            print('Warning: Wrong label. Counting scenario as non leakage.')
+            time_point = np.random.randint(len(X_single) - ts_window)
+        else:
+          time_point = np.random.randint(len(X_single) - ts_window)
+        X.append(X_single.iloc[time_point : time_point + ts_window])
+        y.append(y_single[time_point : time_point + ts_window])
+    
+    if shuffle:
+      X, y, _ = shuffle_data(X, y, y)
+    
     return X, y
 
   def get_full_dataset(self, root, ts_in_h=0.5, include_time=True):
