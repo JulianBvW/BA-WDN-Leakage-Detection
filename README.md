@@ -150,13 +150,13 @@ Ein Besserer Ansatz wird der sein, mittels **Regression** die Werte jeweiliger S
   - [X] Versch. Feature Extractor
   - [X] Hyperparameter adjustieren
   - [X] Metriken analysieren
-- [ ] **Experiment: Regression**
+- [X] **Experiment: Regression**
   - [X] Modell aufstellen
-  - [ ] Hyperparameter adjustieren
-  - [ ] Threshold adjustieren
-    - [ ] Magic number
-    - [ ] Time of day
-  - [ ] Metriken analysieren
+  - [X] Hyperparameter adjustieren
+  - [X] Threshold adjustieren
+    - [X] Magic number
+    - [X] Time of day
+  - [X] Metriken analysieren
 - [X] ~**Experiment: Recurrent- und Graph-NN**~
   - [X] ~Was ist das überhaupt?~
   - [X] ~Keine Ahnung?~
