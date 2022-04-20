@@ -228,7 +228,7 @@ class Datagenerator:
             time_point = np.random.randint(len(X_single) - ts_window)
         else:
           time_point = np.random.randint(len(X_single) - ts_window)
-        X.append(X_single.iloc[time_point : time_point + ts_window])
+        X.append(X_single.iloc[time_point : time_point + ts_window].reset_index())
         y.append(y_single[time_point : time_point + ts_window])
     
     if shuffle:
