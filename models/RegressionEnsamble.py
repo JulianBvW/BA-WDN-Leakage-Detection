@@ -12,17 +12,19 @@ class RegressionEnsamble(BaseEstimator):
   """
   Regression model wrapper for different ML models like SVM or LR.
   Uses regression for node pressure prediction which then gets used
-  together with actual node pressure to classify. 
+  together with actual node pressure to classify.
   This happens for every node which creates a simulated pressure sensor network.
   Uses median filter for noise free classification.
   """
 
-  def __init__(self, model, th_model, medfilt_kernel_size=5, nodes=['10','11','12','13','21','22','23','31','32'], **model_params):
+  def __init__(self, model, th_mode='simple', th_multiplier=1.5, th_majority=0.9, medfilt_kernel_size=5, nodes=['10','11','12','13','21','22','23','31','32'], **model_params):
     """Create the model.
 
     Args:
       model (SKLearn regression model): The base estimator.
-      th_model (int or SKLearn classification model): Mode for threshold handling.
+      th_mode ('simple' or 'daytime'): Mode for threshold handling.
+      th_multiplier (float): Increases the threshold (maximal error while fit).
+      th_majority (float): Percentage of nodes that are needed for classification voting.
       medfilt_kernel_size (int): The kernel size for the median filter.
       nodes (list of nodes): Nodes used for regression ensamble.
     """
@@ -32,7 +34,9 @@ class RegressionEnsamble(BaseEstimator):
       if model_params:
         self.models[node].set_params(**model_params)
     
-    self.th_model = th_model
+    self.th_mode = th_mode
+    self.th_multiplier = th_multiplier
+    self.th_majority = th_majority
     self.nodes = nodes
     self.medfilt_kernel_size = medfilt_kernel_size
 
@@ -76,19 +80,17 @@ class RegressionEnsamble(BaseEstimator):
       # Pressure prediction for Threshold calculation
       X_regr_pred[node] = self.models[node].predict(X_concat[features])
       
-    differences = X_concat[list(self.models)] - X_regr_pred
+    differences = X_concat[nodes] - X_regr_pred
 
-    if type(self.th_model) == int:
-      self.thresholds = abs(differences[y_concat == 0]).max() * 1.5
+    if self.th_mode == 'simple':
+      self.thresholds = abs(differences[y_concat == 0]).max() * self.th_multiplier
     else:
-      if verbose:
-        print('Training threshold classifier...')
       differences['hour of the day'] = X_concat['hour of the day']
-      self.th_model.fit(differences, y_concat)
+      self.thresholds = abs(differences[y_concat == 0]).groupby(['hour of the day']).max() * self.th_multiplier
 
-    return self
+    return self.thresholds
 
-  def predict(self, X, verbose=False, th_model_override=''):
+  def predict(self, X, verbose=False):
     """Predict labels for every time point of every time series inputted.
 
     Args:
@@ -116,17 +118,19 @@ class RegressionEnsamble(BaseEstimator):
         # Pressure prediction for Threshold calculation
         X_regr_pred[node] = self.models[node].predict(X_single[features])
         
-      differences = X_single[list(self.models)] - X_regr_pred
+      differences = X_single[self.nodes] - X_regr_pred
+      min_voters = len(self.nodes) * self.th_majority
 
-      if type(self.th_model) == int:
+      if self.th_mode == 'simple':
         pred = (differences > self.thresholds).sum(axis=1)
-        if type(th_model_override) == str:
-          pred = (pred > self.th_model).astype(int)
-        else:
-          pred = (pred > th_model_override).astype(int)
+        pred = (pred >= min_voters).astype(int)
       else:
-        differences['hour of the day'] = X_single['hour of the day']
-        pred = self.th_model.predict(differences)
+        by_daytimes = []
+        for daytime in X_single['hour of the day'].unique():
+          by_daytime = differences[X_single['hour of the day'] == daytime]
+          by_daytimes.append(by_daytime > self.thresholds.loc[daytime])
+        pred = pd.concat(by_daytimes).sort_index().sum(axis=1)
+        pred = (pred >= min_voters).astype(int)
 
       preds.append(medfilt(pred, self.medfilt_kernel_size))
     
@@ -146,9 +150,9 @@ class RegressionEnsamble(BaseEstimator):
 
   def get_params(self, deep=True):
     params = self.models[self.nodes[0]].get_params(deep)
-    params['th_model'] = self.th_model
-    if type(self.th_model) != int:
-      params['th_model_params'] = self.th_model.get_params(deep)
+    params['th_mode'] = self.th_mode
+    params['th_multiplier'] = self.th_multiplier
+    params['th_majority'] = self.th_majority
     params['model'] = self.models[self.nodes[0]]
     params['nodes'] = self.nodes
     params['medfilt_kernel_size'] = self.medfilt_kernel_size
@@ -158,12 +162,15 @@ class RegressionEnsamble(BaseEstimator):
     if 'nodes' in params:
       self.nodes = params['nodes']
       del params['nodes']
-    if 'th_model' in params:
-      self.th_model = params['th_model']
-      del params['th_model']
-    if 'th_model_params' in params:
-      self.th_model.set_params(params['th_model_params'])
-      del params['th_model_params']
+    if 'th_mode' in params:
+      self.th_mode = params['th_mode']
+      del params['th_mode']
+    if 'th_multiplier' in params:
+      self.th_multiplier = params['th_multiplier']
+      del params['th_multiplier']
+    if 'th_majority' in params:
+      self.th_majority = params['th_majority']
+      del params['th_majority']
     if 'model' in params:
       for node in self.nodes:
         self.models[node] = clone(params['model'])
