@@ -1,5 +1,6 @@
 # General
 import sys
+import numpy as np
 import pandas as pd
 
 # SKLearn
@@ -7,6 +8,8 @@ from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.metrics import make_scorer
 
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from sklearn.neural_network import MLPClassifier
 
 # Own
 from utils.Network import WDN
@@ -25,22 +28,58 @@ scoring = {'accuracy': make_scorer(accuracy),
            'detection_time_std': make_scorer(detection_time_std),
            'detection_time_median': make_scorer(detection_time_median)}
 
-# Generate classification results
-def rgen_classification(X, y):
-  print('STARTING GENERATION OF CLASSIFICATION RESULTS...')
+# New class for Neural Networks
 
-  parameters_knn = {'n_neighbors': [3, 5, 7, 9], 'weights': ['uniform', 'distance']}
-  model_knn = ClassificationModel(KNeighborsClassifier())
-  
-  grid = GridSearchCV(model_knn, parameters_knn, scoring=scoring, cv=5, verbose=1)
+class NNSize(object):
+    def __init__(self, shape_min=1, shape_max=3, size_min=5, size_max=24):
+        self.shape_min = shape_min
+        self.shape_max = shape_max
+        self.size_min = size_min
+        self.size_max = size_max
+
+    def rvs(self, random_state=None):
+        #np.random.seed(random_state)
+        shape = np.random.randint(self.shape_min, self.shape_max+1)
+        return tuple([np.random.randint(self.size_min, self.size_max+1) for _ in range(shape)])
+
+# Generate classification results
+
+def do_gridsearch(name, X, y, model, parameters):
+  print(f'# {name}...')
+
+  grid = GridSearchCV(model, parameters, scoring=scoring, refit='accuracy', cv=5, verbose=2)
   grid.fit(X, y)
 
-  pd.DataFrame(grid.cv_results_).to_csv('results/bla.csv')
+  pd.DataFrame(grid.cv_results_).to_csv(f'results/{name}.csv')
+
+def rgen_classification(X, y):
+  general_params = {'medfilt_kernel_size': [3, 5, 7, 9, 11]}
+  print('### GENERATING CLASSIFICATION RESULTS...')
+
+  model_knn = ClassificationModel(KNeighborsClassifier())
+  parameters_knn = {'n_neighbors': [3, 5, 7, 9], 'weights': ['uniform', 'distance']}
+  do_gridsearch('classification_knn', X, y, model_knn, general_params+parameters_knn)
+
+  model_svc = ClassificationModel(SVC())
+  parameters_svc = {'kernel': ['linear', 'poly', 'rbf'], 
+                    'C': [10**e for e in range(-1, 2)], 
+                    'gamma': [0.001, 0.002, 0.003]}
+  do_gridsearch('classification_svc', X, y, model_svc, general_params+parameters_svc)
+
+  model_mlp = ClassificationModel(MLPClassifier())
+  parameters_mlp = {'hidden_layer_sizes': [NNSize().rvs() for _ in range(30)], 
+                    'learning_rate': ['constant', 'adaptive'], 
+                    'activation': ['logistic', 'tanh', 'relu']}
+  do_gridsearch('classification_mlp', X, y, model_mlp, dict(general_params, **parameters_mlp))
+
+  print('### RESULTS GENERATED...')
 
 def main():
   wdn = WDN("nets/Net1.inp", ['10', '11','12','13','21','22','23','31','32'])
   gen = Datagenerator(wdn)
-  X, y = gen.get_dataset(LEAKDB_PATH)
+
+  print('### LOADING DATASET...')
+  X, y = gen.get_dataset(LEAKDB_PATH, size=500)
 
   if sys.argv[1] == 'classification':
     rgen_classification(X, y)
