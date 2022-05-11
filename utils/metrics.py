@@ -6,13 +6,13 @@ def accuracy(y_true_list, y_pred_list):
   return accuracy_score(*any_transform(y_true_list, y_pred_list))
 
 def recall(y_true_list, y_pred_list):
-  return recall_score(*any_transform(y_true_list, y_pred_list))
+  return recall_score(*any_transform(y_true_list, y_pred_list), zero_division=0)
 
 def specificity(y_true_list, y_pred_list):
-  return recall_score(*any_transform(y_true_list, y_pred_list), pos_label=0)
+  return recall_score(*any_transform(y_true_list, y_pred_list), pos_label=0, zero_division=0)
 
 def precision(y_true_list, y_pred_list):
-  return precision_score(*any_transform(y_true_list, y_pred_list))
+  return precision_score(*any_transform(y_true_list, y_pred_list), zero_division=0)
 
 def detection_time(y_true_list, y_pred_list):
   times = 0
@@ -34,6 +34,8 @@ def detection_time_list(y_true_list, y_pred_list):
       idx = np.where(y_true == 1)[0][0]
       if 1 in list(y_pred[idx:]):
         times.append(np.where(y_pred[idx:] == 1)[0][0])
+  if len(times) == 0:
+    return [999999999]
   return times
 
 def detection_time_mean(y_true_list, y_pred_list):
