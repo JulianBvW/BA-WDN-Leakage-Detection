@@ -88,7 +88,7 @@ class RegressionEnsamble(BaseEstimator):
       differences['hour of the day'] = X_concat['hour of the day']
       self.thresholds = abs(differences[y_concat == 0]).groupby(['hour of the day']).max() * self.th_multiplier
 
-    return self.thresholds
+    return self
 
   def predict(self, X, verbose=False):
     """Predict labels for every time point of every time series inputted.
