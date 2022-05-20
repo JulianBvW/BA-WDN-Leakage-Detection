@@ -17,7 +17,7 @@ from sklearn.neural_network import MLPRegressor
 from utils.gs_utils import do_gridsearch
 from utils.Network import WDN
 from utils.Datagenerator import Datagenerator
-from models.RegressionEnsambleGS import RegressionEnsambleGS
+from models.RegressionEnsambleForGS import RegressionEnsambleForGS
 
 ####### Main
 LEAKDB_PATH = '../Net1_CMH/'
