@@ -19,7 +19,6 @@ class RegressionEnsamble(BaseEstimator):
 
   def __init__(self, model, th_mode='simple', th_multiplier=1.5, th_majority=0.9, medfilt_kernel_size=5, nodes=['10','11','12','13','21','22','23','31','32'], **model_params):
     """Create the model.
-
     Args:
       model (SKLearn regression model): The base estimator.
       th_mode ('simple' or 'daytime'): Mode for threshold handling.
@@ -28,11 +27,8 @@ class RegressionEnsamble(BaseEstimator):
       medfilt_kernel_size (int): The kernel size for the median filter.
       nodes (list of nodes): Nodes used for regression ensamble.
     """
+    self.model = model
     self.models = {}
-    for node in nodes:
-      self.models[node] = clone(model)
-      if model_params:
-        self.models[node].set_params(**model_params)
     
     self.th_mode = th_mode
     self.th_multiplier = th_multiplier
@@ -40,14 +36,24 @@ class RegressionEnsamble(BaseEstimator):
     self.nodes = nodes
     self.medfilt_kernel_size = medfilt_kernel_size
 
+    self.set_params(**model_params)
+
+  def init_models(self):
+    self.set_params(**self.model_params)
+    for node in self.nodes:
+      self.models[node] = clone(self.model)
+      if self.model_params:
+        self.models[node].set_params(**self.model_params)
+
   def fit(self, X, y, verbose=False):
     """Trains the model.
-
     Args:
       X (list of pandas dataframe time series): Multiple simulations.
       y (list of numpy arrays): True labels for every time point in every simulation.
       verbose (bool): If you want to use tqdm.
     """
+
+    self.init_models()
 
     nodes = self.nodes
     if verbose:
@@ -92,7 +98,6 @@ class RegressionEnsamble(BaseEstimator):
 
   def predict(self, X, verbose=False):
     """Predict labels for every time point of every time series inputted.
-
     Args:
       X (list of pandas dataframe time series): Multiple time series.
       verbose (bool): If you want to use tqdm.
@@ -138,7 +143,6 @@ class RegressionEnsamble(BaseEstimator):
 
   def score(self, X, y):
     """Implements standard accuracy score.
-
     Args:
       X (list of pandas dataframe time series): Multiple time series.
       y (list of numpy arrays): True labels for every time point in every simulation.
@@ -149,11 +153,11 @@ class RegressionEnsamble(BaseEstimator):
     return accuracy_score(*any_transform(y, self.predict(X)))
 
   def get_params(self, deep=True):
-    params = self.models[self.nodes[0]].get_params(deep)
+    params = self.model_params
     params['th_mode'] = self.th_mode
     params['th_multiplier'] = self.th_multiplier
     params['th_majority'] = self.th_majority
-    params['model'] = self.models[self.nodes[0]]
+    params['model'] = self.model
     params['nodes'] = self.nodes
     params['medfilt_kernel_size'] = self.medfilt_kernel_size
     return params
@@ -172,12 +176,10 @@ class RegressionEnsamble(BaseEstimator):
       self.th_majority = params['th_majority']
       del params['th_majority']
     if 'model' in params:
-      for node in self.nodes:
-        self.models[node] = clone(params['model'])
+      self.model = params['model']
       del params['model']
     if 'medfilt_kernel_size' in params:
       self.medfilt_kernel_size = params['medfilt_kernel_size']
       del params['medfilt_kernel_size']
-    for node in self.nodes:
-      self.models[node].set_params(**params)
+    self.model_params = params
     return self
