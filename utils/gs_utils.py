@@ -64,19 +64,19 @@ def do_gridsearch(X, y, model, param_grid_model, cv=5):
     print('# Start of CV step', cv_step)
 
     # Train the base model
-    for params_lr in tqdm(ParameterGrid(param_grid_model)):
-      model = RegressionEnsambleForGS(model(**params_lr))
+    for params_model in tqdm(ParameterGrid(param_grid_model)):
+      model = RegressionEnsambleForGS(model(**params_model))
       model.fit(X_train, y_train)
       diff_preds = model.predict_differences_list(X_test)
 
       # Postprocess the predicted differences
-      for params_regr in ParameterGrid(param_grid_regr):#tqdm(ParameterGrid(param_grid_regr), leave=False):
+      for params_regr in tqdm(ParameterGrid(param_grid_regr), leave=False):#ParameterGrid(param_grid_regr):
         preds = model.get_prediction_without_medfilt(diff_preds, **params_regr)
 
         # Apply Median Filter
         for params_mk in ParameterGrid(param_grid_mk):
           preds_medfilt = [medfilt(pred, params_mk['mk_size']) for pred in preds]
-          results.append(dict({'cv_step': cv_step}, **params_lr, **params_regr, **params_mk, **get_results(y_test, preds_medfilt)))
+          results.append(dict({'cv_step': cv_step}, **params_model, **params_regr, **params_mk, **get_results(y_test, preds_medfilt)))
   
   results_df = round(pd.DataFrame(results), 3)
   parameter_keys = [*param_grid_model] + [*param_grid_regr] + [*param_grid_mk]
