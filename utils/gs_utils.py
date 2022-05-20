@@ -56,7 +56,7 @@ def get_results(y_true_list, y_pred_list):
       'dt_median': detection_time_median(y_true_list, y_pred_list)
   }
 
-def do_gridsearch(X, y, model, param_grid_model, cv=5):
+def do_gridsearch(X, y, base_model, param_grid_model, cv=5):
   results = []
 
   # Do Cross Validation
@@ -65,7 +65,7 @@ def do_gridsearch(X, y, model, param_grid_model, cv=5):
 
     # Train the base model
     for params_model in tqdm(ParameterGrid(param_grid_model)):
-      model = RegressionEnsambleForGS(model(**params_model))
+      model = RegressionEnsambleForGS(base_model(**params_model))
       model.fit(X_train, y_train)
       diff_preds = model.predict_differences_list(X_test)
 
