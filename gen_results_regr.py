@@ -17,7 +17,6 @@ from sklearn.neural_network import MLPRegressor
 from utils.gs_utils import do_gridsearch
 from utils.Network import WDN
 from utils.Datagenerator import Datagenerator
-from models.RegressionEnsambleGS import RegressionEnsambleGS
 
 ####### Main
 LEAKDB_PATH = '../Net1_CMH/'
@@ -62,7 +61,7 @@ def rgen_regression(X, y, model='all'):
 
 # Helper
 
-def rgen_regression_lr(X, y, general_params):
+def rgen_regression_lr(X, y):
   model_lr = LinearRegression
   parameters_lr = {}
   results, matric_keys = do_gridsearch(X, y, model_lr, parameters_lr)
@@ -70,7 +69,7 @@ def rgen_regression_lr(X, y, general_params):
   results.to_csv(f'results/regression_lr_full.csv')
   rs_mean.to_csv(f'results/regression_lr_mean.csv')
 
-def rgen_regression_ridge(X, y, general_params):
+def rgen_regression_ridge(X, y):
   model_ridge = Ridge
   parameters_ridge = {'alpha': [0.333*i for i in range(1, 7)]}
   results, matric_keys = do_gridsearch(X, y, model_ridge, parameters_ridge)
@@ -78,7 +77,7 @@ def rgen_regression_ridge(X, y, general_params):
   results.to_csv(f'results/regression_ridge_full.csv')
   rs_mean.to_csv(f'results/regression_ridge_mean.csv')
 
-def rgen_regression_lasso(X, y, general_params):
+def rgen_regression_lasso(X, y):
   model_lasso = Lasso
   parameters_lasso = {'alpha': [0.333*i for i in range(1, 7)], 'max_iter': [2000]}
   results, matric_keys = do_gridsearch(X, y, model_lasso, parameters_lasso)
@@ -86,7 +85,7 @@ def rgen_regression_lasso(X, y, general_params):
   results.to_csv(f'results/regression_lasso_full.csv')
   rs_mean.to_csv(f'results/regression_lasso_mean.csv')
 
-def rgen_regression_dt(X, y, general_params):
+def rgen_regression_dt(X, y):
   model_dt = DecisionTreeRegressor
   parameters_dt = {'criterion': ['squared_error', 'friedman_mse', 'absolute_error'],
                    'splitter': ['best', 'random']}
@@ -95,7 +94,7 @@ def rgen_regression_dt(X, y, general_params):
   results.to_csv(f'results/regression_dt_full.csv')
   rs_mean.to_csv(f'results/regression_dt_mean.csv')
 
-def rgen_regression_rf(X, y, general_params):
+def rgen_regression_rf(X, y):
   model_rf = RandomForestRegressor
   parameters_rf = {'criterion': ['squared_error', 'absolute_error']}
   results, matric_keys = do_gridsearch(X, y, model_rf, parameters_rf)
@@ -103,7 +102,7 @@ def rgen_regression_rf(X, y, general_params):
   results.to_csv(f'results/regression_rf_full.csv')
   rs_mean.to_csv(f'results/regression_rf_mean.csv')
 
-def rgen_regression_knn(X, y, general_params):
+def rgen_regression_knn(X, y):
   model_knn = KNeighborsRegressor
   parameters_knn = {'n_neighbors': [3, 5, 7, 9], 'weights': ['uniform', 'distance']}
   results, matric_keys = do_gridsearch(X, y, model_knn, parameters_knn)
@@ -111,7 +110,7 @@ def rgen_regression_knn(X, y, general_params):
   results.to_csv(f'results/regression_knn_full.csv')
   rs_mean.to_csv(f'results/regression_knn_mean.csv')
 
-def rgen_regression_svr(X, y, general_params):
+def rgen_regression_svr(X, y):
   model_svr = SVR
   parameters_svr = {'kernel': ['linear', 'poly', 'rbf'], 
                     'C': [10**e for e in range(-1, 2)], 
@@ -121,7 +120,7 @@ def rgen_regression_svr(X, y, general_params):
   results.to_csv(f'results/regression_svr_full.csv')
   rs_mean.to_csv(f'results/regression_svr_mean.csv')
 
-def rgen_regression_mlp(X, y, general_params):
+def rgen_regression_mlp(X, y):
   model_mlp = MLPRegressor
   parameters_mlp = {'hidden_layer_sizes': [NNSize().rvs() for _ in range(30)], 
                     'learning_rate': ['constant', 'adaptive'], 
