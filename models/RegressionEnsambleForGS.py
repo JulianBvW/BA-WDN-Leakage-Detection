@@ -92,7 +92,7 @@ class RegressionEnsambleForGS():
     
     return preds
 
-  def get_prediction_without_medfilt(self, differences_list, th_mode, th_multiplier, th_majority):
+  def get_prediction_without_medfilt(self, differences_list, th_mode='simple', th_multiplier=1.0, th_majority=0.1):
     min_voters = len(self.nodes) * th_majority
     
     preds = []
@@ -101,15 +101,13 @@ class RegressionEnsambleForGS():
       if th_mode == 'simple':
         all_without_daytime = list(differences.columns)
         all_without_daytime.remove('hour of the day')
-        self.thresholds_simple *= th_multiplier
-        pred = (differences[all_without_daytime] > self.thresholds_simple).sum(axis=1)
+        pred = (differences[all_without_daytime] > self.thresholds_simple * th_multiplier).sum(axis=1)
         pred = (pred >= min_voters).astype(int)
       else:
-        self.thresholds_daytime *= th_multiplier
         by_daytimes = []
         for daytime in differences['hour of the day'].unique():
           by_daytime = differences[differences['hour of the day'] == daytime]
-          by_daytimes.append(by_daytime > self.thresholds_daytime.loc[daytime])
+          by_daytimes.append(by_daytime > (self.thresholds_daytime * th_multiplier).loc[daytime])
         pred = pd.concat(by_daytimes).sort_index().sum(axis=1)
         pred = (pred >= min_voters).astype(int)
       
