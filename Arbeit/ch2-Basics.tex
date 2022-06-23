@@ -15,25 +15,25 @@ Das umfassende Feld des Maschinellen Lernens (ML) lässt sich grob in zwei Arten
  Klassifikation und die Regression.
 
 Bei der binären Klassifikation soll jeder Datenpunkt $x \in X$ einer von zwei Klassen $y \in \{0, 1\}$ zugewiesen
- werden. Auf unser Problem der Leck-Detektion angewendet, hieße das eine Klassifikation eines Zeitpunkts in
- Klasse $1$, es existiert irgendwo in dem WDN ein Leck, oder Klasse $0$, es existiert keins. Für die Regression
- wird jedem Datenpunkt ein reeller Wert $y \in \mathbb{R}$ zugewiesen. Wie dieses Konzept übernommen werden
- kann, ist in Kapitel ? weiter beschrieben. 
+ werden. Auf unser Problem der Leck-Detektion angewendet, hieße eine Klassifikation eines Zeitpunkts in
+ Klasse $1$, dass irgendwo in dem WDN ein Leck existiert, wohingegen Klasse $0$ die Abwesenheit sämtlicher
+ Lecks impliziert. Für die Regression wird jedem Datenpunkt ein reeller Wert $y \in \mathbb{R}$ zugewiesen.
+Wie dieses Konzept übernommen werden kann, ist in Kapitel ? weiter beschrieben. 
 
 
 \subsection*{Modelle des Maschinellen Lernens}
 
 Für jeden Anwendungsbereich gibt es eine Vielzahl an verschiedenen Algorithmen, welche eine gegebene Aufgabe
- lösen können. Die in dieser Arbeit benutzten Modelle werden im Folgenden erklärt. Hierbei ist wichtig zwischen
+ lösen können. Die in dieser Arbeit benutzten Modelle werden im Folgenden erklärt. Hierbei ist wichtig, zwischen
  Parametern und Hyperparametern zu unterscheiden. Ersteres sind dabei die Variablen und Gewichte, die während
  des Lernprozesses optimiert oder gefunden werden. Die sogenannten Hyperparameter sind Einstellungen, welche
- vor dem Training konfiguriert werden und je nach Einstellung andere Ergebnisse liefern.
+ vor dem Training konfiguriert werden und damit das Ergebnis erheblich verändern können.
 
 \begin{itemize}
 
    \item \textbf{k-Nearest Neighbors (kNN)} ist ein einfaches Modell, bei dem ein neuer Datenpunkt nach der
     Mehrheit seiner Nachbarn $(x_i, y_i)$ in einem n-dimensionalen Koordinatensystem klassifiziert wird. Der
-    Hyperparameter $k$ bestimmt hierbei wie groß die zu betrachtende Nachbarschaft ist. Sei
+    Hyperparameter $k$ bestimmt hierbei, wie groß die zu betrachtende Nachbarschaft ist. Sei
             $\mathcal{N}(\hat{x}, \mathcal{D}, k)$
     die Menge der $k$ am nächsten zu $\hat{x}$ liegenden Punkte aus $\mathcal{D}$, dann ist
             $P(\hat{x}=c|\hat{x}, \mathcal{D}, k) = \frac{1}{k} |\{x_i | x_i \in \mathcal{N}(\hat{x}, \mathcal{D}, k), y_i=c\}|$
@@ -48,10 +48,10 @@ Für jeden Anwendungsbereich gibt es eine Vielzahl an verschiedenen Algorithmen,
    \item \textbf{Multi-Layer Perceptron (MLP)} versucht, ein künstliches neuronales Netz zu erschaffen, indem es
     mehrere Perzeptronen aneinanderreiht. Ein Perzeptronen steht hier für ein Neuron, welches mehrere Eingabewerte
     hat und daraus einen Ausgabewert erstellt. Dafür wird jeder Eingabewert mit einem speziell dafür gelernten
-    Gewicht multipliziert und anschließend wird alles aufsummiert\footnote{TODO +theta}. Als letztes wird eine
-    sogenannte Aktivierungsfunktion auf die Summe angewendet, was dann die Ausgabe des Perzeptron bildet. Die
-    Aktivierungsfunktionen, welche in dieser Arbeit betrachtet worden sind, sind die logistische
-    Funktion, der Hyperbeltangens und der
+    Gewicht multipliziert und anschließend aufsummiert. Zu dieser Summe kann dann noch ein Schwellwert $\theta$
+    hinzuaddiert werden, welches ebenso beim Lernen optimiert wird. Als letztes wird darauf eine sogenannte
+    Aktivierungsfunktion angewendet, was dann die Ausgabe des Perzeptron bildet. Die Aktivierungsfunktionen,
+    welche in dieser Arbeit betrachtet worden sind, sind die logistische Funktion, der Hyperbeltangens und der
     Rectified Linear Unit (ReLU):
     \begin{align}
         \text{logistic}(x) &= \frac{1}{1+e^{-x}}\\
@@ -72,7 +72,7 @@ Für jeden Anwendungsbereich gibt es eine Vielzahl an verschiedenen Algorithmen,
     schickt und die Vorhersage mit der GT vergleicht. In einem Verfahren, was sich Backtracking nennt, werden
     im Grunde die Gewichte, welcher zu einer falschen Entscheidung führten geschwächt, während Gewichte, die
     eine richtige Entscheidung herbeiführen konnten, verstärkt werden. Diese Technik lässt sich durch weitere
-    Hyperparameter, welche zum Beispiel die Rate der Verstärkung beeinflussen, optimiert werden.
+    Hyperparameter, welche zum Beispiel die Rate der Verstärkung beeinflussen, optimieren.
 
    \item \textbf{Linear Regression (LR)} ist eine Regressionsmethode, die versucht, eine Gerade im
     n-dimensionalen Raum zu schaffen, welche die Abstände zu den bekannten Datenpunkten minimiert. Der
@@ -80,7 +80,7 @@ Für jeden Anwendungsbereich gibt es eine Vielzahl an verschiedenen Algorithmen,
     \begin{equation}
         f(\hat{x}) = \sum_i w_ix_i - \theta
     \end{equation}
-    prognostiziert. Um die optimalen Gewichte zu finden nutzt LR den Mean
+    prognostiziert. Um die optimalen Gewichte zu finden, nutzt LR den Mean
     Squared Error (MSE), welcher gegeben ist als
     \begin{equation}
         MSE = \frac{1}{n} \sum_i(y_i-f(x_i))^2
@@ -101,7 +101,9 @@ Für jeden Anwendungsbereich gibt es eine Vielzahl an verschiedenen Algorithmen,
     \begin{equation}
         w = \text{argmin}_{\tilde{w}} MSE + \alpha||\tilde{w}||_1.
     \end{equation}
-    Damit kann einfacher mit Dimensionen umgegangen werden, die nur wenig Einfluss auf das Endergebnis haben.
+    Während L2 aufgrund der Natur quadratischer Funktionen den Wert von $\alpha$ nur asymptotisch gegen $0$ gehen
+    lassen kann, kann L1 diesen komplett auf $0$ setzen. Damit kann einfacher mit Dimensionen umgegangen werden,
+    die nur wenig Einfluss auf das Endergebnis haben.
 
 \end{itemize}
 
@@ -112,8 +114,8 @@ Das korrekte Setzen der Hyperparameter gehört zu dem Fachbereich des Fine Tunin
 
 \section{Evaluation und Metriken}
 
-Um Einschätzen zu können, wie gut ein Modell mit gegeben Hyperparametern und ausgewählten Daten das Problem
- löst wird eine Metrik benötigt. Eine solche ist definiert als Funktion, welche die wahren und die
+Um einschätzen zu können, wie gut ein Modell mit gegebenen Hyperparametern und ausgewählten Daten das Problem
+ löst, wird eine Metrik benötigt. Eine solche ist definiert als Funktion, welche die wahren und die
  prognostizierten Werte annimmt und einen einzigen Wert\footnote{typischerweise zwischen 0 und 1} als
  Indikator, wie gut in einer gewissen Disziplin abgeschnitten wurde, zurückgibt. Die meisten Metriken,
  die in dieser Arbeit verwendet werden, können aus der Konfusionsmatrix berechnet werden. Für ein binäres
@@ -130,10 +132,10 @@ Um Einschätzen zu können, wie gut ein Modell mit gegeben Hyperparametern und a
     \end{tabular}
 \end{center}
 
-Auf der Diagonalen stehen TP (True Positive) für die Menge an positiven Fällen, die auch als solche erkannt
+Auf der Diagonalen steht TP (True Positive) für die Menge an positiven Fällen, die auch als solche erkannt
  wurden, und TN (True Negative) für alle negative Fälle, die ebenfalls richtig vom Modell erkannt wurden.
- Die anderen Werte stehen für keine Übereinstimmung der Werte; FN (False Negative) steht für ein fälschlicherweise
- als negativ klassifizierten Datenpunkte und FP (False Positive) für die Punkte, an denen das Modell ohne Grund
+ Die anderen Werte stehen für keine Übereinstimmung der Werte; FN (False Negative) steht für fälschlicherweise
+ als negativ klassifizierte Datenpunkte und FP (False Positive) für welche, an denen das Modell ohne Grund
  positiv angeschlagen hat. Tabelle ? zeigt ausgewählte Metriken, die in dieser Arbeit benutzt werden und was sie
  in diesem Kontext bedeuten.
 
@@ -144,14 +146,14 @@ Auf der Diagonalen stehen TP (True Positive) für die Menge an positiven Fällen
     Accuracy              & $\frac{TP+TN}{TP+TN+FP+FN}$ & Wie oft lag der Algorithmus richtig? \\
     Recall (Sensitivität) & $\frac{TP}{TP+FN}$          & Wie gut wurden echte Lecks erkannt? \\
     Specificity           & $\frac{TN}{TN+FP}$          & Wie gut wurde 'alles ok' erkannt? \\
-    Precision             & $\frac{TP}{TP+FP}$          & Wie viele erkannte lecks waren auch wirklich Lecks? \\
-    Detection Time        & Mittelwert vom Auftreten eines Lecks bis zur Erkennung & Wie viele Zeiteinheiten dauerte es bis zum erkennen?
+    Precision             & $\frac{TP}{TP+FP}$          & Wie viele erkannte Lecks waren auch wirklich Lecks? \\
+    Detection Time        & Mittelwert vom Auftreten eines Lecks bis zur Erkennung & Wie viele Zeiteinheiten dauerte es bis zum Erkennen?
 \end{tabular}
 
 Hierbei ist wichtig anzumerken, dass auch wenn die Accuracy alle Werte der Konfusionsmatrix in die Bewertung
- mit einfließen lässt, nur als grobe Einschätzung genutzt werden sollte, da sie keine Begründung liefert,
- wie die anderen Metriken. Zudem kann sie auf unbalancierten Datensätzen ein falsches Bild
- vermitteln\footnote{TODO bsp. 99\%}.
+ mit einfließen lässt, diese nur als grobe Einschätzung genutzt werden sollte, da sie im Vergleich zu den anderen
+ Metriken keine Begründung liefert, wie die anderen Metriken. Zudem kann sie auf unbalancierten Datensätzen ein
+ falsches Bild vermitteln\footnote{TODO bsp. 99\%}.
 
 Um die Metriken erheben zu können, muss man jedoch definieren, welche Datenpunkte hierfür genutzt werden
  und welche nicht. Das nächste Kapitel gibt Aufschluss darüber, wie dies bewerkstelligt werden kann.
@@ -194,7 +196,7 @@ Mit dieser Technik können nun verlässlich die Hyperparameter analysiert werden
  gebildet und auf allen Kombinationen mittels Cross-Validation trainiert und getestet wird. So wird für kNN einmal
  mit uniformer Gewichtung der Nachbarn jede Einstellung für k getestet und einmal mit Distanz-bedingter Gewichtung.
  Das Ergebnis zeigt nun die optimale Einstellung für die Gewichtsfunktion und das k an. Ebenso können weitere
- Relationen ausgelesen werden; Beispielsweise könnte für ein höheres k die Distanz-bedingter Gewichtung besser
+ Relationen ausgelesen werden; Beispielsweise könnte für ein höheres k die Distanz-bedingte Gewichtung besser
  funktionieren, für kleinere k jedoch eher die uniforme Gewichtung.
 
 
@@ -218,8 +220,8 @@ Für die Detektion von Lecks in WDNs gibt es mehrere Ansätze, welche sich in ak
      Version des Netzwerkes, abbildet, können aus zu hohen Differenzen Anomalien abgeleitet werden. Die
      Simulation kann auf zwei Wege erstellt werden. Die Hydraulic Model Based Verfahren nutzen spezifisch
      kalibrierte, hydraulische Gleichungen. Sie berücksichtigen alles von der genauen Struktur und Höhenlage
-     über Material bis hin zu Rohrdicken und Alter. Die resultierende Menge an Gleichungen ist daher sehr
-     komplex und bei sensibel gegenüber Ungenauigkeit in der Beschreibung. Auf der anderen Seite stehen die
+     über Material bis hin zur Rohrdicke und Alter. Die resultierende Menge an Gleichungen ist daher sehr
+     komplex und sensibel gegenüber Ungenauigkeit in der Beschreibung. Auf der anderen Seite stehen die
      Hydraulic Measurement Based (oder auch datengetriebenen) Verfahren. Diese nutzen maschinelles Lernen um
      mittels Langzeitdaten des Netzwerkes Vorhersagen zu treffen. Dadurch ist kein Vorwissen über die
      hydraulischen Eigenschaften des Netzwerkes nötig, da das notwendige Wissen von den Algorithmen gelernt wird.
@@ -242,9 +244,10 @@ Wie in Kapitel ? schon angemerkt, unterscheidet sich die Güte eines Modells auc
  benutzt wird. So folgt aus dem finanziellen und ökologischen Schaden eines Lecks, dass potentielle Lecks
  früh erkannt werden sollen; Eine niedrige Detection Time und hohe Sensitivität (bzw. Recall) ist gefordert.
  Während das eigentliche Reparieren eines Rohrs in relativ geringer Zeit absolviert werden kann, ist das, was
- drum herum getan werden muss umso Zeit- und Ressourcenintensiv. Vom Absperren der Straße über das Schließen
- der Ventile bis hin zum Aufgraben des Bodens bis zum Rohr können viele Stunden vergehen [TODO Quelle], die
- im Anschluss wieder rückgängig gemacht werden müssen. Eine hohe Rate an falschen Alarmierungen, also eine
+ drum herum getan werden muss, umso zeit- und ressourcenintensiver. Vom Absperren der Straße über das Schließen
+ der Ventile bis hin zum Aufgraben des Bodens bis zum Rohr können viele Stunden vergehen [TODO Quelle]. Ebenso kann
+ das Zugraben des Loches viel Zeit brauchen, da sich zum Beispiel manche aufgeschüttete Bodenschichten erst Zeit
+ zum sich setzen benötigen, bevor weitergemacht werden kann. Eine hohe Rate an falschen Alarmierungen, also eine
  niedrige Präzision, sollte dementsprechend auch vermieden werden. Verknüpft mit anderen Detektionsverfahren,
  wie zum Beispiel der aktiven Suche zum Überprüfen potentieller Lecks, kann der Wert auf eine optimale Präzision
  jedoch auch wieder geschmälert werden\footnote{Da diese Verfahren jedoch wie besagt auch aufwändig sind, sollte

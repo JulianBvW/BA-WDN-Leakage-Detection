@@ -3,7 +3,7 @@
 Wasserverteilungssysteme (engl. Water Distribution Networks, WDNs) gehören zu den wichtigsten Infrastrukturen
  einer Gesellschaft, in welcher der Anspruch besteht, Trinkwasser in ausreichender Menge und Qualität auf die
  Haushalte zu verteilen. Da der Hauptteil dieser Netzwerke jedoch unter der Erde vergraben liegt, sind WDNs
- Anfällig für plötzlich auftretende sowie schleichende Schäden, die häufig ohne direkt sichtbare Indikatoren
+ anfällig für plötzliche sowie schleichende Schäden, die häufig ohne direkt sichtbare Indikatoren
  auftreten können. Das Wasser kann sich hierbei verunreinigen und geht in Massen verloren. Weltweit beträgt
  der jährliche Wasserverlust, welcher vor allem durch solche Lecks vorangetrieben wird, 126 Milliarden
  Kubikmeter. Auch wenn es in Deutschland nur 5\% des gesamten Wasseraufkommens sind, kann es in manchen
@@ -14,12 +14,13 @@ Wasserverteilungssysteme (engl. Water Distribution Networks, WDNs) gehören zu d
 
 Das Erkennen von Lecks muss demnach schnell und akkurat sein. Alleine das Freilegen der Rohrleitungen kostet viel
  Zeit [Quelle], weswegen die Rate fälschlicher Erkennung niedrig gehalten werden sollte. Auch wenn manche Lecks
- einfach zu Erkennen sind, beispielsweise durch sichtbar austretendes Wasser oder spürbaren Druckverlust, ist in
+ einfach zu erkennen sind, beispielsweise durch sichtbar austretendes Wasser oder spürbaren Druckverlust, ist in
  den meisten Fällen der Wasserverlust unterirdisch. Um solche Arten zu erkennen, können Sensoren installiert
- werden, die den aktuellen Druck in den Rohren messen. Da Drucksensoren ebenso einen finanziellen Aufwand
- bedeuten, haben [Q1] und [Q2] eine Methode entwickelt, ein optimales Sensoren-Placement zu ermöglichen.
-Thema dieser Bachelorarbeit ist es, die Sensordaten zu analysieren und auf deren Basis potentielle Lecks
-in WDNs zu erkennen.
+ werden, die den aktuellen Druck in den Rohren messen. Da das Installieren von Drucksensoren unter der Erde
+ ebenso einen größeren Aufwand bedeuten, haben [Q1] und [Q2] eine Methode entwickelt, eine optimale
+ Sensoren-Verteilung zu ermöglichen.
+Thema dieser Bachelorarbeit ist es, die Sensordaten zu analysieren und durch ein datengetriebenes Modell
+potentielle Lecks in WDNs frühzeitig zu erkennen.
 
 
 Hierfür ist die Arbeit in drei Kapitel aufgeteilt: Zuerst wird auf die theoretischen Grundlagen der
@@ -31,7 +32,7 @@ Wie zuvor erwähnt, ist dies kein triviales Thema, da neben der Erkennungsrate a
 
 Weiterführend wird auf die Methodik eingegangen. Hierfür wird zunächst der Datensatz analysiert gefolgt von
  der Implementation des Erkennungsmodells. Grundlage für ein solches Modell bilden sogenannte digitale Zwillinge,
- welche ein digitale Repräsentationen realer Abläufe sind; Die Sensorwerte werden simuliert und mit den echten
+ welche digitale Repräsentationen realer Abläufe sind; Die Sensorwerte werden simuliert und mit den echten
  Werten verglichen. Eine zu hohe Diskrepanz kann dann als Problemfall gemeldet werden. In der Vergangenheit
  wurden diese simulierte Netzwerke häufig als hydraulische Systeme gelöst, also einer Menge an spezifisch auf
  das WDN angepassten, mathematisch-physikalischen Gleichungen. Diese fordern jedoch in der Modellierung hohe
