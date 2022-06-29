@@ -1,0 +1,45 @@
+\chapter{Einleitung}
+
+Wasserverteilungssysteme (engl. Water Distribution Networks, WDNs) gehören zu den wichtigsten Infrastrukturen
+ einer Gesellschaft, in welcher der Anspruch besteht, Trinkwasser in ausreichender Menge und Qualität auf die
+ Haushalte zu verteilen. Da der Hauptteil dieser Netzwerke jedoch unter der Erde vergraben liegt, sind WDNs
+ anfällig für plötzliche sowie schleichende Schäden, die häufig ohne direkt sichtbare Indikatoren
+ auftreten können. Das Wasser kann sich hierbei verunreinigen und geht in Massen verloren. Weltweit beträgt
+ der jährliche Wasserverlust, welcher vor allem durch solche Lecks vorangetrieben wird, 126 Milliarden
+ Kubikmeter. Auch wenn es in Deutschland nur 5\% des gesamten Wasseraufkommens sind, kann es in manchen
+ Extremfällen bis über 50\% gehen. Der finanzielle Schaden allein beträgt weltweit knapp 40 Milliarden USD
+ jährlich [1]. Doch nicht nur aus finanzieller Sicht ist dies dramatisch. In Zeiten des Klimawandels muss auf
+ eine effiziente Nutzung endlicher Ressourcen Acht gegeben werden.
+
+
+Das Erkennen von Lecks muss demnach schnell und akkurat sein. Alleine das Freilegen der Rohrleitungen kostet viel
+ Zeit [Quelle], weswegen die Rate fälschlicher Erkennung niedrig gehalten werden sollte. Auch wenn manche Lecks
+ einfach zu erkennen sind, beispielsweise durch sichtbar austretendes Wasser oder spürbaren Druckverlust, ist in
+ den meisten Fällen der Wasserverlust unterirdisch. Um solche Arten zu erkennen, können Sensoren installiert
+ werden, die den aktuellen Druck in den Rohren messen. Da das Installieren von Drucksensoren unter der Erde
+ ebenso einen größeren Aufwand bedeuten, haben [Q1] und [Q2] eine Methode entwickelt, eine optimale
+ Sensoren-Verteilung zu ermöglichen.
+Thema dieser Bachelorarbeit ist es, die Sensordaten zu analysieren und durch ein datengetriebenes Modell
+potentielle Lecks in WDNs frühzeitig zu erkennen.
+
+
+Hierfür ist die Arbeit in drei Kapitel aufgeteilt: Zuerst wird auf die theoretischen Grundlagen der
+Anomaliedetektion in WDNs sowie ausgewählter Modelle und Ideen des Maschinellen Lernens eingegangen.
+In diesem Zuge wird auch untersucht, welche Metriken zur Evaluation von Detektions-Modellen geeignet sind.
+Wie zuvor erwähnt, ist dies kein triviales Thema, da neben der Erkennungsrate auch auf eine niedrige
+ Fehlalarm-Quote sowie eine kurze Zeit vom Auftreten der Lecks bis zu ihrem Erkennen geachtet werden muss.
+
+
+Weiterführend wird auf die Methodik eingegangen. Hierfür wird zunächst der Datensatz analysiert gefolgt von
+ der Implementation des Erkennungsmodells. Grundlage für ein solches Modell bilden sogenannte digitale Zwillinge,
+ welche digitale Repräsentationen realer Abläufe sind; Die Sensorwerte werden simuliert und mit den echten
+ Werten verglichen. Eine zu hohe Diskrepanz kann dann als Problemfall gemeldet werden. In der Vergangenheit
+ wurden diese simulierte Netzwerke häufig als hydraulische Systeme gelöst, also einer Menge an spezifisch auf
+ das WDN angepassten, mathematisch-physikalischen Gleichungen. Diese fordern jedoch in der Modellierung hohe
+ Expertise und besitzen während der Kalibrierung eine starke Komplexität durch viele Freiheitsgrade. Somit
+ werden häufiger Methoden aus dem Bereich des Maschinellen Lernens verwendet, welche die Gesetze der Hydraulik
+ nicht kennen müssen und anhand großer, problem-spezifischer Datenmengen selbst lernen.
+
+
+Zuletzt werden die Ergebnisse der Methoden vorgestellt und anschließend diskutiert. Hierbei wird auf die
+ Probleme lokaler Optima sowie die Realisierbarkeit der Modelle eingegangen.

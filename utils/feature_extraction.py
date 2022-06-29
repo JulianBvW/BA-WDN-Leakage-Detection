@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-def past_days_transform(X, nodes, past_start=1, past_end=2):
+def past_days_transform(X, nodes=['10', '11', '12', '13', '21', '22', '23', '31', '32'], past_start=1, past_end=2):
   """Every point in the time series will include the data from specified prior 
   days at the exact hour ie. the pressure values for day 3 hour 5 will include 
   the pressure values of day 2 hour 5 if that day difference is wanted.
@@ -19,6 +19,10 @@ def past_days_transform(X, nodes, past_start=1, past_end=2):
   # Raise exception if type is not list of pd.DataFrame
   if type(X) == np.ndarray:
     raise TypeError('X must be of type list of pd.DataFrame.')
+
+  # Return if there would be no transformation
+  if past_start >= past_end:
+    return X
 
   # Transform every datapoint
   X_new = []
@@ -57,7 +61,12 @@ def mean_transform(X, window=3):
   # Raise exception if type is not list of pd.DataFrame
   if type(X) == np.ndarray:
     raise TypeError('X must be of type list of pd.DataFrame.')
+
+  # Return if there would be no transformation
+  if window <= 1:
+    return X
   
+  # Use rolling window
   rolling = lambda X_single: X_single.rolling(window, min_periods=1).mean()
   
   return list(map(rolling, X))

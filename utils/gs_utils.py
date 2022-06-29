@@ -7,8 +7,10 @@ from tqdm import tqdm
 from scipy.signal import medfilt
 from sklearn.model_selection import ParameterGrid
 
+from models.RegressionEnsamble import RegressionEnsamble
 from models.RegressionEnsambleForGS import RegressionEnsambleForGS
 from utils.metrics import accuracy, recall, specificity, precision, detection_time_mean, detection_time_std, detection_time_median
+from utils.feature_extraction import past_days_transform, mean_transform
 
 
 # Default parameter lists
@@ -80,4 +82,27 @@ def do_gridsearch(X, y, base_model, param_grid_model, cv=5):
   
   results_df = round(pd.DataFrame(results), 3)
   parameter_keys = [*param_grid_model] + [*param_grid_regr] + [*param_grid_mk]
+  return results_df, parameter_keys
+
+def do_fe_gridsearch(X, y, base_model, param_grid_fe, params_ensamble, cv=5):
+  results = []
+
+  for params_fe in tqdm(ParameterGrid(param_grid_fe)):
+
+    # Apply transformations
+    X_transformed = mean_transform(X, window=params_fe['window'])
+    X_transformed = past_days_transform(X_transformed, past_end=params_fe['past_end'])
+
+    # Do Cross Validation
+    for cv_step, (X_train, X_test, y_train, y_test) in enumerate(cv_split(X_transformed, y, cv=cv)):
+      print('# Start of CV step', cv_step)
+
+      # Train the model
+      model = RegressionEnsamble(base_model, **params_ensamble)
+      model.fit(X_train, y_train)
+      y_pred = model.predict_differences_list(X_test)
+      results.append(dict({'cv_step': cv_step}, **params_fe, **get_results(y_test, y_pred)))
+  
+  results_df = round(pd.DataFrame(results), 3)
+  parameter_keys = [*param_grid_fe]
   return results_df, parameter_keys
