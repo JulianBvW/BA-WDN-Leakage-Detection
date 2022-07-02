@@ -136,4 +136,25 @@ Wie bei dem Klassifikationsansatz wird im Vorhersageschritt nun jede Zeitfolge e
 
 \section{Feature Extraction}
 
-blabla
+Ein weiteres Werkzeug zum Verbessern von Vorhersagen kann das Feature Extractions sein. Das ist eine Form des
+ Preprocessings, bei dem die Daten transformiert werden um Features zu entfernen, modifizieren oder hinzuzufügen.
+ Zwei in dieser Arbeit untersuchte Methoden werden im Folgenden vorgestellt.
+
+\subsection*{Past Days Transform}
+
+Die Past Days Transform versucht sich die annähernde Periodizität der Daten zu nutze zu machen, die bei
+der Analyse der Daten herausgekommen ist. Dafür werden zu den Druckwerten an einem Zeitpunkt die jeweiligen
+Druckwerte des letzten Tages hinzugefügt. Ein Datenpunkt sieht dann so aus:
+
+\begin{equation*}
+    x_{i, j} = (x_{i, j}^{(1)}, …, x_{i, j}^{(d)}, x_{i, j-tspd}^{(1)}, …, x_{i, j-tspd}^{(d)})
+\end{equation*}
+
+Dies kann rekursiv mehrere Male gemacht werden, wodurch ein Datenpunkt mehrere Tage in die Vergangenheit
+gucken kann. Der Parameter \texttt{past\_end} kontrolliert, wie viele Tage Rückblick betrachtet werden.
+
+\subsection*{Mean Transform}
+
+Um Rauschen entgegenzuwirken kann dass Mitteln der Werte in einem kleinen Fenster um die jeweiligen Werte helfen.
+ Mean Transform implementiert genau diese Methoden. Dabei kann mit dem Parameter \texttt{window} die Größe des
+ Fensters eingestellt werden.
