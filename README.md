@@ -90,7 +90,7 @@ Das Testen von (anfänglich) **3** erschiedenen Ansätzen zur Leck-Erkunnung:
 1. Die *Baseline*
 2. Regression
 3. ~Recurrent- und Graph-NN~
-4. Outlier Detection und TSF
+4. ~Outlier Detection und TSF~
 
 ### Die Baseline
 
@@ -163,18 +163,18 @@ Ein Besserer Ansatz wird der sein, mittels **Regression** die Werte jeweiliger S
 - [X] ~**Experiment: Weitere Modelle**~
   - [X] ~Time Series Forecasting~
   - [X] ~Unsupervised Outlier Detection~
-- [ ] **Datensätze** testen
+- [X] **Datensätze** testen
   - [X] Net1 Spielzeug
-  - [ ] LeakDB
+  - [X] LeakDB
     - [X] Szenario laden
     - [X] Datensatz laden
     - [X] Datensatz selektieren
-    - [ ] Modelle testen
+    - [X] Modelle testen
     - [X] Metrik umschreiben (h -> ts)
   - [X] ~BattleDIM~
 - [X] ~**XAI**: Analysieren der Experimente~
 - [ ] Aufschreiben
-  - [ ] Formelles
+  - [X] Formelles
   - [ ] Bilder generieren
   - [ ] Kapitel schreiben
   - [ ] Prüfen

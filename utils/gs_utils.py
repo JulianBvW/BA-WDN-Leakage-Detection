@@ -79,7 +79,7 @@ def do_gridsearch(X, y, base_model, param_grid_model, cv=5):
         for params_mk in ParameterGrid(param_grid_mk):
           preds_medfilt = [medfilt(pred, params_mk['mk_size']) for pred in preds]
           results.append(dict({'cv_step': cv_step}, **params_model, **params_regr, **params_mk, **get_results(y_test, preds_medfilt)))
-  
+
   results_df = round(pd.DataFrame(results), 3)
   parameter_keys = [*param_grid_model] + [*param_grid_regr] + [*param_grid_mk]
   return results_df, parameter_keys
@@ -100,9 +100,9 @@ def do_fe_gridsearch(X, y, base_model, param_grid_fe, params_ensamble, cv=5):
       # Train the model
       model = RegressionEnsamble(base_model, **params_ensamble)
       model.fit(X_train, y_train)
-      y_pred = model.predict_differences_list(X_test)
+      y_pred = model.predict(X_test)
       results.append(dict({'cv_step': cv_step}, **params_fe, **get_results(y_test, y_pred)))
-  
+
   results_df = round(pd.DataFrame(results), 3)
   parameter_keys = [*param_grid_fe]
   return results_df, parameter_keys
