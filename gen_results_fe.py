@@ -33,6 +33,7 @@ def rgen_fe(X, y, base_model, params_ensamble):
 # Main
 
 def main():
+  print('### LOADING NETWORK')
   wdn = WDN("nets/Net1.inp", ['10', '11','12','13','21','22','23','31','32'])
   gen = Datagenerator(wdn)
 
