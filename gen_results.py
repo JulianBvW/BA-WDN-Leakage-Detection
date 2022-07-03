@@ -67,11 +67,12 @@ def do_gridsearch(name, X, y, model, parameters):
 def rgen_classification(X, y):
   general_params = {'medfilt_kernel_size': [3, 5, 7, 9, 11]}
   print('### GENERATING CLASSIFICATION RESULTS...')
-  """
+
   model_knn = ClassificationModel(KNeighborsClassifier())
   parameters_knn = {'n_neighbors': [3, 5, 7, 9], 'weights': ['uniform', 'distance']}
-  do_gridsearch('classification_knn', X, y, model_knn, dict(general_params, **parameters_knn))
+  do_gridsearch('adhoc_classification_knn', X, y, model_knn, dict(general_params, **parameters_knn))
 
+  """
   model_svc = ClassificationModel(SVC())
   parameters_svc = {'kernel': ['linear', 'poly', 'rbf'], 
                     'C': [10**e for e in range(-1, 2)], 
@@ -82,7 +83,7 @@ def rgen_classification(X, y):
   parameters_mlp = {'hidden_layer_sizes': [NNSize().rvs() for _ in range(30)], 
                     'learning_rate': ['constant', 'adaptive'], 
                     'activation': ['logistic', 'tanh', 'relu']}
-  do_gridsearch('classification_mlp', X, y, model_mlp, dict(general_params, **parameters_mlp))
+  do_gridsearch('adhoc_classification_mlp', X, y, model_mlp, dict(general_params, **parameters_mlp))
 
   print('### RESULTS GENERATED...')
 
@@ -98,14 +99,14 @@ def rgen_regression(X, y, model='all'):
     rgen_regression_ridge(X, y, general_params)
   if model in ['all', 'lasso']:
     rgen_regression_lasso(X, y, general_params)
-  if model in ['all', 'dt']:
-    rgen_regression_dt(X, y, general_params)
-  if model in ['all', 'rf']:
-    rgen_regression_rf(X, y, general_params)
+  #if model in ['all', 'dt']:
+    #rgen_regression_dt(X, y, general_params)
+  #if model in ['all', 'rf']:
+    #rgen_regression_rf(X, y, general_params)
   if model in ['all', 'knn']:
     rgen_regression_knn(X, y, general_params)
-  if model in ['all', 'svr']:
-    rgen_regression_svr(X, y, general_params)
+  #if model in ['all', 'svr']:
+    #rgen_regression_svr(X, y, general_params)
   if model in ['all', 'mlp']:
     rgen_regression_mlp(X, y, general_params)
 
@@ -116,17 +117,17 @@ def rgen_regression(X, y, model='all'):
 def rgen_regression_lr(X, y, general_params):
   model_lr = RegressionEnsamble(LinearRegression())
   parameters_lr = {}
-  do_gridsearch('regression_lr', X, y, model_lr, dict(general_params, **parameters_lr))
+  do_gridsearch('adhoc_regression_lr', X, y, model_lr, dict(general_params, **parameters_lr))
 
 def rgen_regression_ridge(X, y, general_params):
   model_ridge = RegressionEnsamble(Ridge())
   parameters_ridge = {'alpha': [0.333*i for i in range(1, 7)]}
-  do_gridsearch('regression_ridge', X, y, model_ridge, dict(general_params, **parameters_ridge))
+  do_gridsearch('adhoc_regression_ridge', X, y, model_ridge, dict(general_params, **parameters_ridge))
 
 def rgen_regression_lasso(X, y, general_params):
   model_lasso = RegressionEnsamble(Lasso())
   parameters_lasso = {'alpha': [0.333*i for i in range(1, 7)], 'max_iter': [2000]}
-  do_gridsearch('regression_lasso', X, y, model_lasso, dict(general_params, **parameters_lasso))
+  do_gridsearch('adhoc_regression_lasso', X, y, model_lasso, dict(general_params, **parameters_lasso))
 
 def rgen_regression_dt(X, y, general_params):
   model_dt = RegressionEnsamble(DecisionTreeRegressor())
@@ -142,7 +143,7 @@ def rgen_regression_rf(X, y, general_params):
 def rgen_regression_knn(X, y, general_params):
   model_knn = RegressionEnsamble(KNeighborsRegressor())
   parameters_knn = {'n_neighbors': [3, 5, 7, 9], 'weights': ['uniform', 'distance']}
-  do_gridsearch('regression_knn', X, y, model_knn, dict(general_params, **parameters_knn))
+  do_gridsearch('adhoc_regression_knn', X, y, model_knn, dict(general_params, **parameters_knn))
 
 def rgen_regression_svr(X, y, general_params):
   model_svr = RegressionEnsamble(SVR())
@@ -156,7 +157,7 @@ def rgen_regression_mlp(X, y, general_params):
   parameters_mlp = {'hidden_layer_sizes': [NNSize().rvs() for _ in range(30)], 
                     'learning_rate': ['constant', 'adaptive'], 
                     'activation': ['logistic', 'tanh', 'relu']}
-  do_gridsearch('regression_mlp', X, y, model_mlp, dict(general_params, **parameters_mlp))
+  do_gridsearch('adhoc_regression_mlp', X, y, model_mlp, dict(general_params, **parameters_mlp))
 
 # Main
 
@@ -165,7 +166,8 @@ def main():
   gen = Datagenerator(wdn)
 
   print('### LOADING DATASET...')
-  X, y = gen.get_dataset(LEAKDB_PATH, size=500)
+  #X, y = gen.get_dataset(LEAKDB_PATH, size=500)
+  X, y = gen.gen_dataset(size=150*2, leakage_nodes=wdn.important_nodes, shuffle=True, return_nodes=False)
 
   if sys.argv[1] == 'classification':
     rgen_classification(X, y)
