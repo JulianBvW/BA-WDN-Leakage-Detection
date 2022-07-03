@@ -28,21 +28,21 @@ class RegressionEnsamble(BaseEstimator):
     """
     self.model = model
     self.models = {}
-
+    
     self.th_mode = th_mode
     self.th_multiplier = th_multiplier
     self.th_majority = th_majority
     self.nodes = nodes
     self.medfilt_kernel_size = medfilt_kernel_size
 
-    #self.set_params(**model_params)
+    self.set_params(**model_params)
 
   def init_models(self):
-    #self.set_params(**self.model_params)
+    self.set_params(**self.model_params)
     for node in self.nodes:
       self.models[node] = clone(self.model)
-      #if self.model_params:
-        #self.models[node].set_params(**self.model_params)
+      if self.model_params:
+        self.models[node].set_params(**self.model_params)
 
   def fit(self, X, y, verbose=False):
     """Trains the model.
