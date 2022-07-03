@@ -66,24 +66,24 @@ def rgen_regression_lr(X, y):
   parameters_lr = {}
   results, matric_keys = do_gridsearch(X, y, model_lr, parameters_lr)
   rs_mean = round(results.groupby(matric_keys).mean(), 3)
-  results.to_csv(f'results/regression_lr_full.csv')
-  rs_mean.to_csv(f'results/regression_lr_mean.csv')
+  results.to_csv(f'results/adhoc_regression_lr_full.csv')
+  rs_mean.to_csv(f'results/adhoc_regression_lr_mean.csv')
 
 def rgen_regression_ridge(X, y):
   model_ridge = Ridge
   parameters_ridge = {'alpha': [0.333*i for i in range(1, 7)]}
   results, matric_keys = do_gridsearch(X, y, model_ridge, parameters_ridge)
   rs_mean = round(results.groupby(matric_keys).mean(), 3)
-  results.to_csv(f'results/regression_ridge_full.csv')
-  rs_mean.to_csv(f'results/regression_ridge_mean.csv')
+  results.to_csv(f'results/adhoc_regression_ridge_full.csv')
+  rs_mean.to_csv(f'results/adhoc_regression_ridge_mean.csv')
 
 def rgen_regression_lasso(X, y):
   model_lasso = Lasso
   parameters_lasso = {'alpha': [0.333*i for i in range(1, 7)], 'max_iter': [2000]}
   results, matric_keys = do_gridsearch(X, y, model_lasso, parameters_lasso)
   rs_mean = round(results.groupby(matric_keys).mean(), 3)
-  results.to_csv(f'results/regression_lasso_full.csv')
-  rs_mean.to_csv(f'results/regression_lasso_mean.csv')
+  results.to_csv(f'results/adhoc_regression_lasso_full.csv')
+  rs_mean.to_csv(f'results/adhoc_regression_lasso_mean.csv')
 
 def rgen_regression_dt(X, y):
   model_dt = DecisionTreeRegressor
@@ -107,8 +107,8 @@ def rgen_regression_knn(X, y):
   parameters_knn = {'n_neighbors': [3, 5, 7, 9], 'weights': ['uniform', 'distance']}
   results, matric_keys = do_gridsearch(X, y, model_knn, parameters_knn)
   rs_mean = round(results.groupby(matric_keys).mean(), 3)
-  results.to_csv(f'results/regression_knn_full.csv')
-  rs_mean.to_csv(f'results/regression_knn_mean.csv')
+  results.to_csv(f'results/adhoc_regression_knn_full.csv')
+  rs_mean.to_csv(f'results/adhoc_regression_knn_mean.csv')
 
 def rgen_regression_svr(X, y):
   model_svr = SVR
@@ -127,8 +127,8 @@ def rgen_regression_mlp(X, y):
                     'activation': ['logistic', 'tanh', 'relu']}
   results, matric_keys = do_gridsearch(X, y, model_mlp, parameters_mlp)
   rs_mean = round(results.groupby(matric_keys).mean(), 3)
-  results.to_csv(f'results/regression_mlp_full.csv')
-  rs_mean.to_csv(f'results/regression_mlp_mean.csv')
+  results.to_csv(f'results/adhoc_regression_mlp_full.csv')
+  rs_mean.to_csv(f'results/adhoc_regression_mlp_mean.csv')
 
 # Main
 
@@ -137,7 +137,8 @@ def main():
   gen = Datagenerator(wdn)
 
   print('### LOADING DATASET...')
-  X, y = gen.get_dataset(LEAKDB_PATH, size=500)
+  #X, y = gen.get_dataset(LEAKDB_PATH, size=500)
+  X, y = gen.gen_dataset(size=150*2, leakage_nodes=wdn.important_nodes, shuffle=True, return_nodes=False)
 
   if len(sys.argv) > 1:
     rgen_regression(X, y, model=sys.argv[1])
