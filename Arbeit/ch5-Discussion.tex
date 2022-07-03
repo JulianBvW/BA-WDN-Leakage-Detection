@@ -1,3 +1,27 @@
 \chapter{Diskussion}
 
-blabla
+\{TODO: Schön Ausarbeiten...\}
+Stichpunkte:
+
+\textbf{Interpretation}
+\begin{enumerate}
+    \item Klassifikation (vor allem knn) läuft auf Ad-Hoc besser, da hier nicht zu sehr zu abstrahieren ist und komplexere Modelle hier vermutlich overfitten.
+    \item kNN stürzt bei LeakDB aber ab, da es doch schwieriger ist.
+    \item LR (vor allem L2) gewinnt bei komplexeren Daten.
+    \item kNN weights: distance statt uniform -> abfall specificity, zunahme sensitivity -> distanz-basiert klassifiziert mehr als leck!
+    \item MLP layer unklar/ unsauber -> braucht also mehr testen
+    \item Großes Plus: Regression-Ensemble braucht keine positiven labels, ist also besser für Real Life!
+\end{enumerate}
+
+\textbf{Limitationen}
+\begin{enumerate}
+    \item Net1 ist ein sehr kleines WDN
+    \item training der regressionsalgorithmen ist nicht mit CV -> Kann vlt. einzeln trainieren
+    \item threshold wird mit gleichen daten berechnet, wie regression trainiert wird
+\end{enumerate}
+
+\textbf{Weitere Arbeit}
+\begin{enumerate}
+    \item Zeitfolgen mehr berücksichtigen
+\end{enumerate}
+

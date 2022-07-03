@@ -38,9 +38,9 @@ Der realistischere Datensatz LeakDB ist eine Ansammlung von 1000 Szenarien, welc
 Damit die Daten weiterhin als Zeitfolgen betrachtet werden können, gleichzeitig aber auf mehreren Szenarien
  trainieren und evaluieren werden kann, ist der Definitionsbereich des Modells nicht als $\mathbb{R}^{N \times d}$
  definiert, wobei $N$ die Anzahl an Datenpunkten und $d$ die Anzahl Sensoren ist, sondern als
- $\mathbb{R}^{N \times m \times d}$, mit $m$ als Datenpunkte pro Zeitfolge und $N$ als Anzahl
- Zeitfolgen\footnote{TODO m nicht constant}. Damit kann dem Modell eine Liste an Zeitfolgen übergeben werden,
- dessen Rückgabewert aus $\{0, 1\}^{N \times m}$ ist, also jedem Zeitpunkt das Label 0 oder 1, für kein Leck
+ $\mathbb{R}^{N \times p \times d}$, mit $p$ als Datenpunkte pro Zeitfolge und $N$ als Anzahl
+ Zeitfolgen\footnote{TODO p nicht constant}. Damit kann dem Modell eine Liste an Zeitfolgen übergeben werden,
+ dessen Rückgabewert aus $\{0, 1\}^{N \times p}$ ist, also jedem Zeitpunkt das Label 0 oder 1, für kein Leck
  oder Leck, gibt. Abbildung ? veranschaulicht dies. Im Folgenden bezeichnet $\mathcal{X}$ diese Liste an Zeitfolgen,
  $X_i \in \mathcal{X}$ eine einzelne Zeitfolge und $x_{i, j} = (x_{i, j}^{(1)}, \dots, x_{i, j}^{(d)}) \in X_i$ den $j$-ten
  Zeitpunkt aus Zeitfolge $i$ mit $x_{i, j}^{(k)}$ als dessen $k$-ten Sensorwert.
@@ -80,7 +80,7 @@ Die im Rahmen dieser Arbeit bearbeiteten Strategien sind die der direkten Klassi
 Für die Klassifikation wird ein naiver Ansatz benutzt, in dem ein Klassifikationsmodell auf den rohen Daten
  trainiert und vorhersagt. Dafür werden im Trainingsprozess zuerst die einzelnen Zeitfolgen konkateniert, da
  die Information über die Zeitfolgen hier nicht von Gewicht sind. Die eingabe des Formats
- $\mathbb{R}^{(N*m) \times d}$ wird nun mit den ebenso konkatenierten Labels dem Basemodel zum Trainieren
+ $\mathbb{R}^{(N*p) \times d}$ wird nun mit den ebenso konkatenierten Labels dem Basemodel zum Trainieren
  bereitgestellt, was den Trainingsprozess beendet. Im Vorhersageprozess wird nun jede eingegebene Zeitfolge
  in das Basemodel eingegeben und die Ergebnisse in eine Ausgabeliste gesteckt. Bevor die Vorhersagen nun
  zurückgegeben werden können, wird ein Median-Filter auf die einzelnen Zeitfolgen angewendet. Dieser geht
@@ -113,7 +113,7 @@ Im Trainingsschritt werden die Listen an Zeitfolgen wie auch beim Klassifikation
 Ist das Ensemble trainiert, wird es direkt benutzt um den digitalen Zwilling zu erschaffen. Die zweite Phase
  beginnt nun damit, die Differenzen zwischen realen und geschätzten Werten zu berechnen. Hierfür werden die
  geschätzten Werte einzeln von ihrem realen Gegenstück abgezogen. Es entsteht eine Differenzenmatrix
- $\mathcal{D} \in \mathbb{R}^{(N*m) \times d}$, die für leckfreie Zeitpunkte vom Betrag niedrige Werte und in
+ $\mathcal{D} \in \mathbb{R}^{(N*p) \times d}$, die für leckfreie Zeitpunkte vom Betrag niedrige Werte und in
  Szenarien mit Leck hohe Werte haben soll. Um nun Thresholds zu berechnen wird für jeden Knoten die vom Betrag
  her maximale Differenz ausgewählt, welche einem leckfreien Zeitpunkt zugeordnet ist. Mit dem Hyperparameter
  \texttt{th\_multiplier} kann dieser noch um einen gewissen Prozentsatz vergrößert werden. Ein weiterer wichtiger
@@ -151,7 +151,9 @@ Druckwerte des letzten Tages hinzugefügt. Ein Datenpunkt sieht dann so aus:
 \end{equation*}
 
 Dies kann rekursiv mehrere Male gemacht werden, wodurch ein Datenpunkt mehrere Tage in die Vergangenheit
-gucken kann. Der Parameter \texttt{past\_end} kontrolliert, wie viele Tage Rückblick betrachtet werden.
+ gucken kann. Der Parameter \texttt{past\_end} kontrolliert, wie viele Tage Rückblick betrachtet werden. Ist
+ dieser beispielsweise auf Drei, so besitzt ein Datenpunkt die Druckwerte des eigenen Tages, des Tages
+ zuvor und die des zwei Tage zurückliegenden Datums.
 
 \subsection*{Mean Transform}
 
