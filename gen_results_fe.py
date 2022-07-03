@@ -27,8 +27,8 @@ def rgen_fe(X, y, base_model, params_ensamble):
   param_grid_fe = {'window': range(1, 6), 'past_end': range(1, 6)}
   results, metric_keys = do_fe_gridsearch(X, y, base_model, param_grid_fe, params_ensamble)
   rs_mean = round(results.groupby(metric_keys).mean(), 3)
-  results.to_csv(f'results/regression_fe_full.csv')
-  rs_mean.to_csv(f'results/regression_fe_mean.csv')
+  results.to_csv(f'results/regression_fe_mlp_full.csv')
+  rs_mean.to_csv(f'results/regression_fe_mlp_mean.csv')
 
 # Main
 
@@ -40,7 +40,7 @@ def main():
   print('### LOADING DATASET...')
   X, y = gen.get_dataset(LEAKDB_PATH, size=500)
 
-  params_ensamble = {'th_mode': 'daytime', 'th_multiplier': 1.10, 'th_majority': 0.1, 'mk_size': 3}
+  params_ensamble = {'th_mode': 'daytime', 'th_multiplier': 1.00, 'th_majority': 0.1, 'mk_size': 3}
   rgen_fe(X, y, MLPRegressor(hidden_layer_sizes=(7, 6), learning_rate='adaptive', activation='relu'), params_ensamble)
 
 if __name__ == '__main__':
