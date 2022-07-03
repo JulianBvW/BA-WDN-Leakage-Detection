@@ -4,15 +4,16 @@
 
 \subsection*{Eingrenzung}
 
-Das umfassende Feld des Maschinellen Lernens (ML) lässt sich grob in zwei Arten unterteilen;
+Das umfassende Feld des Maschinellen Lernens (ML) lässt sich in zwei Arten unterteilen;
  Supervised und Unsupervised Learning. In beiden Fällen wird eine Funktion $f: X \rightarrow Y$ gelernt,
- jedoch besitzen die Trainingsdaten für Unsupervised ML keine Informationen für die zu prognostizierende
- Variable $y \in Y$. Dies kann beispielsweise interessant sein für eine Clustering-Aufgabe, in welcher der
- Datensatz in zwei oder mehrere Gruppen aufgeteilt werden soll und vorher nichts über diese Verteilung bekannt
- ist. Die Leck-Detektion benötigt jedoch weitere Informationen; Denn im Gegensatz zu Unsupervised ML ist beim
- Supervised ML diese sogenannte Ground Truth (GT) bekannt und das jeweilige Problem lässt sich anhand der
- Definition des Bildbereichs weiter eingrenzen: Die für die Arbeit wichtigen Arten sind hier die binäre
- Klassifikation und die Regression.
+ die aus der Menge möglicher Datenpunkte $X$ auf die Menge der zu schätzenden Variablen $Y$ abbildet.
+ Hierbei besitzen die Trainingsdaten für Unsupervised ML jedoch keine Informationen für die
+ Variable $y \in Y$. Dies kann beispielsweise interessant sein, wenn der Datensatz in zwei oder mehr distinkte
+ Gruppen aufgeteilt werden soll, ohne dass im Vorhinein etwas über die Verteilung bekannt ist. Solch eine
+ Aufgabe ist als Clustering-Aufgabe bekannt. Die Leck-Detektion benötigt jedoch weitere Informationen;
+ Denn im Gegensatz zu Unsupervised ML ist beim Supervised ML diese sogenannte Ground Truth (GT) bekannt und
+ das jeweilige Problem lässt sich anhand der Definition des Bildbereichs weiter eingrenzen: Die für die
+ Arbeit wichtigen Arten sind hier die binäre Klassifikation und die Regression.
 
 Bei der binären Klassifikation soll jeder Datenpunkt $x \in X$ einer von zwei Klassen $y \in \{0, 1\}$ zugewiesen
  werden. Auf unser Problem der Leck-Detektion angewendet, hieße eine Klassifikation eines Zeitpunkts in
@@ -42,11 +43,12 @@ Für jeden Anwendungsbereich gibt es eine Vielzahl an verschiedenen Algorithmen,
     \begin{equation}
             f_{kNN}(\hat{x}) = \underset{c \in \{1..C\}}{\mathrm{argmax}}\ P(\hat{x}=c|\hat{x}, \mathcal{D}, k)
     \end{equation}
-    Zusätzlich lässt sich mit dem Hyperparameter der Gewichtung einstellen, ob Punkte, die sich im Raum weiter
-    weg befinden, weniger stark gewichtet werden.
+    Mit einem weitereren Hyperparameter lässt sich zusätzlich eine Gewichtung der Punkte hinzufügen: Anders als
+    bei der oben beschriebenen uniformen Gewichtung haben bei abstandsbasierter Gewichtung die Nachbarn, die näher
+    an dem zu klassifizierenden Punkt liegen einen höheren Wert im Vergleich zu Nachbarn, die weiter entfernt sind.
 
    \item \textbf{Multi-Layer Perceptron (MLP)} versucht, ein künstliches neuronales Netz zu erschaffen, indem es
-    mehrere Perzeptronen aneinanderreiht. Ein Perzeptronen steht hier für ein Neuron, welches mehrere Eingabewerte
+    mehrere Perzeptronen aneinanderreiht. Ein Perzeptron steht hier für ein Neuron, welches mehrere Eingabewerte
     hat und daraus einen Ausgabewert erstellt. Dafür wird jeder Eingabewert mit einem speziell dafür gelernten
     Gewicht multipliziert und anschließend aufsummiert. Zu dieser Summe kann dann noch ein Schwellwert $\theta$
     hinzuaddiert werden, welches ebenso beim Lernen optimiert wird. Als letztes wird darauf eine sogenannte
@@ -54,19 +56,19 @@ Für jeden Anwendungsbereich gibt es eine Vielzahl an verschiedenen Algorithmen,
     welche in dieser Arbeit betrachtet worden sind, sind die logistische Funktion, der Hyperbeltangens und der
     Rectified Linear Unit (ReLU):
     \begin{align}
-        \text{logistic}(x) &= \frac{1}{1+e^{-x}}\\
-        \text{tanh}(x)     &= 1-\frac{2}{e^{2x}+1}\\
-        \text{relu}(x)     &= \max(0, x)
+        \text{logistic}(v) &= \frac{1}{1+e^{-v}}\\
+        \text{tanh}(v)     &= 1-\frac{2}{e^{2v}+1}\\
+        \text{relu}(v)     &= \max(0, v)
     \end{align}
-    Die Ausgabe eines Perzeptrons ist also
+    Die Ausgabe $f : \mathbb{R}^d \rightarrow \mathbb{R}$ eines Perzeptrons ist also definiert als
     \begin{equation}
-            f(x) = f_{activation}(\sum_i(w_ix_i)+\theta),
+            f(x) = f_{activation}(\sum_{i=1}^d(w_ix_i)+\theta),
     \end{equation}
     wobei $f_{activation}$ die Aktivierungsfunktion und $w$ die gelernten Gewichte sind. Ein MLP ist dann eine
     Ansammlung vieler einzelner Perzeptronen in möglicherweise mehreren Schichten. Dafür besteht eine Schichte
     aus mehreren, in parallel arbeitenden Perzeptronen, deren Eingabe die Ausgabe aus der vorherigen Schicht
     darstellt. Ihre Ausgabe ist dann wieder Eingabe der folgenden Schicht. Abbildung ? zeigt so eine Struktur.
-    Dabei ist die Anzahl der Schichten sowie die Menge an Perzeptronen pro Schicht ein Hyperparameter.
+    Dabei ist die Anzahl der Schichten sowie die Menge an Perzeptronen pro Schicht jeweils ein Hyperparameter.
 
     Die einzelnen Gewichte lernen kann dieses Modell indem es die Datenpunkt durch das (untrainierte) Netz
     schickt und die Vorhersage mit der GT vergleicht. In einem Verfahren, was sich Backtracking nennt, werden
@@ -75,15 +77,15 @@ Für jeden Anwendungsbereich gibt es eine Vielzahl an verschiedenen Algorithmen,
     Hyperparameter, welche zum Beispiel die Rate der Verstärkung beeinflussen, optimieren.
 
    \item \textbf{Linear Regression (LR)} ist eine Regressionsmethode, die versucht, eine Gerade im
-    n-dimensionalen Raum zu schaffen, welche die Abstände zu den bekannten Datenpunkten minimiert. Der
-    Wert eines neuen Datenpunktes wird nun durch die parametrische Funktion
+    n-dimensionalen Raum zu schaffen, welche die Abstände zu den bekannten Datenpunkten aus $X$ minimiert. Der
+    Wert eines neuen Datenpunktes $\hat{x}$ wird nun durch die parametrische Funktion
     \begin{equation}
-        f(\hat{x}) = \sum_i w_ix_i - \theta
+        f(\hat{x}) = \sum_i w_i\hat{x}_i - \theta
     \end{equation}
     prognostiziert. Um die optimalen Gewichte zu finden, nutzt LR den Mean
     Squared Error (MSE), welcher gegeben ist als
     \begin{equation}
-        MSE = \frac{1}{n} \sum_i(y_i-f(x_i))^2
+        MSE = \frac{1}{n} \sum_{(x,y) \in X}(y-f(x))^2
     \end{equation}
     und die durchschnittliche, quadrierte Abweichung der Punkte von der Linie beschreibt. Die finalen
     Gewichte sind nun $w = \text{argmin}_{\tilde{w}} MSE$.
@@ -94,12 +96,12 @@ Für jeden Anwendungsbereich gibt es eine Vielzahl an verschiedenen Algorithmen,
     häufig $\lambda$ genannt.} multipliziert. Die optimalen Gewichte werden
     damit berechnet: 
     \begin{equation}
-        w = \text{argmin}_{\tilde{w}} MSE + \alpha||\tilde{w}||_2^2.
+        w = \underset{\tilde{w}}{\operatorname{argmin}}\ MSE + \alpha||\tilde{w}||_2^2.
     \end{equation}
     Dadurch werden zu hohe Gewichte und damit Overfitting, was in Kapitel ? weiter erklärt wird, bestraft.
     L1 nutzt die absoluten Werte der Gewichte:
     \begin{equation}
-        w = \text{argmin}_{\tilde{w}} MSE + \alpha||\tilde{w}||_1.
+        w = \underset{\tilde{w}}{\operatorname{argmin}}\ MSE + \alpha||\tilde{w}||_1.
     \end{equation}
     Während L2 aufgrund der Natur quadratischer Funktionen den Wert von $\alpha$ nur asymptotisch gegen $0$ gehen
     lassen kann, kann L1 diesen komplett auf $0$ setzen. Damit kann einfacher mit Dimensionen umgegangen werden,
@@ -144,7 +146,7 @@ Auf der Diagonalen steht TP (True Positive) für die Menge an positiven Fällen,
     Metrik & Berechnung & Bedeutung \\
     \hline
     Accuracy              & $\frac{TP+TN}{TP+TN+FP+FN}$ & Wie oft lag der Algorithmus richtig? \\
-    Recall (Sensitivität) & $\frac{TP}{TP+FN}$          & Wie gut wurden echte Lecks erkannt? \\
+    Sensitivität\footnote{In der Literatur auch als Recall zu finden.} & $\frac{TP}{TP+FN}$          & Wie gut wurden echte Lecks erkannt? \\
     Specificity           & $\frac{TN}{TN+FP}$          & Wie gut wurde 'alles ok' erkannt? \\
     Precision             & $\frac{TP}{TP+FP}$          & Wie viele erkannte Lecks waren auch wirklich Lecks? \\
     Detection Time        & Mittelwert vom Auftreten eines Lecks bis zur Erkennung & Wie viele Zeiteinheiten dauerte es bis zum Erkennen?
@@ -162,13 +164,13 @@ Um die Metriken erheben zu können, muss man jedoch definieren, welche Datenpunk
 \section{Hyperparameter Tuning}
 
 Das Ergebnis eines Machine Learning Modells hängt stark von den gewählten Hyperparametern ab. Diese zu
- optimieren gehört zu den Kernaufgaben im Lebenszyklus des Modellierungsprozesses, für die jedoch eine
- Verlässliche Aussage der Metriken wichtig ist. Man sollte davon absehen, auf den gleichen Daten zu testen,
- auf denen man bereits trainiert hat. Dabei kann es nämlich unbemerkt zu Overfitting kommen, was bedeutet,
- dass das Modell nicht genug generalisiert, sondern die Eigenheiten des Datensatzes, wie zum Beispiel Rauschen,
- lernt. Dadurch funktioniert es schlechter auf nicht gesehenen Daten. Weiter sind Metriken nicht mehr so
- aussagekräftig, wenn nur bereits Bekanntes abgefragt wird\footnote{Mit $k=1$ hätte kNN einen Fehler von $0$, falls
- auf den gleichen Daten getestet und trainiert wird.}. Die Test- und Trainingsdaten sollten also disjunkt sein.
+ optimieren gehört zu den Kernaufgaben des Modellierungsprozesses, für die jedoch eine Verlässliche Aussage
+ der Metriken wichtig ist. Man sollte davon absehen, auf den gleichen Daten zu testen, auf denen man bereits
+ trainiert hat. Dabei kann es nämlich unbemerkt zu Overfitting kommen, was bedeutet, dass das Modell nicht
+ genug generalisiert, sondern die Eigenheiten des Datensatzes, wie zum Beispiel Rauschen, lernt. Dadurch
+ funktioniert es schlechter auf nicht gesehenen Daten. Weiter sind Metriken nicht mehr so aussagekräftig,
+ wenn nur bereits Bekanntes abgefragt wird\footnote{Mit $k=1$ hätte kNN einen Fehler von $0$, falls auf den
+ gleichen Daten getestet und trainiert wird.}. Die Test- und Trainingsdaten sollten also disjunkt sein.
 
 \subsection*{Train-Test-Split}
 
@@ -185,18 +187,18 @@ Die Lösung dieses Problems ist das wiederholte Anwenden eines Train-Test-Splits
  wird dann k-Mal der Prozess des Trainierens und Testens gestartet, wobei jedes mal ein anderes der k Sets als
  Test-Set gewählt wird. Abbildung ? visualisiert dieses Vorgehen. Die Ergebnisse der k Durchläufe werden
  anschließend gemittelt und zeigen damit eine weitaus robustere Einschätzung der Güte auf. Das k liegt hier
- typischerweise zwischen 5 und 10\footnote{Es gibt einen Spezialfall, indem k gleich der größe des Datensatzes
- ist. Eine solche Einstellung nennt sich Leave-One-Out Cross-Validation, bei welcher immer auf allen Datenpunkten
- mit Ausnahme eines einzigen Punktes trainiert wird. Dies ist jedoch nicht Thema dieser Arbeit.}.
+ typischerweise\footnote{Es gibt einen Spezialfall, indem k gleich der größe des Datensatzes ist. Eine solche
+ Einstellung nennt sich Leave-One-Out Cross-Validation, bei welcher immer auf allen Datenpunkten mit Ausnahme
+ eines einzigen Punktes trainiert wird. Dies ist jedoch nicht Thema dieser Arbeit.} zwischen 5 und 10.
 
 \subsection*{Grid-Search}
 
 Mit dieser Technik können nun verlässlich die Hyperparameter analysiert werden. Mit der Methode des Exhaustive
  Grid-Search lassen sich alle Hyperparameter testen, indem das kartesisches Produkt der möglichen Einstellungen
  gebildet und auf allen Kombinationen mittels Cross-Validation trainiert und getestet wird. So wird für kNN einmal
- mit uniformer Gewichtung der Nachbarn jede Einstellung für k getestet und einmal mit Distanz-bedingter Gewichtung.
+ mit uniformer Gewichtung der Nachbarn jede Einstellung für k getestet und einmal mit distanzbedingter Gewichtung.
  Das Ergebnis zeigt nun die optimale Einstellung für die Gewichtsfunktion und das k an. Ebenso können weitere
- Relationen ausgelesen werden; Beispielsweise könnte für ein höheres k die Distanz-bedingte Gewichtung besser
+ Relationen ausgelesen werden; Beispielsweise könnte für ein höheres k die distanzbedingte Gewichtung besser
  funktionieren, für kleinere k jedoch eher die uniforme Gewichtung.
 
 
@@ -207,16 +209,16 @@ Für die Detektion von Lecks in WDNs gibt es mehrere Ansätze, welche sich in ak
 
 \begin{itemize}
     
-    \item Die \textbf{aktiven Verfahren}, auch Hardware-basierte Verfahren, sind Strategien, die mittels
+    \item Die \textbf{aktiven Verfahren}, auch hardwarebasierte Verfahren, sind Strategien, die mittels
      spezialisierter Technik aktiv nach Brüchen in den Rohren suchen. Hierfür könnten zum Beispiel
      Schallgeneratoren oder Kameras benutzt werden. Dabei steht jeder Suchvorgang in der Regel für sich
      und bildet keinen Verlauf ab. Zudem sind aktive Verfahren sowohl Zeit- als auch Ressourcenintensiv.
 
-    \item Dahingegen sind \textbf{passive Verfahren}, oder auch Modell-basierte Verfahren, darauf ausgelegt
+    \item Dahingegen sind \textbf{passive Verfahren}, oder auch modellbasierte Verfahren, darauf ausgelegt
      ein kontinuierliches Bild über den aktuellen Zustand des Netzwerkes zu geben und bei Anomalien Alarm zu
      schlagen. Hierfür wird die bereits erwähnte Technik der digitalen Zwillinge angewendet, indem das reale
      Netz, welches durch eine Menge an Sensoren durchgehend überwacht wird, durch ein virtuell simuliertes
-     Netzwerk erweitert wird. Mit der Annahme, dass die Simulation den Normalzustand, also eine Leckfreie
+     Netzwerk erweitert wird. Mit der Annahme, dass die Simulation den Normalzustand, also eine leckfreie
      Version des Netzwerkes, abbildet, können aus zu hohen Differenzen Anomalien abgeleitet werden. Die
      Simulation kann auf zwei Wege erstellt werden. Die Hydraulic Model Based Verfahren nutzen spezifisch
      kalibrierte, hydraulische Gleichungen. Sie berücksichtigen alles von der genauen Struktur und Höhenlage
@@ -242,7 +244,7 @@ In dieser Arbeit geht es um die datengetriebenen, also die passiven, auf vorange
 
 Wie in Kapitel ? schon angemerkt, unterscheidet sich die Güte eines Modells auch darin, welche Metrik
  benutzt wird. So folgt aus dem finanziellen und ökologischen Schaden eines Lecks, dass potentielle Lecks
- früh erkannt werden sollen; Eine niedrige Detection Time und hohe Sensitivität (bzw. Recall) ist gefordert.
+ früh erkannt werden sollen; Eine niedrige Detection Time und hohe Sensitivität ist gefordert.
  Während das eigentliche Reparieren eines Rohrs in relativ geringer Zeit absolviert werden kann, ist das, was
  drum herum getan werden muss, umso zeit- und ressourcenintensiver. Vom Absperren der Straße über das Schließen
  der Ventile bis hin zum Aufgraben des Bodens bis zum Rohr können viele Stunden vergehen [TODO Quelle]. Ebenso kann
