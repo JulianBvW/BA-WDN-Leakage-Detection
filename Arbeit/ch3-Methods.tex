@@ -1,4 +1,4 @@
-\chapter{Modellierung}
+\chapter{Modellierung \label{Chapter-Methods}}
 
 \section{Datensatz}
 
@@ -38,8 +38,9 @@ Der realistischere Datensatz LeakDB ist eine Ansammlung von 1000 Szenarien, welc
 Damit die Daten weiterhin als Zeitfolgen betrachtet werden können, gleichzeitig aber auf mehreren Szenarien
  trainieren und evaluieren werden kann, ist der Definitionsbereich des Modells nicht als $\mathbb{R}^{N \times d}$
  definiert, wobei $N$ die Anzahl an Datenpunkten und $d$ die Anzahl Sensoren ist, sondern als
- $\mathbb{R}^{N \times p \times d}$, mit $p$ als Datenpunkte pro Zeitfolge und $N$ als Anzahl
- Zeitfolgen\footnote{TODO p nicht constant}. Damit kann dem Modell eine Liste an Zeitfolgen übergeben werden,
+ $\mathbb{R}^{N \times p \times d}$, mit $p$ als Datenpunkte pro Zeitfolge\footnote{Wichtig anzumerken ist hier,
+ dass das $p$ kein fester Wert ist, sondern unterschiedlich für jede der $N$ Zeitfolgen sein kann.} und $N$
+ als Anzahl Zeitfolgen. Damit kann dem Modell eine Liste an Zeitfolgen übergeben werden,
  dessen Rückgabewert aus $\{0, 1\}^{N \times p}$ ist, also jedem Zeitpunkt das Label 0 oder 1, für kein Leck
  oder Leck, gibt. Abbildung ? veranschaulicht dies. Im Folgenden bezeichnet $\mathcal{X}$ diese Liste an Zeitfolgen,
  $X_i \in \mathcal{X}$ eine einzelne Zeitfolge und $x_{i, j} = (x_{i, j}^{(1)}, \dots, x_{i, j}^{(d)}) \in X_i$ den $j$-ten
@@ -69,11 +70,11 @@ Ein weiterer Schritt beim Vorbereiten der Daten ist das hinzufügen von Zeitinfo
 Die im Rahmen dieser Arbeit bearbeiteten Strategien sind die der direkten Klassifikation, welche als Baseline
  dienen wird, und der Regressions-Ensemble mit anschließender Threshold-Klassifikation, welche ein weitaus
  solideres Ergebnis liefern soll. Für beide Fälle ist ein Wrapper geschrieben, der neben eigenen Hyperparametern
- ein ML Modell (im Folgenden Basemodel genannt) entgegen nimmt. Dieses ist eines der im Kapitel ? beschriebenen,
- bekannten Algorithmen. Die Aufgabe des Wrappers ist es, die erhaltenen Daten vor- und nachzubereiten, damit sie
- auf die Basemodels angewendet werden können. Für die Strategie der Klassifikation werden sie also so vorbereitet,
- dass Klassifikationsalgorithmen wie kNN angewendet werden können, während für die Strategie des
- Regressions-Ensemble Algorithmen wie LR oder Ridge angewendet werden.
+ ein ML Modell (im Folgenden Basemodel genannt) entgegen nimmt. Dieses ist eines der im Kapitel \ref{Chapter-ML}
+ beschriebenen, bekannten Algorithmen. Die Aufgabe des Wrappers ist es, die erhaltenen Daten vor- und
+ nachzubereiten, damit sie auf die Basemodels angewendet werden können. Für die Strategie der Klassifikation
+ werden sie also so vorbereitet, dass Klassifikationsalgorithmen wie kNN angewendet werden können, während für
+ die Strategie des Regressions-Ensemble Algorithmen wie LR oder Ridge angewendet werden.
 
 \subsection*{Klassifikation}
 
@@ -107,7 +108,8 @@ Im Trainingsschritt werden die Listen an Zeitfolgen wie auch beim Klassifikation
     \item Welcher Algorithmus mit welcher Konfiguration der Hyperparameter dies ist, ist als Basemodel festgelegt.
     \item Die Eingabe jedes Basemodels sind die konkatenierten Daten mit jeweiliger Ausnahme der Werte des eigenen
      Knotens\footnote{Wichtig anzumerken ist hier, dass die Daten derart gefiltert werden, dass nur leckfreie
-     Zeitpunkte für dieses Training genutzt werden. Im Kapitel ? wird weiter darauf eingegangen.}.
+     Zeitpunkte für dieses Training genutzt werden. Im Kapitel \ref{Chapter-Discussion} wird dies weiter
+     diskutiert.}.
 \end{itemize}
 
 Ist das Ensemble trainiert, wird es direkt benutzt um den digitalen Zwilling zu erschaffen. Die zweite Phase

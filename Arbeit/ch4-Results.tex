@@ -22,10 +22,10 @@ Da eine detaillierte Analyse aller Kombinationen den Rahmen dieser Arbeit spreng
 Im Zuge des Ad-Hoc Datensatzes wurden 300 Zeitfolgen mit jeweiliger Zeitspanne von fünf Tagen getestet. Um die
  Accuracy als valide, erste Einschätzung der Güte nutzen zu können, ist der Datensatz genau zur Hälfte in
  leckfreie und leckbehaftete Szenarien aufgeteilt. Abbildung ? zeigt die Metriken der, nach Accuracy, besten
-Konfigurationen der jeweiligen Ansätze und Basemodels. Anhang ? benennt dabei ihre Einstellungen. Wichtig zu
-bemerken ist, dass k-Nearest Neighbors in beiden Ansätzen und allen Metriken den höchsten Wert von 100\%
-abliefert. Währenddessen sind bei der Linearen Regression und vor allem bei der L2-Regulierung starke Einbrüche
-in der Sensitivität für Lecks zu sehen.
+ Konfigurationen der jeweiligen Ansätze und Basemodels. Anhang ? benennt dabei ihre Einstellungen. Wichtig zu
+ bemerken ist, dass k-Nearest Neighbors in beiden Ansätzen und allen Metriken den höchsten Wert von 100\%
+ abliefert. Währenddessen sind bei der Linearen Regression und vor allem bei der L2-Regulierung starke Einbrüche
+ in der Sensitivität für Lecks zu sehen.
 
 Um auch bei LeakDB die Accuracy nutzen zu können, wurden aus den 1000 Szenarien 500 ausgewählt, sodass diese
  mit 250 leckfreien zu 250 leckbehafteten Szenarien balanziert war. Zusätzlich zu der doppelten, zeitlichen
@@ -35,7 +35,7 @@ Um auch bei LeakDB die Accuracy nutzen zu können, wurden aus den 1000 Szenarien
 
 \section{LeakDB Datensatz}
 
-Um dies massiven Datenmengen analysieren zu können, wurde zuerst für jeden Hyperparameter ein Einfluss-Wert
+Um diese massiven Datenmengen analysieren zu können, wurde zuerst für jeden Hyperparameter ein Einfluss-Wert
  erzeugt. Dieser gibt Aufschluss darüber, wie viel Einfluss die Veränderung dieses Wertes auf das Ergebnis
  einer Metrik hat und wird wie folgt berechnet:
 
@@ -57,9 +57,9 @@ Hierbei sind \texttt{results} die Ergebnisse aus der csv-Datei, \texttt{feature}
 Die folgenden Analysen der Hyperparameter wurden generiert, indem die Hyperparameter mit höherem Einfluss auf
  ihre lokale Optima gesetzt wurden und die Werte der Hyperparameter geringerem Einflusses gemittelt wurden.
  So lassen sich Tendenzen in der Veränderung eines Hyperparameters isolierter betrachten. Alle Grafiken dieser
- Analyse sind im Anhang gezeigt.
+ Analyse sind im Anhang gezeigt, welche keine Korrelation ergibt.
 
-Schaut man sich zuerst den verhältnismäßig einflussreichsten Hyperparameter \texttt{th\_majority}, so fällt auf,
+Schaut man sich zuerst den verhältnismäßig einflussreichsten Hyperparameter \texttt{th\_majority} an, so fällt auf,
  dass der Verlauf bei allen Basemodels ungefähr gleich ist. Abbildung ? zeigt dies am Beispiel des MLPs. Während
  die Spezifität annähernd konstant bleibt, sinken die Werte der Sensitivität und Akkuratheit. Am interessantesten
  ist die Präzision, also der Anteil echter Lecks an den prognostizierten Lecks, welcher erst Nahe eins bleibt,
@@ -67,12 +67,15 @@ Schaut man sich zuerst den verhältnismäßig einflussreichsten Hyperparameter \
  welche die Abhängigkeit der Thresholds von der Tageszeit einstellt. Auch hier sind die Verläufe ähnlich unter
  den Basemodels und liefert ein klares Bild: Die Thresholds von der Tageszeit abhängig zu machen verringert die
  Akkuratheit und die Sensitivität, während die anderen Metriken sich nur leicht verschlechtern, wie am Beispiel
- der Linearen Regression in Abbildung ? zu sehen ist.
+ der Linearen Regression in Abbildung ? zu sehen ist. Weniger Einfluss geht von \texttt{th\_multiplier} aus,
+ welcher die berechneten Thresholds künstlich erhöhen kann. Abbildung ? zeigt die Interaktion mit
+ \texttt{th\_majority} in einer Heatmap.
 
 Für k-Nearest Neighbors ist der einflussreichste Hyperparameter \texttt{weights}, mit welchem angegeben werden
  kann, ob die Datenpunkte in der Nachbarschaft alle gleich gewichtet werden, oder nach ihrem Abstand. Der Effekt
  von distanzbasierter Gewichtung im Vergleich zur uniformen Gewichtung wird in Abbildung ? gezeigt. Hier sieht
- man, dass die Spezifität abnimmt, während die Sensitivität erhöht wird.
+ man, dass die Spezifität abnimmt, während die Sensitivität erhöht wird. Bei der distanzbasierten Gewichtung
+ werden also mehr Punkte als Leck klassifiziert.
 
 Betrachtet man das MLP, so ist die richtige Wahl der Aktivierungsfunktion am entscheidendsten. Abbildung ?
  zeigt, dass die Wahl der logistischen Funktion oder der Hyperbeltangens im Mittelwert zu einer Präzision
@@ -81,7 +84,9 @@ Betrachtet man das MLP, so ist die richtige Wahl der Aktivierungsfunktion am ent
  kann man in Abbildung ?, welche die Schichten zuerst nach ihrer Anzahl und dann ihrer Summe an Perzeptronen
  sortiert, einen kleinen Abwärtstrend in der Sensitivität sehen, je größer das künstliche, neuronale Netz ist.
 
-\{TODO: detection time\}
+ Für die meisten Hyperparameter ist das Optimum für die bisher betrachteten Metriken ebenso das der
+  Detektionszeit. Ein davon abweichender Fall, welcher in Abbildung ? gezeigt wird, ist der \texttt{th\_mode},
+  welcher im Gegensatz zu den anderen Metriken leicht die simple Einstellung bevorzugt.
 
 \section{Einfluss von Feature Extraction}
 
@@ -93,3 +98,6 @@ Um die Effekte der zwei Techniken der Feature Extraction zu analysieren wurde da
  Abbildung ? einsehen. Interessant ist hier zu sehen, dass obwohl der Rückblick in die Vergangenheit generell
  bessere Werte liefert, so weiter dieser ist, ist für Accuracy und Sensitivity kein Rückblick am besten. Zudem
  kann die Mittelung der Werte nur bessere Werte hervorbringen, falls die Past Days Transform aktiv ist.
+
+ Betrachtet man sich jedoch die Detektionszeit in Abbildung ?, so hat die Mittelung für die
+  durchschnittliche Detektionszeit auch ohne Past Days Transform einen guten Effekt.

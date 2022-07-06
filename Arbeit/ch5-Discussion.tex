@@ -1,27 +1,65 @@
-\chapter{Diskussion}
+\chapter{Diskussion \label{Chapter-Discussion}}
 
-\{TODO: Schön Ausarbeiten...\}
-Stichpunkte:
+Um die Leistung verschiedener Ansätze des maschinellen Lernens in der Problemstellung der Leck-Detektion zu
+ testen wurden diese zuerst auf einem einfachen und danach auf einem realistischeren Datensatz evaluiert. Dabei
+ hat die Auswertung unter Anderem gezeigt, dass k-Nearest Neighbors sowohl im Ansatz der Klassifikation als auch
+ des Regressions-Ensemble auf dem Ad-Hoc Datensatz beinahe perfekte Ergebnisse liefern kann, während es auf dem
+ komplexen Datensatz stark schwächelt. Dies kann daran liegen, dass LeakDB neben den täglichen Schwankungen
+ auch jährliche Veränderung besitzt, über die kNN keine Kenntnis haben kann. Die zusätzliche Angabe zum Beispiel
+ der Kalenderwoche würde hier zwar vermutlich helfen, jedoch würde das viel mehr Daten erfordern. Zudem gibt es
+ auch über Jahre hinweg andauernde Schwankungen durch das Weltklima, welche den Rahmen wieder sprengen würden.
+ Die gegengesetzte Richtung, also dass Modelle auf den komplexeren Daten besser werden, ist bei den
+ Regressionsalgorithmen zu sehen. Vor allem L2 kann hier signifikant an Sensitivität gewinnen. Ein möglicher
+ Grund für die schlechtere Leistung auf den einfacheren Daten ist, dass diese anfangen, das Rauschen zu lernen,
+ Stichwort Overfitting.
 
-\textbf{Interpretation}
-\begin{enumerate}
-    \item Klassifikation (vor allem knn) läuft auf Ad-Hoc besser, da hier nicht zu sehr zu abstrahieren ist und komplexere Modelle hier vermutlich overfitten.
-    \item kNN stürzt bei LeakDB aber ab, da es doch schwieriger ist.
-    \item LR (vor allem L2) gewinnt bei komplexeren Daten.
-    \item kNN weights: distance statt uniform -> abfall specificity, zunahme sensitivity -> distanz-basiert klassifiziert mehr als leck!
-    \item MLP layer unklar/ unsauber -> braucht also mehr testen
-    \item Großes Plus: Regression-Ensemble braucht keine positiven labels, ist also besser für Real Life!
-\end{enumerate}
+Ein weiterer großer Vorteil des Regression-Ensemble-Ansatzes ist, dass der Trainingsprozess nur leckfreie Daten
+ benutzt. Das Modell kann also vollkommen auf leckbehaftete Zeitpunkte verzichtet, welche in manchen Städten rar
+ sind.
 
-\textbf{Limitationen}
-\begin{enumerate}
-    \item Net1 ist ein sehr kleines WDN
-    \item training der regressionsalgorithmen ist nicht mit CV -> Kann vlt. einzeln trainieren
-    \item threshold wird mit gleichen daten berechnet, wie regression trainiert wird
-\end{enumerate}
+Wichtig anzumerken ist jedoch, dass in der momentanen Implementation des Ensembles der Trainingsschritt noch
+ ausgebessert werden kann. So werden aktuell auf allen (leckfreien) Datenpunkten trainiert und direkt
+ prognostiziert, um die Differenzen, welche dann die Thresholds ergeben, zu berechnen. Das bedeutet, dass
+ bereits gelernte Daten abgefragt werden, was, wie in Kapitel \ref{Chapter-ML} bereits gesagt, Probleme mit sich ziehen kann.
+ Separates Training mit Cross Validation und extra Mengen alleine für die Berechnung der Differenzen kann
+ zukünftig helfen, wobei ein solches Vorgehen wieder einen höheren Bedarf an Daten mit sich zieht.
 
-\textbf{Weitere Arbeit}
-\begin{enumerate}
-    \item Zeitfolgen mehr berücksichtigen
-\end{enumerate}
+Weitere Fragen, die sich aus der Analyse ergeben, sind die der einzelnen Hyperparameter. Betrachtet man
+ \texttt{th\_majority}, so lässt sich das Absteigen von Sensitivität und Akkuratheit leicht erklären: Denn dieser
+ Hyperparameter gibt die Anzahl an, wie viele Knoten Alarm schlagen müssen und erhöht damit die generelle Hürde,
+ damit ein Zeitpunkt als Leck erklärt wird. Höhere Hürde trotz konstanter Werte führt zu geringeren Zahlen.
+ Interessant ist jedoch die Präzision, welche zuerst stetig bei 100\% bleibt und dann plötzlich auf 0\%
+ fällt. Aufschluss über dieses Verhalten gibt die Spezifität, welche hier bei 100\% liegt. Dieser Wert kann
+ nur erreicht werden, wenn die Anzahl fälschlicherweise als positiv markierten Punkte (FP) gleich 0 ist.
+ Für die Präzision, welche als $\frac{TP}{TP+FP}$ berechnet wird, bedeutet dies, dass sie nur die Werte 1, falls
+ es mindestens ein richtigerweise positiv markierten Punkt gibt, oder 0, falls TP = 0 ist, erreichen
+ kann\footnote{Bei TP = 0 würde die Formel zu $\frac{0}{0}$ evaluieren, was nicht definiert ist. Für diese Anwendung
+ ist es jedoch als 0 definiert.}, was dieses Verhalten der Präzisionskurve erklärt. Die Werte zwischen 0 und 1
+ stammen dabei aus der Mittelung der verschiedenen Konfigurationen. Bezüglich des Erhöhen der Hürde ist die
+ Interaktion mit dem Hyperparameter \texttt{th\_multiplier} interessant. Da dessen Erhöhung ebenfalls eine
+ Verstärkung der Hürde darstellt, könnte man meinen, dass diese Parameter in einer inversen Korrelation
+ zueinander stehen sollten: So niedriger der Threshold, desto mehr Knoten sollte es zum Alarm schlagen
+ benötigen. Doch die Abbildung ? unterstützt diese These nicht.
+
+Betrachtet man die Aktivierungsfunktion des MLPs, so kann die gleiche Erklärung wie für den plötzlichen Abfall
+ der Präzision bei \texttt{th\_majority} genutzt werden: Hier ist die Spezifität auch nahe 100\%, was für die
+ logistische Funktion oder den Hyperbeltangens bedeutet, dass keine Zeitpunkte als Leck gelabelt wurden. Um
+ den Einfluss der verborgenen Schichten eines MLPs genauer bestimmen zu können, muss dieser jedoch noch weiter
+ getestet und analysiert werden. Für diese Tests wurde die Form zufällig gesampelt, das heißt, es wurden nicht
+ alle Kombinationen ausgetestet. Vielleicht kann mit einer erschöpfenden Suche ein Besserer Zusammenhang
+ gefunden werden.
+
+Die Betrachtung der Detektionszeit zeigt keinen großen, von der der anderen Metriken abweichenden,
+ Handlungsbedarf an. Der Unterschied in den gezeigten Beispielen betrifft meist nur unter zwei Zeitschritten,
+ also bei LeakDB eine Stunde. Der maximale Median betrifft für die Evaluation des Feature Extraction nur einen
+ halben Zeitschritt, was einer viertel Stunde entspricht.
+
+Die größte Limitation betrifft jedoch das zugrunde liegende WDN. Denn mit nur neun Knotenpunkten ist das
+ benutzte “Net1” ein sehr kleines Netzwerk, wodurch die Ergebnisse, selbst bei realistischer Simulation, ein
+ verfälschtes Bild abgeben können. Weiterführend sollten die Modelle somit auf größeren Netzwerken getestet
+ evaluiert werden.
+
+Auch das Auffassen des Themas als Vorhersageproblem von Zeitfolgen kann in weiterer Forschung noch stärker
+exploriert werden, da die in dieser Arbeit betrachteten Algorithmen nur begrenzt zeitlichen Kontext inferieren
+können.
 

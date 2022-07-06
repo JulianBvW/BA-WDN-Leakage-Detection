@@ -1,6 +1,6 @@
-\chapter{Grundlagen}
+\chapter{Grundlagen Maschinelles Lernen \label{Chapter-ML}}
 
-\section{Maschinelles Lernen}
+\section{Eingränzung}
 
 \subsection*{Eingrenzung}
 
@@ -19,7 +19,7 @@ Bei der binären Klassifikation soll jeder Datenpunkt $x \in X$ einer von zwei K
  werden. Auf unser Problem der Leck-Detektion angewendet, hieße eine Klassifikation eines Zeitpunkts in
  Klasse $1$, dass irgendwo in dem WDN ein Leck existiert, wohingegen Klasse $0$ die Abwesenheit sämtlicher
  Lecks impliziert. Für die Regression wird jedem Datenpunkt ein reeller Wert $y \in \mathbb{R}$ zugewiesen.
-Wie dieses Konzept übernommen werden kann, ist in Kapitel ? weiter beschrieben. 
+ Wie dieses Konzept übernommen werden kann, ist in Kapitel \ref{Chapter-Methods} weiter beschrieben. 
 
 
 \subsection*{Modelle des Maschinellen Lernens}
@@ -98,8 +98,8 @@ Für jeden Anwendungsbereich gibt es eine Vielzahl an verschiedenen Algorithmen,
     \begin{equation}
         w = \underset{\tilde{w}}{\operatorname{argmin}}\ MSE + \alpha||\tilde{w}||_2^2.
     \end{equation}
-    Dadurch werden zu hohe Gewichte und damit Overfitting, was in Kapitel ? weiter erklärt wird, bestraft.
-    L1 nutzt die absoluten Werte der Gewichte:
+    Dadurch werden zu hohe Gewichte und damit Overfitting, was in Kapitel \ref{Section-HyperTuning} weiter
+    erklärt wird, bestraft. L1 nutzt die absoluten Werte der Gewichte:
     \begin{equation}
         w = \underset{\tilde{w}}{\operatorname{argmin}}\ MSE + \alpha||\tilde{w}||_1.
     \end{equation}
@@ -146,7 +146,7 @@ Auf der Diagonalen steht TP (True Positive) für die Menge an positiven Fällen,
     Metrik & Berechnung & Bedeutung \\
     \hline
     Accuracy              & $\frac{TP+TN}{TP+TN+FP+FN}$ & Wie oft lag der Algorithmus richtig? \\
-    Sensitivität\footnote{In der Literatur auch als Recall zu finden.} & $\frac{TP}{TP+FN}$          & Wie gut wurden echte Lecks erkannt? \\
+    Sensitivität (auch Recall) & $\frac{TP}{TP+FN}$          & Wie gut wurden echte Lecks erkannt? \\
     Specificity           & $\frac{TN}{TN+FP}$          & Wie gut wurde 'alles ok' erkannt? \\
     Precision             & $\frac{TP}{TP+FP}$          & Wie viele erkannte Lecks waren auch wirklich Lecks? \\
     Detection Time        & Mittelwert vom Auftreten eines Lecks bis zur Erkennung & Wie viele Zeiteinheiten dauerte es bis zum Erkennen?
@@ -155,13 +155,14 @@ Auf der Diagonalen steht TP (True Positive) für die Menge an positiven Fällen,
 Hierbei ist wichtig anzumerken, dass auch wenn die Accuracy alle Werte der Konfusionsmatrix in die Bewertung
  mit einfließen lässt, diese nur als grobe Einschätzung genutzt werden sollte, da sie im Vergleich zu den anderen
  Metriken keine Begründung liefert, wie die anderen Metriken. Zudem kann sie auf unbalancierten Datensätzen ein
- falsches Bild vermitteln\footnote{TODO bsp. 99\%}.
+ falsches Bild vermitteln\footnote{Gibt ein Modell konstant nur Label 0 aus, so ist die Accuracy auf einem
+ Datensatz, welches nur ganz wenige Punkte mit Label 1 besitzt, bei annährend 100\%}.
 
 Um die Metriken erheben zu können, muss man jedoch definieren, welche Datenpunkte hierfür genutzt werden
  und welche nicht. Das nächste Kapitel gibt Aufschluss darüber, wie dies bewerkstelligt werden kann.
 
 
-\section{Hyperparameter Tuning}
+\section{Hyperparameter Tuning \label{Section-HyperTuning}}
 
 Das Ergebnis eines Machine Learning Modells hängt stark von den gewählten Hyperparametern ab. Diese zu
  optimieren gehört zu den Kernaufgaben des Modellierungsprozesses, für die jedoch eine Verlässliche Aussage
@@ -177,8 +178,8 @@ Das Ergebnis eines Machine Learning Modells hängt stark von den gewählten Hype
 Beim Train-Test-Split wird die Datenmenge in zwei Gruppen aufgeteilt: Das Train-Set und das Test-Set.
  Typischerweise beträgt die größe des Test-Sets zwischen 20\% und 33\% der gesamten Daten. Da bei diesem Split
  auf neuen Daten getestet wird, zwingt es einen dazu, das Modell so zu gestalten, dass es gut generalisieren
- kann. Bei einer unglücklichen Wahl des Test-Sets, kann es jedoch immer noch passieren, dass die Metriken
- einen falschen Eindruck hinterlassen\footnote{TODO 33\% class1 in train, 0 in test}.
+ kann. Bei einer unglücklichen Wahl des Test-Sets, wenn beispielsweise keine Punkte einer Klasse im Test-Set sind,
+ kann es jedoch immer noch passieren, dass die Metriken einen falschen Eindruck hinterlassen.
 
 \subsection*{Cross-Validation}
 
@@ -202,7 +203,7 @@ Mit dieser Technik können nun verlässlich die Hyperparameter analysiert werden
  funktionieren, für kleinere k jedoch eher die uniforme Gewichtung.
 
 
-\section{Anomaliedetektion}
+\chapter{Anomaliedetektion}
 
 Für die Detektion von Lecks in WDNs gibt es mehrere Ansätze, welche sich in aktive und passive
  Strategien einteilen lassen.
@@ -232,17 +233,17 @@ Für die Detektion von Lecks in WDNs gibt es mehrere Ansätze, welche sich in ak
 
 In dieser Arbeit geht es um die datengetriebenen, also die passiven, auf vorangegangenen Messwerten
  basierten, Verfahren. Ein solches Modell funktioniert in zwei Schritten. Im ersten Schritt wird das
- digitale Netzwerk simuliert. Hierfür wird für jeden echten Sensor ein digitaler Sensor erstellt. Dieser
+ virtuelle Netzwerk simuliert. Hierfür wird für jeden echten Sensor ein digitaler Sensor erstellt. Dieser
  schätzt den eigenen Druckwert anhand der aktuellen Druckwerte aller anderen Sensoren. Möglicherweise können
  auch direkt vorangegangene Messwerte in diese Vorhersage mit eingebaut werden. Wird dies für jeden Sensor
- gemacht, entsteht ein digitales Netzwerk, bei dem jeder digitale Sensor kein Wissen über seinen realen Wert
+ gemacht, entsteht ein virtuelles Netzwerk, bei dem jeder digitale Sensor kein Wissen über seinen realen Wert
  hat. Im nächsten Schritt wird dann zuerst die Differenz der Netzwerke berechnet. Ist momentan kein Leck im
  WDN, so sollten diese Differenzen klein sein, während Lecks zu höheren Differenzen führen. Hier gilt es nun,
  einen Threshold zu finden, ab dem eine Differenz zu hoch ist, um im Normalbereich zu liegen. Ist dieser
  abhängig von dem jeweiligen Sensor, so stellt sich ebenso die Frage, bei wie vielen Sensoren eine Differenz
  als ‘zu hoch’ gelten muss, damit das gesamte Modell Alarm schlägt.
 
-Wie in Kapitel ? schon angemerkt, unterscheidet sich die Güte eines Modells auch darin, welche Metrik
+Wie in Kapitel \ref{Chapter-ML} schon angemerkt, unterscheidet sich die Güte eines Modells auch darin, welche Metrik
  benutzt wird. So folgt aus dem finanziellen und ökologischen Schaden eines Lecks, dass potentielle Lecks
  früh erkannt werden sollen; Eine niedrige Detection Time und hohe Sensitivität ist gefordert.
  Während das eigentliche Reparieren eines Rohrs in relativ geringer Zeit absolviert werden kann, ist das, was
