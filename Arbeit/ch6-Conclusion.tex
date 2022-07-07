@@ -1,9 +1,20 @@
 \chapter{Zusammenfassung}
 
-\section{Ausblick}
+In dieser Arbeit wurde in die Problemstellung der Leck-Detektion in Wasserverteilungsnetzwerken eingeleitet under
+ wichtige Kriterien hervorgehoben sowie verschiedene Ansätze des maschinellen Lernens für die Eignung als
+ Detektions-Algorithmen getestet. So ist für diese Technologien wichtig, schnelle und präzise Vorhersagen
+ treffen zu können. Dafür wurden die Ansätze in verschiedenen Szenarien mit variierenden Bedingungen trainiert
+ und evaluiert. Die Ergebnisse zeigen, dass ein Ansatz, indem ein Ensemble von Regressionsalgorithmen ein
+ virtuelles Netzwerk prognostiziert auf realistischen Daten nicht nur für die Optimierung der Metriken, sondern
+ auch für die echte Anwendung am besten funktioniert.
 
-blabla
+Zudem wurden für den Erfolg wesentliche Hyperparameter in der Feinabstimmung identifiziert und auf ihren Einfluss
+ analysiert: So ist es wichtig, den Threshold dynamisch nach der Tageszeit auszurichten und die Anzahl an Knoten,
+ die Alarm schlagen müssen, damit das gesamte Modell einen Zeitpunkt als Leck prognostiziert, niedrig zu halten.
+ Auch das richtige Auswählen einer Aktivierungsfunktion für MLPs kann das Ergebnis stark verbessern.
 
-\section{Fazit}
+Als letztes wurde gezeigt, dass das Erweitern der einzelnen Datenpunkte um Informationen von vergangenen
+Zeitpunkten helfen kann, mehr Sicherheit in der Vorhersagen zu schaffen.
 
-blabla
+Abschließend lässt sich sagen, dass vor allem das Regression-Ensemble einen vielversprechenden Ansatz für die
+Leck-Detektion bietet, welche auf größeren Netzwerken weiter getestet werden sollte.
