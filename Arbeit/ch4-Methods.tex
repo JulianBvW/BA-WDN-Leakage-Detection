@@ -1,5 +1,8 @@
 \chapter{Modellierung \label{Chapter-Methods}}
 
+Um die verschiedenen Modelle testen zu können, werden zwei Ansätze vorgestellt, welche jeweils auf zwei Datensätzen
+ trainiert werden. Diese wurden dabei durch ein Simulations-Tool erzeugt, welches im Folgenden erklärt wird.
+
 \section{Datensatz}
 
 \subsection*{WNTR Simulation}
@@ -33,7 +36,7 @@ Der realistischere Datensatz LeakDB ist eine Ansammlung von 1000 Szenarien, welc
  des Wertes einer Tageszeit, so kann man, im Vergleich zum ad-hoc Datensatz, hier saisonale Ereignisse und die
  Unsicherheit direkt erkennen.
 
-\subsection*{Form der Datenpunkte}
+\subsection*{Datenformat}
 
 Damit die Daten weiterhin als Zeitfolgen betrachtet werden können, gleichzeitig aber auf mehreren Szenarien
  trainieren und evaluieren werden kann, ist der Definitionsbereich des Modells nicht als $\mathbb{R}^{N \times d}$
