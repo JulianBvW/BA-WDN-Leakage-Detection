@@ -6,32 +6,66 @@ Zum Generieren der Ergebnisse wurde Grid-Search auf beiden Datensätzen für bei
  Zeit. Damit ist sowohl die Generierung, als auch die Analyse gemeint, da die Anzahl an Ergebnissen durch das
  Produkt der jeweils möglichen Einstellungen der Hyperparameter gegeben ist. Existieren beispielsweise fünf
  Hyperparameter mit jeweils fünf Einstellungen, so ist die Anzahl an Durchläufen gleich $5^5=3125$.
- Eine Auflistung, wie viele Kombinationen getestet wurden, kann in Tabelle ? eingesehen werden.
+ Eine Auflistung, wie viele Kombinationen getestet wurden, kann in Tabelle \ref{tab:res-kombs} eingesehen werden.
 
-\{TODO: Tabelle\}
+ \begin{table}[h]
+    \centering
+    \begin{tabular}{l|ll|ll}
+    & \multicolumn{2}{l|}{Klassifikation} & \multicolumn{2}{l}{Regression-Ensemble} \\
+    \hline
+    Basemodel & \# HP & \# Kombi. & \# HP & \# Kombi. \\
+    \hline
+    LR        &                           &                                & \multicolumn{1}{c}{0}     & \multicolumn{1}{c}{300}       \\
+    Ridge     &                           \multicolumn{2}{c|}{-}           & \multicolumn{1}{c}{1}     & \multicolumn{1}{c}{1800}      \\
+    Lasso     &                           &                                & \multicolumn{1}{c}{1}     & \multicolumn{1}{c}{1800}      \\
+    kNN       & \multicolumn{1}{c}{2}     & \multicolumn{1}{c|}{40}        & \multicolumn{1}{c}{2}     & \multicolumn{1}{c}{2400}      \\
+    MLP       & \multicolumn{1}{c}{3}     & \multicolumn{1}{c|}{900}       & \multicolumn{1}{c}{3}     & \multicolumn{1}{c}{54000}
+    \end{tabular}
+    \caption{Anzahl (als \# abgekürzt) von Hyperparametern (HP) einzelner Modelle und ihrer insgesamter Anzahl an
+        Kombinationen inklusive der Wrapper-Klasse. Klassifikation besitzt nur einen Hyperparameter, während
+        Regression-Ensemble vier besitzt.}
+    \label{tab:res-kombs}
+\end{table}
 
 Da eine detaillierte Analyse aller Kombinationen den Rahmen dieser Arbeit sprengen würde, werden für den
  Ad-Hoc Datensatz sowie für den Ansatz der Klassifikation bei dem LeakDB Datensatz nur die besten Konfigurationen
  präsentiert. Da der Regressions-Ensemble-Ansatz auf dem realistischeren Datensatz die wichtigsten Werte zeigt,
  wird dieser detaillierter betrachtet. Hier wird zuletzt auch die Detektionszeit und das Feature Extraction
  analysiert. Die vollständigen Werte jedes einzelnen Experimentes sind auf der GitHub-Seite als csv-Dateien
- bereitgestellt.
+ bereitgestellt [TODO Quelle]. Dort ist ebenfalls ein Notebook namens \texttt{analyse.ipynb} hinterlegt, in welchem
+ die komplette Analyse der Ergebnisse dokumentiert ist.
 
 \section{Optimale Konfiguration}
 
 Im Zuge des Ad-Hoc Datensatzes wurden 300 Zeitfolgen mit jeweiliger Zeitspanne von fünf Tagen getestet. Um die
  Accuracy als valide, erste Einschätzung der Güte nutzen zu können, ist der Datensatz genau zur Hälfte in
- leckfreie und leckbehaftete Szenarien aufgeteilt. Abbildung ? zeigt die Metriken der, nach Accuracy, besten
- Konfigurationen der jeweiligen Ansätze und Basemodels. Anhang ? benennt dabei ihre Einstellungen. Wichtig zu
- bemerken ist, dass k-Nearest Neighbors in beiden Ansätzen und allen Metriken den höchsten Wert von 100\%
- abliefert. Währenddessen sind bei der Linearen Regression und vor allem bei der L2-Regulierung starke Einbrüche
- in der Sensitivität für Lecks zu sehen.
+ leckfreie und leckbehaftete Szenarien aufgeteilt. Abbildung \ref{fig:res-best-adhoc} zeigt die Metriken der, nach
+ Accuracy, besten Konfigurationen der jeweiligen Ansätze und Basemodels.
+ Wichtig zu bemerken ist, dass k-Nearest Neighbors in beiden Ansätzen und allen Metriken den höchsten Wert von
+ 100\% abliefert. Währenddessen sind bei der Linearen Regression und vor allem bei der L2-Regulierung starke
+ Einbrüche in der Sensitivität für Lecks zu sehen.
 
 Um auch bei LeakDB die Accuracy nutzen zu können, wurden aus den 1000 Szenarien 500 ausgewählt, sodass diese
  mit 250 leckfreien zu 250 leckbehafteten Szenarien balanziert war. Zusätzlich zu der doppelten, zeitlichen
- Auflösung, ist jede Zeitfolge hier zehn Tage lang. Abbildung ? zeigt wieder die besten Werte auf, während
- Anhang ? die zugrunde liegenden Einstellung nennt. Hier ist zu bemerken, dass kNN aus dem Ansatz des
- Regressions-Ensembles stark eingebrochen ist, während die anderen Werte weitgehend stabil bleiben.
+ Auflösung, ist jede Zeitfolge hier zehn Tage lang. Abbildung \ref{fig:res-best-leakdb} zeigt wieder die besten
+ Werte auf. Hier ist zu bemerken, dass kNN aus dem Ansatz des Regressions-Ensembles stark eingebrochen ist,
+ während die anderen Werte weitgehend stabil bleiben.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=1.0\textwidth]{res/res-best-adhoc}
+        \caption{Ad-Hoc Datensatz\vspace{1em}}
+        \label{fig:res-best-adhoc}
+    \end{subfigure}
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=1.0\textwidth]{res/res-best-leakdb}
+        \caption{LeakDB}
+        \label{fig:res-best-leakdb}
+    \end{subfigure}
+    \caption{Die Werte der besten Konfigurationen einzelner Modelle, nach der Akkuratheit. Die genauen
+        Einstellungen sind im benannten Notebook unter dem Punkt 'Die Besten' zu finden.}
+\end{figure}
 
 \section{LeakDB Datensatz}
 
@@ -39,7 +73,11 @@ Um diese massiven Datenmengen analysieren zu können, wurde zuerst für jeden Hy
  erzeugt. Dieser gibt Aufschluss darüber, wie viel Einfluss die Veränderung dieses Wertes auf das Ergebnis
  einer Metrik hat und wird wie folgt berechnet:
 
-\{TODO: Code\}
+\begin{verbatim}
+    def influence(results, feature, metric='accuracy'):
+        grouped = results.groupby(feature).mean().loc[:, metric]
+        return grouped.max() - grouped.min()
+\end{verbatim}
 
 Hierbei sind \texttt{results} die Ergebnisse aus der csv-Datei, \texttt{feature} das zu untersuchende Feature
  und \texttt{metric} die jeweilige Metrik. Die \texttt{groupby}-Funktion gruppiert also zuerst die Ergebnisse
@@ -47,7 +85,7 @@ Hierbei sind \texttt{results} die Ergebnisse aus der csv-Datei, \texttt{feature}
  dann der mittlere Metrikwert berechnet, was dazu führt, dass die Differenz des maximalen zu dem minimalen
  Mittelwert den Gesamteinfluss widerspiegelt. Ein Hyperparameter mit einem Einfluss von 0.6 hat also das
  Potential, das Ergebnis um 0.6, also 60\%-Punkte, zu verändern, während ein Hyperparameter mit einem Einfluss
- von 0.01 nur wenig am Endergebnis verändern kann. Tabelle ? gibt den Einfluss jedes möglichen Hyperparameters
+ von 0.01 nur wenig am Endergebnis verändern kann. Anhang TODO ? gibt den Einfluss jedes möglichen Hyperparameters
  pro Basemodel an. Hier ist gut zu sehen, dass der Wrapper-spezifische Hyperparameter \texttt{th\_majority},
  also die Anzahl, wie viele Knoten Alarm schlagen müssen, bevor ein Zeitpunkt als leckbehaftet gilt, tendenziell
  den größten Effekt auf das Endergebnis hat, während die Größe des Median-Filters nur einen sehr kleinen Effekt
@@ -60,16 +98,37 @@ Die folgenden Analysen der Hyperparameter wurden generiert, indem die Hyperparam
  Analyse sind im Anhang gezeigt, welche keine Korrelation ergibt.
 
 Schaut man sich zuerst den verhältnismäßig einflussreichsten Hyperparameter \texttt{th\_majority} an, so fällt auf,
- dass der Verlauf bei allen Basemodels ungefähr gleich ist. Abbildung ? zeigt dies am Beispiel des MLPs. Während
- die Spezifität annähernd konstant bleibt, sinken die Werte der Sensitivität und Akkuratheit. Am interessantesten
- ist die Präzision, also der Anteil echter Lecks an den prognostizierten Lecks, welcher erst Nahe eins bleibt,
- dann aber plötzlich stark abfällt. Ein weiterer, einflussreicher Wrapper-Hyperparameter ist \texttt{th\_mode},
- welche die Abhängigkeit der Thresholds von der Tageszeit einstellt. Auch hier sind die Verläufe ähnlich unter
- den Basemodels und liefert ein klares Bild: Die Thresholds von der Tageszeit abhängig zu machen verringert die
- Akkuratheit und die Sensitivität, während die anderen Metriken sich nur leicht verschlechtern, wie am Beispiel
- der Linearen Regression in Abbildung ? zu sehen ist. Weniger Einfluss geht von \texttt{th\_multiplier} aus,
- welcher die berechneten Thresholds künstlich erhöhen kann. Abbildung ? zeigt die Interaktion mit
- \texttt{th\_majority} in einer Heatmap.
+ dass der Verlauf bei allen Basemodels ungefähr gleich ist. Abbildung \ref{fig:res-th-majority} zeigt dies am
+ Beispiel des MLPs. Während die Spezifität annähernd konstant bleibt, sinken die Werte der Sensitivität und
+ Akkuratheit. Am interessantesten ist die Präzision, also der Anteil echter Lecks an den prognostizierten Lecks,
+ welcher erst Nahe eins bleibt, dann aber plötzlich stark abfällt. Ein weiterer, einflussreicher
+ Wrapper-Hyperparameter ist \texttt{th\_mode}, welche die Abhängigkeit der Thresholds von der Tageszeit einstellt.
+ Auch hier sind die Verläufe ähnlich unter den Basemodels und liefert ein klares Bild: Die Thresholds von der
+ Tageszeit abhängig zu machen verbessert die Akkuratheit und die Sensitivität, während die anderen Metriken sich
+ nur leicht verschlechtern, wie am Beispiel der Linearen Regression in Abbildung \ref{fig:res-th-mode} zu sehen
+ ist. Weniger Einfluss geht von \texttt{th\_multiplier} aus, welcher die berechneten Thresholds künstlich erhöhen
+ kann. Abbildung \ref{fig:res-th-multiplier} zeigt die Interaktion mit \texttt{th\_majority} in einer Heatmap.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{res/res-th-majority}
+    \caption{TODO.}
+    \label{fig:res-th-majority}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{res/res-th-mode}
+    \caption{TODO.}
+    \label{fig:res-th-mode}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \fbox{\includegraphics[width=0.7\textwidth]{res/res-th-multiplier}}
+    \caption{TODO.}
+    \label{fig:res-th-multiplier}
+\end{figure}
 
 Für k-Nearest Neighbors ist der einflussreichste Hyperparameter \texttt{weights}, mit welchem angegeben werden
  kann, ob die Datenpunkte in der Nachbarschaft alle gleich gewichtet werden, oder nach ihrem Abstand. Der Effekt
@@ -77,16 +136,39 @@ Für k-Nearest Neighbors ist der einflussreichste Hyperparameter \texttt{weights
  man, dass die Spezifität abnimmt, während die Sensitivität erhöht wird. Bei der distanzbasierten Gewichtung
  werden also mehr Punkte als Leck klassifiziert.
 
-Betrachtet man das MLP, so ist die richtige Wahl der Aktivierungsfunktion am entscheidendsten. Abbildung ?
- zeigt, dass die Wahl der logistischen Funktion oder der Hyperbeltangens im Mittelwert zu einer Präzision
- und Sensitivität nahe null führt. Ein weiterer, nicht so einflussreicher Hyperparameter von MLP ist die
- Gestaltung der verborgenen Schichten. Auch, wenn es schwierig ist, eine Ordnung auf der Struktur zu finden,
- kann man in Abbildung ?, welche die Schichten zuerst nach ihrer Anzahl und dann ihrer Summe an Perzeptronen
- sortiert, einen kleinen Abwärtstrend in der Sensitivität sehen, je größer das künstliche, neuronale Netz ist.
+Betrachtet man das MLP, so ist die richtige Wahl der Aktivierungsfunktion am entscheidendsten. Abbildung
+ \ref{fig:res-mlp-activation} zeigt, dass die Wahl der logistischen Funktion oder der Hyperbeltangens im
+ Mittelwert zu einer Präzision und Sensitivität nahe null führt. Ein weiterer, nicht so einflussreicher
+ Hyperparameter von MLP ist die Gestaltung der verborgenen Schichten. Auch, wenn es schwierig ist, eine Ordnung
+ auf der Struktur zu finden, kann man in Abbildung \ref{fig:res-mlp-layers}, welche die Schichten zuerst nach
+ ihrer Anzahl und dann ihrer Summe an Perzeptronen sortiert, einen kleinen Abwärtstrend in der Sensitivität
+ sehen, je größer das künstliche, neuronale Netz ist.
 
- Für die meisten Hyperparameter ist das Optimum für die bisher betrachteten Metriken ebenso das der
-  Detektionszeit. Ein davon abweichender Fall, welcher in Abbildung ? gezeigt wird, ist der \texttt{th\_mode},
-  welcher im Gegensatz zu den anderen Metriken leicht die simple Einstellung bevorzugt.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{res/res-mlp-activation}
+    \caption{TODO.}
+    \label{fig:res-mlp-activation}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{res/res-mlp-layers}
+    \caption{TODO.}
+    \label{fig:res-mlp-layers}
+\end{figure}
+
+
+Für die meisten Hyperparameter ist das Optimum für die bisher betrachteten Metriken ebenso das der
+ Detektionszeit. Ein davon abweichender Fall, welcher in Abbildung \ref{fig:res-fe-th-mode} gezeigt wird, ist der
+ \texttt{th\_mode}, welcher im Gegensatz zu den anderen Metriken leicht die simple Einstellung bevorzugt.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{res/res-fe-th-mode}
+    \caption{TODOridge.}
+    \label{fig:res-fe-th-mode}
+\end{figure}
 
 \section{Einfluss von Feature Extraction}
 
@@ -95,12 +177,27 @@ Um die Effekte der zwei Techniken der Feature Extraction zu analysieren wurde da
  also keinem Rückblick, und Fünf, also ein Rückblick um bis zu vier Tage in die Vergangenheit, gewählt. Für
  die Mean Transformation wurde ebenso eine Fenstergröße von Eins, also keiner Veränderung, bis zu Fünf, also
  einer Mittelwertberechnung über fünf Werte, vorgegeben. Die Ergebnisse lassen sich als Heatmap in
- Abbildung ? einsehen. Interessant ist hier zu sehen, dass obwohl der Rückblick in die Vergangenheit generell
+ Abbildung \ref{fig:res-fe-metrics} einsehen. Interessant ist hier zu sehen, dass obwohl der Rückblick in die Vergangenheit generell
  bessere Werte liefert, so weiter dieser ist, ist für Accuracy und Sensitivity kein Rückblick am besten. Zudem
  kann die Mittelung der Werte nur bessere Werte hervorbringen, falls die Past Days Transform aktiv ist.
 
- Betrachtet man sich jedoch die Detektionszeit in Abbildung ?, so hat die Mittelung für die
-  durchschnittliche Detektionszeit auch ohne Past Days Transform einen guten Effekt.
+Betrachtet man sich jedoch die Detektionszeit in Abbildung \ref{fig:res-fe-dt}, so hat die Mittelung für die
+ durchschnittliche Detektionszeit auch ohne Past Days Transform einen guten Effekt.
+
+ \begin{figure}
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=1.3\textwidth]{res/res-fe-metrics}
+        \caption{TODO\vspace{1em}}
+        \label{fig:res-fe-metrics}
+    \end{subfigure}
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=0.9\textwidth]{res/res-fe-dt}
+        \caption{TODO}
+        \label{fig:res-fe-dt}
+    \end{subfigure}
+    \caption{TODO.}
+\end{figure}
 
 \section{Diskussion \label{Chapter-Discussion}}
 
@@ -143,7 +240,7 @@ Weitere Fragen, die sich aus der Analyse ergeben, sind die der einzelnen Hyperpa
  Interaktion mit dem Hyperparameter \texttt{th\_multiplier} interessant. Da dessen Erhöhung ebenfalls eine
  Verstärkung der Hürde darstellt, könnte man meinen, dass diese Parameter in einer inversen Korrelation
  zueinander stehen sollten: So niedriger der Threshold, desto mehr Knoten sollte es zum Alarm schlagen
- benötigen. Doch die Abbildung ? unterstützt diese These nicht.
+ benötigen. Doch die Abbildung \ref{fig:res-th-multiplier} unterstützt diese These nicht.
 
 Betrachtet man die Aktivierungsfunktion des MLPs, so kann die gleiche Erklärung wie für den plötzlichen Abfall
  der Präzision bei \texttt{th\_majority} genutzt werden: Hier ist die Spezifität auch nahe 100\%, was für die
@@ -164,6 +261,6 @@ Die größte Limitation betrifft jedoch das zugrunde liegende WDN. Denn mit nur 
  evaluiert werden.
 
 Auch das Auffassen des Themas als Vorhersageproblem von Zeitfolgen kann in weiterer Forschung noch stärker
-exploriert werden, da die in dieser Arbeit betrachteten Algorithmen nur begrenzt zeitlichen Kontext inferieren
-können.
+ exploriert werden, da die in dieser Arbeit betrachteten Algorithmen nur begrenzt zeitlichen Kontext inferieren
+ können.
 

@@ -6,8 +6,13 @@
 \usepackage{amssymb, mathtools}
 \usepackage{setspace}
 \usepackage{multirow}
+\usepackage{subcaption}
 \usepackage{caption}
+\usepackage{titlesec}
 \captionsetup{font=footnotesize}
+\titleformat{\chapter}[display]
+    {\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{20pt}{\Huge}
+\titlespacing*{\chapter}{0pt}{0pt}{40pt}
 
 \title{
     Evaluation of Machine Learning Models for Leakage Detection in Water Distribution Networks
