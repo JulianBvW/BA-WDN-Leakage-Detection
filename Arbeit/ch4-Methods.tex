@@ -14,20 +14,50 @@ Grundlage für das Trainieren und Evaluieren der Modelle bilden Simulationen des
  einfachen Szenarien, die durch ihre geringere Komplexität einen schnellen Evaluationszyklus gewähren. Hingegen
  besteht der zweite Datensatz aus vorgenerierten Szenarien, welche mit Unsicherheiten und weiter definierten
  Bedarf, weitaus realistischere Daten darstellen. Beide Datensätze nutzen das gleiche WDN als Basis: Das Das
- sogenannte EPANET Example Network 1 (auch als Net1 zu finden). Dessen Topologie ist in Abbildung ? gezeigt
- und besitzt als verhältnismäßig kleines Netzwerk neun Knotenpunkte, einen Tank und ein Reservoir.
+ sogenannte EPANET Example Network 1 (auch als Net1 zu finden). Dessen Topologie ist in Abbildung
+ \ref{fig:practice-wdn} gezeigt und besitzt als verhältnismäßig kleines Netzwerk neun Knotenpunkte, einen Tank
+ und ein Reservoir.
+
+\begin{figure}
+    \centering
+    \fbox{\includegraphics[width=0.7\textwidth]{res/practice-wdn}}
+    \caption{Aufbau des Netzwerkes.}
+    \label{fig:practice-wdn}
+\end{figure}
 
 \subsubsection*{Der ad-hoc Datensatz}
 
 Die Ausgabe der WNTR-Simulation ist eine einfache Tabelle, in welcher für jeden Knoten stündlich die Werte des
- Wasserdrucks eingetragen sind. Abbildung ? zeigt einen Beispielverlauf der Druckwerte im Normalzustand sowie
+ Wasserdrucks eingetragen sind. Abbildung \ref{fig:practice-sim} zeigt einen Beispielverlauf der Druckwerte im Normalzustand sowie
  in Leckszenarien verschiedener Stärken. Diese können mit der Funktion
- \texttt{add\_leak(network, area, start\_time, end\_time)}, wobei “area” als betroffene Größe in Metern die Stärke
+ \begin{center}
+    \texttt{add\_leak(network, area, start\_time, end\_time)},
+ \end{center}
+ wobei “area” als betroffene Größe in Metern die Stärke
  des Lecks kennzeichnet, zu einem Knoten hinzugefügt werden. Die finalen Einstellungen sehen eine zufällige Stärke
  im Bereich von 0.0009 bis 0.0014 vor. Betrachtet man die Werte der Knoten zu einem bestimmten Zeitpunkt am Tag,
  so sieht man, dass (nach einer bis zu zehntägigen Eingewöhnungsphase, welche im weiteren Verlauf herausgeschnitten
  wird) diese exakt gleich sind. Damit die Modelle nicht die genauen Werte lernen, wird ein geringes,
- normalverteiltes Rauschen hinzu addiert (siehe Abbildung ?).
+ normalverteiltes Rauschen hinzu addiert (siehe Abbildung \ref{fig:practice-noise}).
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.45\textwidth]{res/practice-sim-noleak.png}
+    \includegraphics[width=0.45\textwidth]{res/practice-sim-leak.png}
+    \caption{Beispielhafte Druckverläufe. Links ein leckfreies Szenario für eine Auswahl an Knoten. Rechts
+        für den Knoten 12 ein Vergleich verschiedener Stärken des Lecks.}
+    \label{fig:practice-sim}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.44\textwidth]{res/practice-noise-days.png}
+    \includegraphics[width=0.44\textwidth]{res/practice-noise-applied.png}
+    \caption{Beispielhafte Druckverläufe des Knotens 12. Links sind die Druckwerte ausgewählter Stunden über das
+        Jahr angegeben. Nach der Eingewöhnungsphase sind ide vollständig konstant. Rechts ist der Einfluss des
+        kleinen Rauschens gezeigt.}
+    \label{fig:practice-noise}
+\end{figure}
 
 \subsubsection*{LeakDB}
 
@@ -45,11 +75,11 @@ Damit die Daten weiterhin als Zeitfolgen betrachtet werden können, gleichzeitig
  dass das $p$ kein fester Wert ist, sondern unterschiedlich für jede der $N$ Zeitfolgen sein kann.} und $N$
  als Anzahl Zeitfolgen. Damit kann dem Modell eine Liste an Zeitfolgen übergeben werden,
  dessen Rückgabewert aus $\{0, 1\}^{N \times p}$ ist, also jedem Zeitpunkt das Label 0 oder 1, für kein Leck
- oder Leck, gibt. Abbildung ? veranschaulicht dies. Im Folgenden bezeichnet $\mathcal{X}$ diese Liste an Zeitfolgen,
+ oder Leck, gibt. Im Folgenden bezeichnet $\mathcal{X}$ diese Liste an Zeitfolgen,
  $X_i \in \mathcal{X}$ eine einzelne Zeitfolge und $x_{i, j} = (x_{i, j}^{(1)}, \dots, x_{i, j}^{(d)}) \in X_i$ den $j$-ten
  Zeitpunkt aus Zeitfolge $i$ mit $x_{i, j}^{(k)}$ als dessen $k$-ten Sensorwert.
 
-\{TODO: gehört dieser Absatz vlt. in das Ergebnisse-Kapitel?\} Die Analyse für die Metriken, welche aus der
+Die Analyse für die Metriken, welche aus der
  Konfusionsmatrix berechnet werden, geschieht nun nicht auf den einzelnen Zeitpunkten $x_{i, j}$, sondern auf
  den Zeitfolgen $X_i$. Eine Zeitfolge gilt als Leck-Szenario mit Label 1, falls mindestens ein Zeitpunkt
  innerhalb des Szenarios als Leck gekennzeichnet wurde. Andernfalls bekommt die leckfreie Folge das Label 0.
@@ -97,9 +127,16 @@ Für die Klassifikation wird ein naiver Ansatz benutzt, in dem ein Klassifikatio
 
 Die Ausgabe der Leckdetektion ist eine binäre Klassifikation. Regressionsalgorithmen können hier dennoch helfen,
  um die Werte des Netzwerks zu einem bestimmten Zeitpunkt zu schätzen und anhand dessen und den real gemessenen
- Werten eine binäre Entscheidung zu fällen. Dieser Prozess ist in Abbildung ? schematisch gezeigt und kann in
- zwei Phasen eingeteilt werden: Das Generieren des digitalen Zwillings, also die geschätzten Druckwerte des
- gesamten Netzwerkes, mittels Regressions-Ensemble und Klassifikation durch erkannte Thresholds.
+ Werten eine binäre Entscheidung zu fällen. Dieser Prozess ist in Abbildung \ref{fig:practice-ensemble} schematisch
+ gezeigt und kann in zwei Phasen eingeteilt werden: Das Generieren des digitalen Zwillings, also die geschätzten
+ Druckwerte des gesamten Netzwerkes, mittels Regressions-Ensemble und Klassifikation durch erkannte Thresholds.
+
+\begin{figure}
+    \centering
+    \fbox{\includegraphics[width=0.9\textwidth]{res/practice-ensemble.png}}
+    \caption{Schematische Darstellung des Regression-Ensemble-Ansatzes eingeteilt in die zwei Phasen.}
+    \label{fig:practice-ensemble}
+\end{figure}
 
 Im Trainingsschritt werden die Listen an Zeitfolgen wie auch beim Klassifikationsansatz zuerst konkateniert.
  Diese Menge an Zeitpunkten wird nun in ein Ensemble an Regressionsalgorithmen geleitet. Dieses ist wie folgt
@@ -134,7 +171,7 @@ Wie bei dem Klassifikationsansatz wird im Vorhersageschritt nun jede Zeitfolge e
  und in der folgenden Phase mit den echten Werten zu einer Differenzenmatrix gemacht wird. Die im Trainingsschritt
  gefundenen Thresholds werden nun auf $\mathcal{D}$ angewendet. Dafür wird jeder Wert mit seinem Threshold,
  also nach Knoten und möglicherweise Tageszeit, verglichen. Ist der absolute Wert größer, so gibt der Knoten für
- den Zeitpunkt eine 1 aus., sonst würde er eine 0 ausgeben. Werden die Schätzungen der Knoten nun nach Zeitpunkt
+ den Zeitpunkt eine 1 aus, sonst würde er eine 0 ausgeben. Werden die Schätzungen der Knoten nun nach Zeitpunkt
  aufsummiert, erhält jeder Zeitpunkt die Anzahl der Knoten, die Alarm schlagen. Mit dem Hyperparameter
  \texttt{th\_majority} kann man einstellen, wieviel Prozent an Knoten warnen müssen, bevor der Zeitpunkt insgesamt
  als Leck gelabelt wird.
@@ -152,7 +189,7 @@ der Analyse der Daten herausgekommen ist. Dafür werden zu den Druckwerten an ei
 Druckwerte des letzten Tages hinzugefügt. Ein Datenpunkt sieht dann so aus:
 
 \begin{equation*}
-    x_{i, j} = (x_{i, j}^{(1)}, …, x_{i, j}^{(d)}, x_{i, j-tspd}^{(1)}, …, x_{i, j-tspd}^{(d)})
+    x_{i, j} = (x_{i, j}^{(1)}, \dots, x_{i, j}^{(d)}, x_{i, j-tspd}^{(1)}, \dots, x_{i, j-tspd}^{(d)})
 \end{equation*}
 
 Dies kann rekursiv mehrere Male gemacht werden, wodurch ein Datenpunkt mehrere Tage in die Vergangenheit

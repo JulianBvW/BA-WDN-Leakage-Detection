@@ -4,11 +4,11 @@
 
 \subsection*{Eingrenzung}
 
-Das umfassende Feld des Maschinellen Lernens (ML) lässt sich in zwei Arten unterteilen;
- Supervised und Unsupervised Learning. In beiden Fällen wird eine Funktion $f: X \rightarrow Y$ gelernt,
- die aus der Menge möglicher Datenpunkte $X$ auf die Menge der zu schätzenden Variablen $Y$ abbildet.
- Hierbei besitzen die Trainingsdaten für Unsupervised ML jedoch keine Informationen für die
- Variable $y \in Y$. Dies kann beispielsweise interessant sein, wenn der Datensatz in zwei oder mehr distinkte
+Das umfassende Feld des Maschinellen Lernens (ML) befasst sich mit vielen Bereichen;
+ Die zwei prominetesten sind dabei das Supervised und Unsupervised Learning. In beiden Fällen wird eine Funktion
+ $f: X \rightarrow Y$ gelernt, die aus der Menge möglicher Datenpunkte $X$ auf die Menge der zu schätzenden
+ Variablen $Y$ abbildet. Hierbei besitzen die Trainingsdaten für Unsupervised ML jedoch keine Informationen für
+ die Variable $y \in Y$. Dies kann beispielsweise interessant sein, wenn der Datensatz in zwei oder mehr distinkte
  Gruppen aufgeteilt werden soll, ohne dass im Vorhinein etwas über die Verteilung bekannt ist. Solch eine
  Aufgabe ist als Clustering-Aufgabe bekannt. Die Leck-Detektion benötigt jedoch weitere Informationen;
  Denn im Gegensatz zu Unsupervised ML ist beim Supervised ML diese sogenannte Ground Truth (GT) bekannt und
@@ -65,10 +65,19 @@ Für jeden Anwendungsbereich gibt es eine Vielzahl an verschiedenen Algorithmen,
             f(x) = f_{activation}(\sum_{i=1}^d(w_ix_i)+\theta),
     \end{equation}
     wobei $f_{activation}$ die Aktivierungsfunktion und $w$ die gelernten Gewichte sind. Ein MLP ist dann eine
-    Ansammlung vieler einzelner Perzeptronen in möglicherweise mehreren Schichten. Dafür besteht eine Schichte
+    Ansammlung vieler einzelner Perzeptronen in möglicherweise mehreren Schichten. Dafür besteht eine Schicht
     aus mehreren, in parallel arbeitenden Perzeptronen, deren Eingabe die Ausgabe aus der vorherigen Schicht
-    darstellt. Ihre Ausgabe ist dann wieder Eingabe der folgenden Schicht. Abbildung ? zeigt so eine Struktur.
-    Dabei ist die Anzahl der Schichten sowie die Menge an Perzeptronen pro Schicht jeweils ein Hyperparameter.
+    darstellt. Ihre Ausgabe ist dann wieder Eingabe der folgenden Schicht. Abbildung \ref{fig:theory-mlp} zeigt so
+    eine Struktur. Dabei ist die Anzahl der Schichten sowie die Menge an Perzeptronen pro Schicht jeweils ein
+    Hyperparameter.
+
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.7\textwidth]{res/theory-mlp}
+        \caption{Beispielhafter Aufbau eines künstlichen, neuronalen Netzwerkes mit zwei verborgenen Schichten, die
+            jeweils vier Perzeptronen besizten.\\ Quelle: https://github.com/d-r-e/multilayer-perceptron}
+        \label{fig:theory-mlp}
+    \end{figure}
 
     Die einzelnen Gewichte lernen kann dieses Modell indem es die Datenpunkt durch das (untrainierte) Netz
     schickt und die Vorhersage mit der GT vergleicht. In einem Verfahren, was sich Backtracking nennt, werden
@@ -123,34 +132,54 @@ Um einschätzen zu können, wie gut ein Modell mit gegebenen Hyperparametern und
  die in dieser Arbeit verwendet werden, können aus der Konfusionsmatrix berechnet werden. Für ein binäres
  Klassifikationsproblem hat sie den folgenden Aufbau:
 
-\begin{center}
-    \hspace{3.1cm}Echtes Label \\ Modell Ausgabe
-    \begin{tabular}{ c | c c | }
-      & 1 & 0 \\ 
-     \hline
-     1 & TP & FP \\  
-     0 & FN & TN \\
-     \hline  
+\renewcommand{\arraystretch}{1.5}
+\begin{table}[h]
+    \centering
+    \begin{tabular}{c c c c}
+        & & \multicolumn{2}{c}{Echtes Label} \\
+        \cline{3-4}
+        & & 1 & 0 \\
+        \hline
+        \multirow{2}{10em}{Ausgabe des Modells} & 1 & \textbf{TP} & \textbf{FP} \\
+        \cline{2-4}
+        & 0 & \textbf{FN} & \textbf{TN} \\
+        \hline
     \end{tabular}
-\end{center}
+\end{table}
+
+% \begin{center}
+%     \hspace{3.1cm}
+%     \begin{tabular}{ c c | c c | }
+%         & & \multicolumn{2}{c}{Echtes Label} \\
+%         & & 1 & 0 \\ 
+%         \hline
+%         \multirow{2}{10em}{Ausgabe des Modells} & 1 & \ TP & \ FP \\  
+%         & 0 & \ FN & \ TN \\
+%         \hline  
+%     \end{tabular}
+% \end{center}
 
 Auf der Diagonalen steht TP (True Positive) für die Menge an positiven Fällen, die auch als solche erkannt
  wurden, und TN (True Negative) für alle negative Fälle, die ebenfalls richtig vom Modell erkannt wurden.
  Die anderen Werte stehen für keine Übereinstimmung der Werte; FN (False Negative) steht für fälschlicherweise
  als negativ klassifizierte Datenpunkte und FP (False Positive) für welche, an denen das Modell ohne Grund
- positiv angeschlagen hat. Tabelle ? zeigt ausgewählte Metriken, die in dieser Arbeit benutzt werden und was sie
+ positiv angeschlagen hat. Tabelle \ref{tab:theory-metrics} zeigt ausgewählte Metriken, die in dieser Arbeit benutzt werden und was sie
  in diesem Kontext bedeuten.
 
- \renewcommand{\arraystretch}{2}
-\begin{tabular}{ m{6em} m{7em} m{16em} }
-    Metrik & Berechnung & Bedeutung \\
-    \hline
-    Accuracy              & $\frac{TP+TN}{TP+TN+FP+FN}$ & Wie oft lag der Algorithmus richtig? \\
-    Sensitivität (auch Recall) & $\frac{TP}{TP+FN}$          & Wie gut wurden echte Lecks erkannt? \\
-    Specificity           & $\frac{TN}{TN+FP}$          & Wie gut wurde 'alles ok' erkannt? \\
-    Precision             & $\frac{TP}{TP+FP}$          & Wie viele erkannte Lecks waren auch wirklich Lecks? \\
-    Detection Time        & Mittelwert vom Auftreten eines Lecks bis zur Erkennung & Wie viele Zeiteinheiten dauerte es bis zum Erkennen?
-\end{tabular}
+\renewcommand{\arraystretch}{1.5}
+\begin{table}
+    \begin{tabular}{ m{6em} m{9em} m{14em} }
+        Metrik & Berechnung & Bedeutung \\
+        \hline
+        Accuracy              & $\frac{TP+TN}{TP+TN+FP+FN}$ & Wie oft lag der Algorithmus richtig? \\
+        Sensitivität (auch Recall) & $\frac{TP}{TP+FN}$          & Wie gut wurden echte Lecks erkannt? \\
+        Specificity           & $\frac{TN}{TN+FP}$          & Wie gut wurde 'alles ok' erkannt? \\
+        Precision             & $\frac{TP}{TP+FP}$          & Wie viele erkannte Lecks waren auch wirklich Lecks? \\
+        Detection\ \ \ \ \ \ Time & Mittelwert vom Auftreten eines Lecks bis zur Erkennung & Wie viele Zeiteinheiten dauerte es bis zum Erkennen?
+    \end{tabular}
+    \caption{Definitionen und Bedeutungen wichtiger Metriken.}
+    \label{tab:theory-metrics}
+\end{table}
 
 Hierbei ist wichtig anzumerken, dass auch wenn die Accuracy alle Werte der Konfusionsmatrix in die Bewertung
  mit einfließen lässt, diese nur als grobe Einschätzung genutzt werden sollte, da sie im Vergleich zu den anderen
@@ -186,11 +215,18 @@ Beim Train-Test-Split wird die Datenmenge in zwei Gruppen aufgeteilt: Das Train-
 Die Lösung dieses Problems ist das wiederholte Anwenden eines Train-Test-Splits. Bei der sogenannten
  k-Fold Cross-Validation wird der Datensatz in k gleich große Mengen unterteilt. Mit dieser Aufteilung
  wird dann k-Mal der Prozess des Trainierens und Testens gestartet, wobei jedes mal ein anderes der k Sets als
- Test-Set gewählt wird. Abbildung ? visualisiert dieses Vorgehen. Die Ergebnisse der k Durchläufe werden
- anschließend gemittelt und zeigen damit eine weitaus robustere Einschätzung der Güte auf. Das k liegt hier
+ Test-Set gewählt wird. Abbildung \ref{fig:theory-cv} visualisiert dieses Vorgehen. Die Ergebnisse der k Durchläufe
+ werden anschließend gemittelt und zeigen damit eine weitaus robustere Einschätzung der Güte auf. Das k liegt hier
  typischerweise\footnote{Es gibt einen Spezialfall, indem k gleich der größe des Datensatzes ist. Eine solche
  Einstellung nennt sich Leave-One-Out Cross-Validation, bei welcher immer auf allen Datenpunkten mit Ausnahme
- eines einzigen Punktes trainiert wird. Dies ist jedoch nicht Thema dieser Arbeit.} zwischen 5 und 10.
+ eines einzigen Punktes trainiert wird. Dies ist jedoch nicht Thema dieser Arbeit.} zwischen 3 und 10.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{res/theory-cv}
+    \caption{Aufbau einer k-Fold Cross Validation.\\ Quelle: https://www.researchgate.net/figure/K-fold-cross-validation-method\_fig2\_331209203}
+    \label{fig:theory-cv}
+\end{figure}
 
 \subsection*{Grid-Search}
 
