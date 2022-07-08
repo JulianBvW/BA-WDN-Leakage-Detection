@@ -85,7 +85,7 @@ Hierbei sind \texttt{results} die Ergebnisse aus der csv-Datei, \texttt{feature}
  dann der mittlere Metrikwert berechnet, was dazu führt, dass die Differenz des maximalen zu dem minimalen
  Mittelwert den Gesamteinfluss widerspiegelt. Ein Hyperparameter mit einem Einfluss von 0.6 hat also das
  Potential, das Ergebnis um 0.6, also 60\%-Punkte, zu verändern, während ein Hyperparameter mit einem Einfluss
- von 0.01 nur wenig am Endergebnis verändern kann. Anhang TODO \ref{appendix-ranking} gibt den Einfluss jedes
+ von 0.01 nur wenig am Endergebnis verändern kann. Anhang \ref{appendix-ranking} gibt den Einfluss jedes
  möglichen Hyperparameters pro Basemodel an. Hier ist gut zu sehen, dass der Wrapper-spezifische Hyperparameter
  \texttt{th\_majority}, also die Anzahl, wie viele Knoten Alarm schlagen müssen, bevor ein Zeitpunkt als
  leckbehaftet gilt, tendenziell den größten Effekt auf das Endergebnis hat, während die Größe des Median-Filters
@@ -112,21 +112,23 @@ Schaut man sich zuerst den verhältnismäßig einflussreichsten Hyperparameter \
 \begin{figure}
     \centering
     \includegraphics[width=0.7\textwidth]{res/res-th-majority}
-    \caption{TODO.}
+    \caption{Durchschnittlicher Verlauf der Metriken für den Hyperparameter \texttt{th\_majority}.}
     \label{fig:res-th-majority}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=0.7\textwidth]{res/res-th-mode}
-    \caption{TODO.}
+    \caption{Durchschnittliche Werte der Metriken für \texttt{daytime} (links) und
+        \texttt{simple} (rechts) des Hyperparameters \texttt{th\_mode}.}
     \label{fig:res-th-mode}
 \end{figure}
 
 \begin{figure}
     \centering
     \fbox{\includegraphics[width=0.7\textwidth]{res/res-th-multiplier}}
-    \caption{TODO.}
+    \caption{2-dimensionaler Verlauf der Accuracy in Abhängigkeit der Hyperparameter \texttt{th\_multiplier} und
+        \texttt{th\_majority} für die Ridge Regression.}
     \label{fig:res-th-multiplier}
 \end{figure}
 
@@ -139,7 +141,8 @@ Für k-Nearest Neighbors ist der einflussreichste Hyperparameter \texttt{weights
 \begin{figure}
     \centering
     \includegraphics[width=0.7\textwidth]{res/res-knn-weights}
-    \caption{TODO.}
+    \caption{Relative Veränderung der Metriken beim Umschalten auf distanzbasierten Gewichten für kNN.
+        Sensitivität verbessert sich stark, während die Spezifität sich verschlechtert hat.}
     \label{fig:res-knn-weights}
 \end{figure}
 
@@ -154,14 +157,15 @@ Betrachtet man das MLP, so ist die richtige Wahl der Aktivierungsfunktion am ent
 \begin{figure}
     \centering
     \includegraphics[width=0.7\textwidth]{res/res-mlp-activation}
-    \caption{TODO.}
+    \caption{Durchschnittlicher Metrikwerte für die drei Aktivierungsfunktionen des MLPs.}
     \label{fig:res-mlp-activation}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=0.7\textwidth]{res/res-mlp-layers}
-    \caption{TODO.}
+    \caption{Durchschnittliche Metrikwerte abhängig von der Form der verborgenen Schichten.
+        Dabei sind links tendenziell kleinere Netzwerke, während sie nach rechts wachsen.}
     \label{fig:res-mlp-layers}
 \end{figure}
 
@@ -173,7 +177,9 @@ Für die meisten Hyperparameter ist das Optimum für die bisher betrachteten Met
 \begin{figure}
     \centering
     \includegraphics[width=0.7\textwidth]{res/res-fe-th-mode}
-    \caption{TODOridge.}
+    \caption{Informationen über die Detektionszeit (dt) für \texttt{daytime} (links) und
+        \texttt{simple} (rechts) des Hyperparameters \texttt{th\_mode} anhand Ridge.
+        Dabei sind hier kleinere Werte besser, was \texttt{simple} etwas besser macht.}
     \label{fig:res-fe-th-mode}
 \end{figure}
 
@@ -196,15 +202,16 @@ Betrachtet man sich jedoch die Detektionszeit in Abbildung \ref{fig:res-fe-dt}, 
     \begin{adjustwidth}{-1cm}{}
         \begin{subfigure}{\textwidth}
             \includegraphics[width=1.3\textwidth]{res/res-fe-metrics}
-            \caption{TODO\vspace{1em}}
+            \caption{Die vier Metriken der Konfusionsmatrix.\vspace{1em}}
             \label{fig:res-fe-metrics}
         \end{subfigure}
         \begin{subfigure}{\textwidth}
             \includegraphics[width=0.9\textwidth]{res/res-fe-dt}
-            \caption{TODO}
+            \caption{Die Detektionszeit.}
             \label{fig:res-fe-dt}
         \end{subfigure}
-        \caption{TODO.}
+        \caption{2-dimensionaler Verlauf durchschnittlicher Metrikwerte anhand der FE-spezifischen
+            Hyperparameter \texttt{window} und \texttt{past\_end}. Hellere Werte sind hier besser.}
     \end{adjustwidth}
 \end{figure}
 
