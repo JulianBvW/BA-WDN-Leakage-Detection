@@ -8,7 +8,7 @@ Zum Generieren der Ergebnisse wurde Grid-Search auf beiden Datensätzen für bei
  Hyperparameter mit jeweils fünf Einstellungen, so ist die Anzahl an Durchläufen gleich $5^5=3125$.
  Eine Auflistung, wie viele Kombinationen getestet wurden, kann in Tabelle \ref{tab:res-kombs} eingesehen werden.
 
- \begin{table}[h]
+ \begin{table}[ht]
     \centering
     \begin{tabular}{l|ll|ll}
     & \multicolumn{2}{l|}{Klassifikation} & \multicolumn{2}{l}{Regression-Ensemble} \\
@@ -52,7 +52,7 @@ Um auch bei LeakDB die Accuracy nutzen zu können, wurden aus den 1000 Szenarien
  dass kNN aus dem Ansatz des Regressions-Ensembles stark eingebrochen ist, während die anderen Werte weitgehend
  stabil bleiben.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \begin{subfigure}{\textwidth}
         \includegraphics[width=1.0\textwidth]{res/res-best-adhoc}
