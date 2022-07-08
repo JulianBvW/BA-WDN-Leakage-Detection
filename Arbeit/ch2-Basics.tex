@@ -5,15 +5,15 @@
 \subsection*{Eingrenzung}
 
 Das umfassende Feld des Maschinellen Lernens (ML) befasst sich mit vielen Bereichen;
- Die zwei prominetesten sind dabei das Supervised und Unsupervised Learning. In beiden Fällen wird eine Funktion
- $f: X \rightarrow Y$ gelernt, die aus der Menge möglicher Datenpunkte $X$ auf die Menge der zu schätzenden
- Variablen $Y$ abbildet. Hierbei besitzen die Trainingsdaten für Unsupervised ML jedoch keine Informationen für
- die Variable $y \in Y$. Dies kann beispielsweise interessant sein, wenn der Datensatz in zwei oder mehr distinkte
- Gruppen aufgeteilt werden soll, ohne dass im Vorhinein etwas über die Verteilung bekannt ist. Solch eine
- Aufgabe ist als Clustering-Aufgabe bekannt. Die Leck-Detektion benötigt jedoch weitere Informationen;
- Denn im Gegensatz zu Unsupervised ML ist beim Supervised ML diese sogenannte Ground Truth (GT) bekannt und
- das jeweilige Problem lässt sich anhand der Definition des Bildbereichs weiter eingrenzen: Die für die
- Arbeit wichtigen Arten sind hier die binäre Klassifikation und die Regression.
+ Die zwei prominetesten sind dabei das Supervised und Unsupervised Learning \cite{mlTheory}.
+ In beiden Fällen wird eine Funktion $f: X \rightarrow Y$ gelernt, die aus der Menge möglicher Datenpunkte $X$ auf
+ die Menge der zu schätzenden Variablen $Y$ abbildet. Hierbei besitzen die Trainingsdaten für Unsupervised ML
+ jedoch keine Informationen für die Variable $y \in Y$. Dies kann beispielsweise interessant sein, wenn der
+ Datensatz in zwei oder mehr distinkte Gruppen aufgeteilt werden soll, ohne dass im Vorhinein etwas über die
+ Verteilung bekannt ist. Solch eine Aufgabe ist als Clustering-Aufgabe bekannt. Die Leck-Detektion benötigt jedoch
+ weitere Informationen; Denn im Gegensatz zu Unsupervised ML ist beim Supervised ML diese sogenannte Ground Truth
+ (GT) bekannt und das jeweilige Problem lässt sich anhand der Definition des Bildbereichs weiter eingrenzen: Die
+ für die Arbeit wichtigen Arten sind hier die binäre Klassifikation und die Regression.
 
 Bei der binären Klassifikation soll jeder Datenpunkt $x \in X$ einer von zwei Klassen $y \in \{0, 1\}$ zugewiesen
  werden. Auf unser Problem der Leck-Detektion angewendet, hieße eine Klassifikation eines Zeitpunkts in
@@ -34,7 +34,7 @@ Für jeden Anwendungsbereich gibt es eine Vielzahl an verschiedenen Algorithmen,
 
    \item \textbf{k-Nearest Neighbors (kNN)} ist ein einfaches Modell, bei dem ein neuer Datenpunkt nach der
     Mehrheit seiner Nachbarn $(x_i, y_i)$ in einem n-dimensionalen Koordinatensystem klassifiziert wird. Der
-    Hyperparameter $k$ bestimmt hierbei, wie groß die zu betrachtende Nachbarschaft ist. Sei
+    Hyperparameter $k$ bestimmt hierbei, wie groß die zu betrachtende Nachbarschaft ist \cite{mlKNN}. Sei
             $\mathcal{N}(\hat{x}, \mathcal{D}, k)$
     die Menge der $k$ am nächsten zu $\hat{x}$ liegenden Punkte aus $\mathcal{D}$, dann ist
             $P(\hat{x}=c|\hat{x}, \mathcal{D}, k) = \frac{1}{k} |\{x_i | x_i \in \mathcal{N}(\hat{x}, \mathcal{D}, k), y_i=c\}|$
@@ -48,10 +48,10 @@ Für jeden Anwendungsbereich gibt es eine Vielzahl an verschiedenen Algorithmen,
     an dem zu klassifizierenden Punkt liegen einen höheren Wert im Vergleich zu Nachbarn, die weiter entfernt sind.
 
    \item \textbf{Multi-Layer Perceptron (MLP)} versucht, ein künstliches neuronales Netz zu erschaffen, indem es
-    mehrere Perzeptronen aneinanderreiht. Ein Perzeptron steht hier für ein Neuron, welches mehrere Eingabewerte
-    hat und daraus einen Ausgabewert erstellt. Dafür wird jeder Eingabewert mit einem speziell dafür gelernten
-    Gewicht multipliziert und anschließend aufsummiert. Zu dieser Summe kann dann noch ein Schwellwert $\theta$
-    hinzuaddiert werden, welches ebenso beim Lernen optimiert wird. Als letztes wird darauf eine sogenannte
+    mehrere Perzeptronen aneinanderreiht \cite{mlMLP}. Ein Perzeptron steht hier für ein Neuron, welches mehrere
+    Eingabewerte hat und daraus einen Ausgabewert erstellt. Dafür wird jeder Eingabewert mit einem speziell dafür
+    gelernten Gewicht multipliziert und anschließend aufsummiert. Zu dieser Summe kann dann noch ein Schwellwert
+    $\theta$ hinzuaddiert werden, welches ebenso beim Lernen optimiert wird. Als letztes wird darauf eine sogenannte
     Aktivierungsfunktion angewendet, was dann die Ausgabe des Perzeptron bildet. Die Aktivierungsfunktionen,
     welche in dieser Arbeit betrachtet worden sind, sind die logistische Funktion, der Hyperbeltangens und der
     Rectified Linear Unit (ReLU):
@@ -86,8 +86,8 @@ Für jeden Anwendungsbereich gibt es eine Vielzahl an verschiedenen Algorithmen,
     Hyperparameter, welche zum Beispiel die Rate der Verstärkung beeinflussen, optimieren.
 
    \item \textbf{Linear Regression (LR)} ist eine Regressionsmethode, die versucht, eine Gerade im
-    n-dimensionalen Raum zu schaffen, welche die Abstände zu den bekannten Datenpunkten aus $X$ minimiert. Der
-    Wert eines neuen Datenpunktes $\hat{x}$ wird nun durch die parametrische Funktion
+    n-dimensionalen Raum zu schaffen, welche die Abstände zu den bekannten Datenpunkten aus $X$ minimiert
+    \cite{mlLR}. Der Wert eines neuen Datenpunktes $\hat{x}$ wird nun durch die parametrische Funktion
     \begin{equation}
         f(\hat{x}) = \sum_i w_i\hat{x}_i - \theta
     \end{equation}
@@ -102,13 +102,13 @@ Für jeden Anwendungsbereich gibt es eine Vielzahl an verschiedenen Algorithmen,
    \item \textbf{Ridge (L2)} und \textbf{Lasso (L1)} Regression sind Erweiterungen der LR indem sie einen
     Regularisierungsterm zum MSE hinzufügen, welcher Einfluss auf die optimalen Gewichte hat. Für L2 werden
     die einzelnen Gewichte quadriert und mit einem Hyperparameter $\alpha$\footnote{In der Literatur auch
-    häufig $\lambda$ genannt.} multipliziert. Die optimalen Gewichte werden
+    häufig $\lambda$ genannt.} multipliziert \cite{mlL2}. Die optimalen Gewichte werden
     damit berechnet: 
     \begin{equation}
         w = \underset{\tilde{w}}{\operatorname{argmin}}\ MSE + \alpha||\tilde{w}||_2^2.
     \end{equation}
     Dadurch werden zu hohe Gewichte und damit Overfitting, was in Kapitel \ref{Section-HyperTuning} weiter
-    erklärt wird, bestraft. L1 nutzt die absoluten Werte der Gewichte:
+    erklärt wird, bestraft. L1 nutzt die absoluten Werte der Gewichte \cite{mlL1}:
     \begin{equation}
         w = \underset{\tilde{w}}{\operatorname{argmin}}\ MSE + \alpha||\tilde{w}||_1.
     \end{equation}
@@ -126,7 +126,7 @@ Das korrekte Setzen der Hyperparameter gehört zu dem Fachbereich des Fine Tunin
 \section{Evaluation und Metriken}
 
 Um einschätzen zu können, wie gut ein Modell mit gegebenen Hyperparametern und ausgewählten Daten das Problem
- löst, wird eine Metrik benötigt. Eine solche ist definiert als Funktion, welche die wahren und die
+ löst, wird eine Metrik benötigt \cite{mlMetrics}. Eine solche ist definiert als Funktion, welche die wahren und die
  prognostizierten Werte annimmt und einen einzigen Wert\footnote{typischerweise zwischen 0 und 1} als
  Indikator, wie gut in einer gewissen Disziplin abgeschnitten wurde, zurückgibt. Die meisten Metriken,
  die in dieser Arbeit verwendet werden, können aus der Konfusionsmatrix berechnet werden. Für ein binäres
@@ -213,7 +213,7 @@ Beim Train-Test-Split wird die Datenmenge in zwei Gruppen aufgeteilt: Das Train-
 \subsection*{Cross-Validation}
 
 Die Lösung dieses Problems ist das wiederholte Anwenden eines Train-Test-Splits. Bei der sogenannten
- k-Fold Cross-Validation wird der Datensatz in k gleich große Mengen unterteilt. Mit dieser Aufteilung
+ k-Fold Cross-Validation wird der Datensatz in k gleich große Mengen unterteilt \cite{mlCV}. Mit dieser Aufteilung
  wird dann k-Mal der Prozess des Trainierens und Testens gestartet, wobei jedes mal ein anderes der k Sets als
  Test-Set gewählt wird. Abbildung \ref{fig:theory-cv} visualisiert dieses Vorgehen. Die Ergebnisse der k Durchläufe
  werden anschließend gemittelt und zeigen damit eine weitaus robustere Einschätzung der Güte auf. Das k liegt hier
@@ -232,8 +232,8 @@ Die Lösung dieses Problems ist das wiederholte Anwenden eines Train-Test-Splits
 
 Mit dieser Technik können nun verlässlich die Hyperparameter analysiert werden. Mit der Methode des Exhaustive
  Grid-Search lassen sich alle Hyperparameter testen, indem das kartesisches Produkt der möglichen Einstellungen
- gebildet und auf allen Kombinationen mittels Cross-Validation trainiert und getestet wird. So wird für kNN einmal
- mit uniformer Gewichtung der Nachbarn jede Einstellung für k getestet und einmal mit distanzbedingter Gewichtung.
- Das Ergebnis zeigt nun die optimale Einstellung für die Gewichtsfunktion und das k an. Ebenso können weitere
- Relationen ausgelesen werden; Beispielsweise könnte für ein höheres k die distanzbedingte Gewichtung besser
+ gebildet und auf allen Kombinationen mittels Cross-Validation trainiert und getestet wird \cite{mlGS}. So wird für
+ kNN einmal mit uniformer Gewichtung der Nachbarn jede Einstellung für k getestet und einmal mit distanzbedingter
+ Gewichtung. Das Ergebnis zeigt nun die optimale Einstellung für die Gewichtsfunktion und das k an. Ebenso können
+ weitere Relationen ausgelesen werden; Beispielsweise könnte für ein höheres k die distanzbedingte Gewichtung besser
  funktionieren, für kleinere k jedoch eher die uniforme Gewichtung.
