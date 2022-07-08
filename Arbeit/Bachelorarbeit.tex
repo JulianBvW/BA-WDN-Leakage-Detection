@@ -8,6 +8,7 @@
 \usepackage{multirow}
 \usepackage{subcaption}
 \usepackage{caption}
+\usepackage{changepage}
 \usepackage{titlesec}
 \captionsetup{font=footnotesize}
 \titleformat{\chapter}[display]
@@ -24,6 +25,8 @@
 \begin{document}
 
 \onehalfspacing
+
+\pagenumbering{gobble}
 
 \begin{titlepage} % Suppresses headers and footers on the title page
 
@@ -61,6 +64,9 @@
 
 \tableofcontents
 
+\cleardoublepage
+\pagenumbering{arabic}
+
 \include{ch1-Introduction}
 
 \include{ch2-Basics}
@@ -72,5 +78,9 @@
 \include{ch5-Results}
 
 \include{ch6-Conclusion}
+
+\appendix
+
+\include{ch7-Appendix}
 
 \end{document}

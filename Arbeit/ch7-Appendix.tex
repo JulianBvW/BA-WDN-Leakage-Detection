@@ -1,0 +1,96 @@
+\chapter{Anhang}
+
+\section{Beste Konfigurationen \label{appendix-best-conf}}
+
+\begin{table}[h]
+    \footnotesize
+    \begin{tabular}{lllll}
+    Ansatz              & Basemodel & Hyperparameter                & \multicolumn{2}{c}{Wert} \\ \hline
+                        &           &                               & Ad-Hoc      & LeakDB      \\ \cline{4-5} 
+    Klassifikation      & kNN       & \texttt{n\_neighbors}         & 3           & 7           \\
+                        &           & \texttt{weights}              & uniform     & uniform     \\
+                        &           & \texttt{mk\_size}             & 3           & 11          \\
+                        & MLP       & \texttt{hidden\_layer\_sizes} & (18, 22)    & (22, 24, 6) \\
+                        &           & \texttt{learning\_rate}       & constant    & constant    \\
+                        &           & \texttt{activation}           & logistic    & relu        \\
+                        &           & \texttt{mk\_size}             & 3           & 11          \\
+    \end{tabular}
+\end{table}
+\begin{table}[h!]
+    \footnotesize
+    \begin{tabular}{lllll}
+    Ansatz              & Basemodel & Hyperparameter                & \multicolumn{2}{c}{Wert} \\ \hline
+                        &           &                               & Ad-Hoc      & LeakDB      \\ \cline{4-5}
+    Regression-Ensemble & LR        & \texttt{th\_mode}             & daytime     & daytime     \\
+                        &           & \texttt{th\_multiplier}       & 1.0         & 1.0         \\
+                        &           & \texttt{th\_majority}         & 0.1         & 0.1         \\
+                        &           & \texttt{mk\_size}             & 3           & 3           \\
+                        & Lasso     & \texttt{alpha}                & 1.998       & 0.333       \\
+                        &           & \texttt{th\_mode}             & daytime     & daytime     \\
+                        &           & \texttt{th\_multiplier}       & 1.0         & 1.0         \\
+                        &           & \texttt{th\_majority}         & 0.1         & 0.1         \\
+                        &           & \texttt{mk\_size}             & 3           & 3           \\
+                        & Ridge     & \texttt{alpha}                & 0.333       & 0.333       \\
+                        &           & \texttt{th\_mode}             & daytime     & daytime     \\
+                        &           & \texttt{th\_multiplier}       & 1.0         & 1.0         \\
+                        &           & \texttt{th\_majority}         & 0.1         & 0.1         \\
+                        &           & \texttt{mk\_size}             & 3           & 3           \\
+                        & kNN       & \texttt{n\_neighbors}         & 3           & 3           \\
+                        &           & \texttt{weights}              & uniform     & uniform     \\
+                        &           & \texttt{th\_mode}             & daytime     & daytime     \\
+                        &           & \texttt{th\_multiplier}       & 1.15        & 1.2         \\
+                        &           & \texttt{th\_majority}         & 0.1         & 0.2         \\
+                        &           & \texttt{mk\_size}             & 7           & 3           \\
+                        & MLP       & \texttt{hidden\_layer\_sizes} & (5, 12, 12) & (7, 6)      \\
+                        &           & \texttt{learning\_rate}       & adaptive    & adaptive    \\
+                        &           & \texttt{activation}           & logistic    & relu        \\
+                        &           & \texttt{th\_mode}             & daytime     & daytime     \\
+                        &           & \texttt{th\_multiplier}       & 1.0         & 1.1         \\
+                        &           & \texttt{th\_majority}         & 0.1         & 0.1         \\
+                        &           & \texttt{mk\_size}             & 3           & 3            \\
+    \end{tabular}
+\end{table}
+
+\newpage
+\phantom{phantom}
+\newpage
+
+\section{Einfluss der Hyperparameter \label{appendix-ranking}}
+
+\begin{table}[h]
+    \footnotesize
+    \begin{adjustwidth}{-3.5cm}{}
+        \begin{tabular}{lllll}
+        Basemodel & Accuracy                              & Sensitivity                           & Specificity                         & Precision                             \\ \hline
+        LR        & \texttt{th\_majority (0.414)}         & \texttt{th\_majority (0.85)}          & \texttt{th\_majority (0.012)}       & \texttt{th\_majority (1.0)}           \\
+                  & \texttt{th\_mode (0.054)}             & \texttt{th\_mode (0.111)}             & \texttt{th\_mode (0.002)}           & \texttt{th\_mode (0.025)}             \\
+                  & \texttt{th\_multiplier (0.01)}        & \texttt{th\_multiplier (0.021)}       & \texttt{th\_multiplier (0.001)}     & \texttt{mk\_size (0.01)}              \\
+                  & \texttt{mk\_size (0.004)}             & \texttt{mk\_size (0.008)}             & \texttt{mk\_size (0.0)}             & \texttt{th\_multiplier (0.001)}       \\
+        Lasso     & \texttt{th\_majority (0.338)}         & \texttt{th\_majority (0.7)}           & \texttt{th\_majority (0.011)}       & \texttt{th\_majority (1.0)}           \\
+                  & \texttt{th\_mode (0.021)}             & \texttt{th\_mode (0.044)}             & \texttt{th\_multiplier (0.001)}     & \texttt{th\_multiplier (0.001)}       \\
+                  & \texttt{alpha (0.012)}                & \texttt{alpha (0.025)}                & \texttt{th\_mode (0.001)}           & \texttt{th\_mode (0.001)}             \\
+                  & \texttt{th\_multiplier (0.008)}       & \texttt{th\_multiplier (0.017)}       & \texttt{alpha (0.001)}              & \texttt{alpha (0.001)}                \\
+                  & \texttt{mk\_size (0.005)}             & \texttt{mk\_size (0.011)}             & \texttt{mk\_size (0.0)}             & \texttt{mk\_size (0.0)}               \\
+        Ridge     & \texttt{th\_majority (0.398)}         & \texttt{th\_majority (0.829)}         & \texttt{th\_majority (0.022)}       & \texttt{th\_majority (1.0)}           \\
+                  & \texttt{th\_mode (0.054)}             & \texttt{th\_mode (0.112)}             & \texttt{th\_multiplier (0.002)}     & \texttt{th\_multiplier (0.002)}       \\
+                  & \texttt{th\_multiplier (0.009)}       & \texttt{th\_multiplier (0.021)}       & \texttt{th\_mode (0.002)}           & \texttt{th\_mode (0.002)}             \\
+                  & \texttt{mk\_size (0.007)}             & \texttt{mk\_size (0.014)}             & \texttt{mk\_size (0.0)}             & \texttt{mk\_size (0.0)}               \\
+                  & \texttt{alpha (0.0)}                  & \texttt{alpha (0.0)}                  & \texttt{alpha (0.0)}                & \texttt{alpha (0.0)}                  \\
+        kNN       & \texttt{weights (0.066)}              & \texttt{weights (0.693)}              & \texttt{weights (0.82)}             & \texttt{th\_majority (0.309)}         \\
+                  & \texttt{th\_majority (0.058)}         & \texttt{th\_majority (0.451)}         & \texttt{th\_majority (0.332)}       & \texttt{weights (0.252)}              \\
+                  & \texttt{th\_mode (0.012)}             & \texttt{mk\_size (0.065)}             & \texttt{mk\_size (0.059)}           & \texttt{n\_neighbors (0.017)}         \\
+                  & \texttt{n\_neighbors (0.009)}         & \texttt{th\_mode (0.042)}             & \texttt{th\_mode (0.018)}           & \texttt{th\_mode (0.016)}             \\
+                  & \texttt{mk\_size (0.002)}             & \texttt{n\_neighbors (0.035)}         & \texttt{n\_neighbors (0.017)}       & \texttt{th\_multiplier (0.007)}       \\
+                  & \texttt{th\_multiplier (0.001)}       & \texttt{th\_multiplier (0.008)}       & \texttt{th\_multiplier (0.006)}     & \texttt{mk\_size (0.004)}             \\
+        MLP       & \texttt{activation (0.148)}           & \texttt{activation (0.299)}           & \texttt{th\_majority (0.002)}       & \texttt{activation (0.645)}           \\
+                  & \texttt{th\_majority (0.136)}         & \texttt{th\_majority (0.275)}         & \texttt{activation (0.001)}         & \texttt{th\_majority (0.393)}         \\
+                  & \texttt{th\_mode (0.011)}             & \texttt{th\_mode (0.022)}             & \texttt{th\_multiplier (0.0)}       & \texttt{hidden\_layer\_sizes (0.029)} \\
+                  & \texttt{hidden\_layer\_sizes (0.009)} & \texttt{hidden\_layer\_sizes (0.019)} & \texttt{th\_mode (0.0)}             & \texttt{th\_mode (0.017)}             \\
+                  & \texttt{th\_multiplier (0.004)}       & \texttt{th\_multiplier (0.008)}       & \texttt{mk\_size (0.0)}             & \texttt{th\_multiplier (0.007)}       \\
+                  & \texttt{mk\_size (0.002)}             & \texttt{mk\_size (0.003)}             & \texttt{learning\_rate (0.0)}       & \texttt{mk\_size (0.003)}             \\
+                  & \texttt{learning\_rate (0.0)}         & \texttt{learning\_rate (0.0)}         & \texttt{hidden\_layer\_sizes (0.0)} & \texttt{learning\_rate (0.003)}      
+        \end{tabular}
+        \caption{todo: caption nur auf regr leakdb}
+    \end{adjustwidth}
+\end{table}
+

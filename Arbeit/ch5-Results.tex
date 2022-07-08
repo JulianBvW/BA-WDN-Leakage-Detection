@@ -40,16 +40,17 @@ Da eine detaillierte Analyse aller Kombinationen den Rahmen dieser Arbeit spreng
 Im Zuge des Ad-Hoc Datensatzes wurden 300 Zeitfolgen mit jeweiliger Zeitspanne von fünf Tagen getestet. Um die
  Accuracy als valide, erste Einschätzung der Güte nutzen zu können, ist der Datensatz genau zur Hälfte in
  leckfreie und leckbehaftete Szenarien aufgeteilt. Abbildung \ref{fig:res-best-adhoc} zeigt die Metriken der, nach
- Accuracy, besten Konfigurationen der jeweiligen Ansätze und Basemodels.
- Wichtig zu bemerken ist, dass k-Nearest Neighbors in beiden Ansätzen und allen Metriken den höchsten Wert von
- 100\% abliefert. Währenddessen sind bei der Linearen Regression und vor allem bei der L2-Regulierung starke
- Einbrüche in der Sensitivität für Lecks zu sehen.
+ Accuracy, besten Konfigurationen der jeweiligen Ansätze und Basemodels. Anhang \ref{appendix-best-conf} listet
+ die jeweiligen Werte auf. Wichtig zu bemerken ist, dass k-Nearest Neighbors in beiden Ansätzen und allen Metriken
+ den höchsten Wert von 100\% abliefert. Währenddessen sind bei der Linearen Regression und vor allem bei der
+ L2-Regulierung starke Einbrüche in der Sensitivität für Lecks zu sehen.
 
 Um auch bei LeakDB die Accuracy nutzen zu können, wurden aus den 1000 Szenarien 500 ausgewählt, sodass diese
  mit 250 leckfreien zu 250 leckbehafteten Szenarien balanziert war. Zusätzlich zu der doppelten, zeitlichen
  Auflösung, ist jede Zeitfolge hier zehn Tage lang. Abbildung \ref{fig:res-best-leakdb} zeigt wieder die besten
- Werte auf. Hier ist zu bemerken, dass kNN aus dem Ansatz des Regressions-Ensembles stark eingebrochen ist,
- während die anderen Werte weitgehend stabil bleiben.
+ Werte auf, dessen Konfigurationen in Anhang \ref{appendix-best-conf} wieder gezeigt werden. Hier ist zu bemerken,
+ dass kNN aus dem Ansatz des Regressions-Ensembles stark eingebrochen ist, während die anderen Werte weitgehend
+ stabil bleiben.
 
 \begin{figure}[h]
     \centering
@@ -63,8 +64,7 @@ Um auch bei LeakDB die Accuracy nutzen zu können, wurden aus den 1000 Szenarien
         \caption{LeakDB}
         \label{fig:res-best-leakdb}
     \end{subfigure}
-    \caption{Die Werte der besten Konfigurationen einzelner Modelle, nach der Akkuratheit. Die genauen
-        Einstellungen sind im benannten Notebook unter dem Punkt 'Die Besten' zu finden.}
+    \caption{Die Werte der besten Konfigurationen einzelner Modelle, nach der Akkuratheit.}
 \end{figure}
 
 \section{LeakDB Datensatz}
@@ -85,12 +85,12 @@ Hierbei sind \texttt{results} die Ergebnisse aus der csv-Datei, \texttt{feature}
  dann der mittlere Metrikwert berechnet, was dazu führt, dass die Differenz des maximalen zu dem minimalen
  Mittelwert den Gesamteinfluss widerspiegelt. Ein Hyperparameter mit einem Einfluss von 0.6 hat also das
  Potential, das Ergebnis um 0.6, also 60\%-Punkte, zu verändern, während ein Hyperparameter mit einem Einfluss
- von 0.01 nur wenig am Endergebnis verändern kann. Anhang TODO ? gibt den Einfluss jedes möglichen Hyperparameters
- pro Basemodel an. Hier ist gut zu sehen, dass der Wrapper-spezifische Hyperparameter \texttt{th\_majority},
- also die Anzahl, wie viele Knoten Alarm schlagen müssen, bevor ein Zeitpunkt als leckbehaftet gilt, tendenziell
- den größten Effekt auf das Endergebnis hat, während die Größe des Median-Filters nur einen sehr kleinen Effekt
- hat. Für kNN und MLP ist \texttt{th\_majority} jedoch nur an zweiter Stelle, da ihre modellspezifischen
- Hyperparameter \texttt{weights} und \texttt{activation} größeren Einfluss haben.
+ von 0.01 nur wenig am Endergebnis verändern kann. Anhang TODO \ref{appendix-ranking} gibt den Einfluss jedes
+ möglichen Hyperparameters pro Basemodel an. Hier ist gut zu sehen, dass der Wrapper-spezifische Hyperparameter
+ \texttt{th\_majority}, also die Anzahl, wie viele Knoten Alarm schlagen müssen, bevor ein Zeitpunkt als
+ leckbehaftet gilt, tendenziell den größten Effekt auf das Endergebnis hat, während die Größe des Median-Filters
+ nur einen sehr kleinen Effekt hat. Für kNN und MLP ist \texttt{th\_majority} jedoch nur an zweiter Stelle, da
+ ihre modellspezifischen Hyperparameter \texttt{weights} und \texttt{activation} größeren Einfluss haben.
 
 Die folgenden Analysen der Hyperparameter wurden generiert, indem die Hyperparameter mit höherem Einfluss auf
  ihre lokale Optima gesetzt wurden und die Werte der Hyperparameter geringerem Einflusses gemittelt wurden.
@@ -132,9 +132,16 @@ Schaut man sich zuerst den verhältnismäßig einflussreichsten Hyperparameter \
 
 Für k-Nearest Neighbors ist der einflussreichste Hyperparameter \texttt{weights}, mit welchem angegeben werden
  kann, ob die Datenpunkte in der Nachbarschaft alle gleich gewichtet werden, oder nach ihrem Abstand. Der Effekt
- von distanzbasierter Gewichtung im Vergleich zur uniformen Gewichtung wird in Abbildung ? gezeigt. Hier sieht
- man, dass die Spezifität abnimmt, während die Sensitivität erhöht wird. Bei der distanzbasierten Gewichtung
- werden also mehr Punkte als Leck klassifiziert.
+ von distanzbasierter Gewichtung im Vergleich zur uniformen Gewichtung wird in Abbildung
+ \ref{fig:res-knn-weights} gezeigt. Hier sieht man, dass die Spezifität abnimmt, während die Sensitivität
+ erhöht wird. Bei der distanzbasierten Gewichtung werden also mehr Punkte als Leck klassifiziert.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{res/res-knn-weights}
+    \caption{TODO.}
+    \label{fig:res-knn-weights}
+\end{figure}
 
 Betrachtet man das MLP, so ist die richtige Wahl der Aktivierungsfunktion am entscheidendsten. Abbildung
  \ref{fig:res-mlp-activation} zeigt, dass die Wahl der logistischen Funktion oder der Hyperbeltangens im
@@ -186,17 +193,19 @@ Betrachtet man sich jedoch die Detektionszeit in Abbildung \ref{fig:res-fe-dt}, 
 
  \begin{figure}
     \centering
-    \begin{subfigure}{\textwidth}
-        \includegraphics[width=1.3\textwidth]{res/res-fe-metrics}
-        \caption{TODO\vspace{1em}}
-        \label{fig:res-fe-metrics}
-    \end{subfigure}
-    \begin{subfigure}{\textwidth}
-        \includegraphics[width=0.9\textwidth]{res/res-fe-dt}
-        \caption{TODO}
-        \label{fig:res-fe-dt}
-    \end{subfigure}
-    \caption{TODO.}
+    \begin{adjustwidth}{-1cm}{}
+        \begin{subfigure}{\textwidth}
+            \includegraphics[width=1.3\textwidth]{res/res-fe-metrics}
+            \caption{TODO\vspace{1em}}
+            \label{fig:res-fe-metrics}
+        \end{subfigure}
+        \begin{subfigure}{\textwidth}
+            \includegraphics[width=0.9\textwidth]{res/res-fe-dt}
+            \caption{TODO}
+            \label{fig:res-fe-dt}
+        \end{subfigure}
+        \caption{TODO.}
+    \end{adjustwidth}
 \end{figure}
 
 \section{Diskussion \label{Chapter-Discussion}}
