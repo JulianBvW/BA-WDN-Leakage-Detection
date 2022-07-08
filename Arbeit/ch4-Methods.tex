@@ -8,13 +8,14 @@ Um die verschiedenen Modelle testen zu können, werden zwei Ansätze vorgestellt
 \subsection*{WNTR Simulation}
 
 Grundlage für das Trainieren und Evaluieren der Modelle bilden Simulationen des Water Network Tool for Resilience
- (WNTR). Auf Basis eines EPANET-Netzwerkes können durch die mannigfaltigen Umgebungsvariablen, welche Parameter,
- wie das zugrunde liegende Hydraulikmodell, aber auch Ereignisse, wie Rohrbrüche verschiedenster Stärken,
- einschließen, eine vielzahl an Szenarien erstellt werden. So besteht der erste Datensatz aus ad-hoc generierten, 
- einfachen Szenarien, die durch ihre geringere Komplexität einen schnellen Evaluationszyklus gewähren. Hingegen
- besteht der zweite Datensatz aus vorgenerierten Szenarien, welche mit Unsicherheiten und weiter definierten
- Bedarf, weitaus realistischere Daten darstellen. Beide Datensätze nutzen das gleiche WDN als Basis: Das Das
- sogenannte EPANET Example Network 1 (auch als Net1 zu finden). Dessen Topologie ist in Abbildung
+ (WNTR) \cite{klise2018overview} Auf Basis eines EPANET-Netzwerkes können durch die mannigfaltigen
+ Umgebungsvariablen, welche Parameter, wie das zugrunde liegende Hydraulikmodell, aber auch Ereignisse, wie
+ Rohrbrüche verschiedenster Stärken, einschließen, eine vielzahl an Szenarien erstellt werden. So besteht der erste
+ Datensatz aus ad-hoc generierten, einfachen Szenarien, die durch ihre geringere Komplexität einen schnellen
+ Evaluationszyklus gewähren. Hingegen besteht der zweite Datensatz aus vorgenerierten Szenarien, welche mit
+ Unsicherheiten und weiter definierten Bedarf, weitaus realistischere Daten darstellen.
+ Beide Datensätze nutzen das gleiche WDN als Basis:
+ Das sogenannte EPANET Example Network 1 (auch als Net1 zu finden). Dessen Topologie ist in Abbildung
  \ref{fig:practice-wdn} gezeigt und besitzt als verhältnismäßig kleines Netzwerk neun Knotenpunkte, einen Tank
  und ein Reservoir.
 
@@ -61,10 +62,10 @@ Die Ausgabe der WNTR-Simulation ist eine einfache Tabelle, in welcher für jeden
 
 \subsubsection*{LeakDB}
 
-Der realistischere Datensatz LeakDB ist eine Ansammlung von 1000 Szenarien, welche jeweils über ein Jahr andauern
- und eine doppelt so hohe, zeitliche Auflösung, also halbstündlich, haben. Betrachtet man hier ebenso den Verlauf
- des Wertes einer Tageszeit, so kann man, im Vergleich zum ad-hoc Datensatz, hier saisonale Ereignisse und die
- Unsicherheit direkt erkennen.
+Der realistischere Datensatz LeakDB \cite{vrachimis2018leakdb} ist eine Ansammlung von 1000 Szenarien, welche
+ jeweils über ein Jahr andauern und eine doppelt so hohe, zeitliche Auflösung, also halbstündlich, haben.
+ Betrachtet man hier ebenso den Verlauf des Wertes einer Tageszeit, so kann man, im Vergleich zum ad-hoc
+ Datensatz, hier saisonale Ereignisse und die Unsicherheit direkt erkennen.
 
 \subsection*{Datenformat}
 
